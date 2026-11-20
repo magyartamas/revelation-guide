@@ -318,6 +318,87 @@ td.res{font-weight:700;white-space:nowrap}
 .tile small{display:block;font-size:13.5px;color:#d6d6d6;line-height:1.35;margin-top:2px}
 .tile .trait{color:#ffff55;font-family:var(--f-ui);font-size:13px;font-weight:700}
 
+/* Globális kereső */
+.gsearch{position:relative;width:min(640px,100%);margin-top:14px}
+.gsearch input{width:100%;font-family:var(--f-ui);font-size:16px;padding:10px 12px;background:#000;color:#fff;border:2px solid #a0a0a0;outline:none}
+.gsearch input:focus{border-color:#fff}
+.gsearch input::placeholder{color:#8a8a8a}
+#gres{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:60;background:var(--tip-bg);border:2px solid #2d0a6b;box-shadow:0 10px 30px rgba(0,0,0,.6);max-height:420px;overflow:auto;text-align:left}
+#gres .gr{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;width:100%;text-align:left;background:transparent;border:0;color:#fff;padding:9px 12px;cursor:pointer;font-family:var(--f-ui)}
+#gres .gr .chip{grid-row:span 2;align-self:start;margin-top:2px}
+#gres .gr .gt{font-weight:700;font-size:15px}
+#gres .gr .gx{font-size:13px;color:#b9b9d9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#gres .gr.sel,#gres .gr:hover{background:#2a1450}
+.gempty{padding:12px;color:#ddd;font-size:14px}
+
+/* Ércfeldolgozás */
+.flows{display:grid;gap:14px}
+.flow{background:#bdbdbd;box-shadow:inset 2px 2px 0 #e8e8e8, inset -2px -2px 0 #8a8a8a;padding:14px 16px;display:grid;gap:10px}
+.flow-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.flow-head b{font-family:var(--f-ui);font-size:17px}
+.flow-body{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.flow .craft{padding:14px}
+.yield{display:grid;gap:4px;min-width:180px;flex:1 1 180px;max-width:320px}
+.yield span{font-family:var(--f-display);font-size:24px;font-weight:600;color:#2a2a2a}
+.ybar{height:16px;background:#555;border:2px solid #000;position:relative}
+.ybar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#b4ff70,var(--xp) 45%,#4fae10)}
+.flow-note{margin:0;font-size:15px;color:var(--ink-soft)}
+
+/* Twilight */
+.tf-start{display:grid;justify-items:center;gap:4px;max-width:420px;margin:0 auto}
+.tf-arrow{font-family:var(--f-ui);font-weight:700;font-size:22px;color:#555;text-align:center}
+.tf-split{text-align:center;max-width:none;margin:14px auto;font-weight:700}
+.tf-branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.tf-branch{display:grid;gap:4px;align-content:start;border-top:6px solid var(--bc);background:#b4b4b4;padding:10px}
+.tf-biome{font-family:var(--f-ui);font-weight:700;color:#fff;background:var(--bc);padding:4px 10px;justify-self:start;margin:-10px 0 4px -10px}
+.boss{background:#3a3a3a;color:#eee;padding:10px 12px;width:100%;box-shadow:inset 2px 2px 0 #555, inset -2px -2px 0 #222}
+.boss b{font-family:var(--f-ui);font-size:17px;color:#fff}
+.boss dl{margin:4px 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:14px}
+.boss dt{color:#ffff55;font-weight:700}
+.boss dd{margin:0}
+
+/* Csapat */
+.teampanel{background:#2b2b2b;color:#e6e6e6;padding:14px 16px;display:grid;gap:10px}
+.tm-state{display:flex;gap:10px;align-items:center;font-size:15px}
+.dotlive{width:12px;height:12px;background:#777;border:2px solid #000;flex:0 0 12px}
+.tm-state.on .dotlive{background:var(--xp)}
+.tm-err{margin:0;color:#ff8a7a;font-weight:700}
+.tm-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 12px;align-items:end}
+.tm-form label{font-size:13px;color:#cfcfcf;grid-row:1}
+.tm-form input{grid-row:2}
+.tm-form .tm-actions{grid-column:1/-1;grid-row:3;margin-top:6px}
+.teampanel input,.roster-form input,.roster-form select,.note-form input,.note-form select{font-family:var(--f-ui);font-size:15px;padding:7px 9px;background:#000;color:#fff;border:2px solid #8a8a8a;width:100%;min-width:0}
+.teampanel input:disabled{opacity:.6}
+.tm-hint{margin:0;font-size:13px;color:#bdbdbd;max-width:none}
+.tm-actions{display:flex;gap:8px;flex-wrap:wrap}
+.tm-off{color:var(--ink-soft);font-size:15px}
+.setup{margin-top:12px;background:#b4b4b4;padding:10px 14px;box-shadow:inset 2px 2px 0 #8a8a8a, inset -2px -2px 0 #e2e2e2}
+.setup summary{cursor:pointer;font-weight:700}
+.setup ol{max-width:75ch;padding-left:22px}
+.setup li{margin:6px 0}
+.setup pre{background:#1e1e1e;color:#e6e6e6;padding:10px 12px;overflow-x:auto;font-size:13px}
+.roster-form,.note-form{display:grid;gap:4px;background:#b4b4b4;padding:12px;box-shadow:inset 2px 2px 0 #8a8a8a, inset -2px -2px 0 #e2e2e2;margin-bottom:10px}
+.roster-form label,.note-form label{font-size:13px;font-weight:700;color:#3a3a3a;margin-top:4px}
+.roster-form input,.roster-form select,.note-form input,.note-form select{background:#fff;color:#222;border-color:#555}
+.xyz{display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr;gap:6px;align-items:center}
+.xyz label{margin:0}
+.roster-list,.note-list{display:grid;gap:8px}
+.rp,.nt{background:#3a3a3a;color:#eee;padding:10px 12px}
+.rp b,.nt b{font-family:var(--f-ui);font-size:16px;color:#fff;margin-right:8px}
+.rp p,.nt p{margin:6px 0 2px;font-size:14.5px}
+.rp small,.nt small{color:#aaa}
+.nt code{display:inline-block;margin-top:6px;background:#000;color:#ffff55;padding:2px 6px;font-size:13px}
+.nt-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.nt-foot{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:6px}
+.who{display:block;font-size:13px;color:#2f6a10;font-weight:700;margin-top:2px}
+@media (max-width:760px){.tm-form{grid-template-columns:1fr}.tm-form label,.tm-form input{grid-row:auto}.tm-form .tm-actions{grid-row:auto}}
+
+/* Szótár */
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin:0}
+.gl{background:#bdbdbd;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f;padding:10px 12px}
+.gl dt{font-weight:700;font-size:16px}
+.gl dd{margin:2px 0 0;font-size:15px;color:#333}
+
 footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:#a9a9a9;font-size:14px}
 footer p{max-width:90ch}
 
@@ -347,6 +428,10 @@ footer p{max-width:90ch}
     <div class="xp-level" id="xpLevel">0</div>
     <div class="xp-bar" role="progressbar" aria-label="Kipipált haladási célok" aria-valuemin="0" aria-valuemax="100" id="xpBar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
     <div class="xp-label" id="xpLabel">0 / 0 cél kész. Az Útvonal fülön pipálhatod ki őket.</div>
+  </div>
+  <div class="gsearch">
+    <input id="gq" type="search" placeholder="Hogyan szerzek…? Keresés az egész útmutatóban (pl. acél, repülés, Hydra)" aria-label="Keresés az egész útmutatóban" autocomplete="off" aria-controls="gres">
+    <div id="gres" role="listbox" hidden></div>
   </div>
 </header>
 
@@ -405,7 +490,7 @@ footer p{max-width:90ch}
 <!-- ================= ÚTVONAL ================= -->
 <section id="utvonal" role="tabpanel" aria-labelledby="tab-utvonal" hidden>
   <h2>Haladási útvonal</h2>
-  <p class="lede">Hat szakasz az első naptól az endgame-ig. A célokat kipipálhatod, a böngésződ megjegyzi őket, és a fenti XP-csík mutatja, hol tartasz. A tech és a mágia célokat külön is szűrheted.</p>
+  <p class="lede">Hat szakasz az első naptól az endgame-ig. A célokat kipipálhatod, és a fenti XP-csík mutatja, hol tartasz. Ha a Csapat fülön csatlakoztatok, a pipák közösek, és látszik, ki pipálta ki. A tech és a mágia célokat külön is szűrheted.</p>
   <div class="filters" role="group" aria-label="Célok szűrése">
     <button class="btn" data-track="all" aria-pressed="true">Mind</button>
     <button class="btn" data-track="tech" aria-pressed="false">Csak tech</button>
@@ -438,6 +523,20 @@ footer p{max-width:90ch}
     <div class="inset"><h4>Javítás</h4><p style="margin:0">Az eszközt a fej anyagával javítod a Tool Stationben. A Mending Moss vagy az Ecological (fa) trait magától javít.</p></div>
   </div>
   <div id="tiers"></div>
+</section>
+
+<!-- ================= ÉRCFELDOLGOZÁS ================= -->
+<section id="feldolgozas" role="tabpanel" aria-labelledby="tab-feldolgozas" hidden>
+  <h2>Ércfeldolgozás: hány rúd lesz egy ércből?</h2>
+  <p class="lede">Az ércek a pack legszűkebb erőforrásai, ezért nem mindegy, hogyan dolgozod fel őket. Sorrendben: Smeltery az első napoktól, Pulverizer vagy SAG Mill az első gépekkel, majd Induction Smelter Cinnabarral, ami ércenként 3 rudat ad.</p>
+  <div class="flows" id="oreflow"></div>
+  <h3>Mire figyelj</h3>
+  <ul class="plain">
+    <li>A nyers ércet ne olvaszd kemencében, amíg van jobb utad. Tedd el egy ládába, és dolgozd fel később.</li>
+    <li>A melléktermékeket ne dobd el: a platina, az irídium és a Cinnabar a későbbi gépekhez kell.</li>
+    <li>A Silk Touch-csal kibányászott szén-, gyémánt- és redstone-érc Pulverizerben több terméket ad, mint ha csákánnyal törnéd ki.</li>
+    <li>Ebben a packban nincs Mekanism, így a ×3 a csúcs. Utána a void bányák (Environmental Tech, Laser Drill) adják a tömeges ércet.</li>
+  </ul>
 </section>
 
 <!-- ================= MODOK ================= -->
@@ -492,6 +591,124 @@ footer p{max-width:90ch}
   <div class="grid2" id="magic"></div>
 </section>
 
+
+<!-- ================= TWILIGHT ================= -->
+<section id="twilight" role="tabpanel" aria-labelledby="tab-twilight" hidden>
+  <h2>Twilight Forest</h2>
+  <p class="lede">Egy örök alkonyatban élő varázserdő bossokkal, kincsekkel és saját felszereléssel. A bossok sorban nyitják meg a területeket: amíg az előző nincs legyőzve, a következő biom büntet, a struktúrát pedig mágikus fal zárja.</p>
+  <div class="grid3">
+    <div class="inset"><h4>Portál</h4><p style="margin:0">Ásd ki egy 2×2-es gödröt, töltsd fel vízzel, és rakj virágokat a széle köré a fűre. Dobj bele egy gyémántot, és villámlással megnyílik a portál.</p></div>
+    <div class="inset"><h4>Mit vigyél</h4><p style="margin:0">Sok kaját, fáklyát, ágyat, íjat nyilakkal, és egy Waystone-t a portál mellé. Odaát mindig alkonyat van, ezért folyamatosan spawnolnak a mobok.</p></div>
+    <div class="inset"><h4>Zárt területek</h4><p style="margin:0">A még zárt biomok büntetnek, például vaksággal, égéssel, fagyással vagy éhséggel. Ha ilyet tapasztalsz, előbb a megelőző bosst győzd le.</p></div>
+  </div>
+  <h3>A bossok sorrendje</h3>
+  <div id="tfmap"></div>
+  <p class="mcnote">A Twilight Forestben vannak hasznos kincsek is: az Uncrafting Table szétszedi a tárgyakat, a varázstérképek (Magic Map, Maze Map) pedig megmutatják a környéket és a labirintust.</p>
+</section>
+
+<!-- ================= CSAPAT ================= -->
+<section id="csapat" role="tabpanel" aria-labelledby="tab-csapat" hidden>
+  <h2>Csapatjáték</h2>
+  <p class="lede">Közös tábla a csapatnak: ki min dolgozik, fontos helyek koordinátái, és közös pipák az Útvonal fülön. Minden élőben frissül mindenkinél, ha ugyanazzal a csapatkóddal csatlakoztok.</p>
+  <div class="teampanel" id="teamPanel"></div>
+  <details class="setup">
+    <summary>Beállítás (egyszer, a csapat egy tagjának)</summary>
+    <ol>
+      <li>Nyisd meg a <a href="https://console.firebase.google.com/">Firebase konzolt</a> egy Google-fiókkal, és hozz létre egy új projektet (a Google Analytics kikapcsolható).</li>
+      <li>Bal oldalt: <b>Build</b>, majd <b>Realtime Database</b>, majd <b>Create Database</b>. Helynek válaszd a <b>Belgium (europe-west1)</b> lehetőséget, és indítsd <b>locked mode</b>-ban.</li>
+      <li>A <b>Rules</b> fülön cseréld le a szabályokat erre, és kattints a <b>Publish</b> gombra:
+<pre><code>{
+  "rules": {
+    "teams": {
+      "$team": { ".read": true, ".write": true }
+    }
+  }
+}</code></pre></li>
+      <li>A <b>Data</b> fül tetején lévő címet (…firebasedatabase.app) másold be fent az <i>Adatbázis címe</i> mezőbe, adj meg egy csapatkódot és a neved, majd csatlakozz.</li>
+      <li>Küldd el a címet és a csapatkódot a társaidnak. Ha a címet az oldal fájljába is beírjuk, nekik csak a kódot és a nevüket kell megadniuk.</li>
+    </ol>
+    <p>A szabály miatt bárki, aki ismeri a címet és a csapatkódot, írhat a táblába. Ezért a csapatkód legyen hosszú és nehezen kitalálható. Más csapatok listáját senki nem látja.</p>
+  </details>
+  <div class="grid2" style="margin-top:18px">
+    <div><h3 style="margin-top:0">Ki min dolgozik</h3><div id="roster"></div></div>
+    <div><h3 style="margin-top:0">Közös helyek és jegyzetek</h3><div id="notes"></div></div>
+  </div>
+
+  <h3>Szereposztás ötletek</h3>
+  <div class="grid3">
+    <div class="inset"><h4>Tech és áram</h4><p style="margin:0">Gépsorok, generátorok, a közös AE2 vagy Refined Storage. Ő tervezi a bázis gépházát.</p></div>
+    <div class="inset"><h4>Bányászat és feldolgozás</h4><p style="margin:0">Ércek, Nether-utak (Cobalt, Ardite), a feldolgozósor etetése. Később a void bányák.</p></div>
+    <div class="inset"><h4>Mágia</h4><p style="margin:0">Botania, Astral Sorcery, Blood Magic. Sok mágia-eszköz a többieknek is jól jön (pl. Mana-eszközök, sigilek).</p></div>
+    <div class="inset"><h4>Felfedezés</h4><p style="margin:0">Twilight Forest, dungeonok, meteoritok és slime-szigetek keresése. Ő viszi fel a helyeket a közös jegyzetekbe.</p></div>
+    <div class="inset"><h4>Farm és kaja</h4><p style="margin:0">Pam's HarvestCraft kertek, állatok, Cooking for Blockheads konyha, méhek.</p></div>
+    <div class="inset"><h4>Építés</h4><p style="margin:0">A bázis kinézete, Chisel és Chisels &amp; Bits. Jó, ha valaki rendben tartja a közös teret.</p></div>
+  </div>
+
+  <h3>Hasznos dolgok többjátékos módban</h3>
+  <ul class="plain">
+    <li><b>Chunk claim:</b> az inventory bal felső sarkában a <i>Claimed Chunks</i> térkép-ikon. Bal klikk vagy húzás: lefoglalás; jobb klikk: feloldás.</li>
+    <li><b>Chunkload:</b> ugyanitt Shift + bal klikk egy lefoglalt chunkon betöltve tartja, így a gépek akkor is futnak, ha senki sincs ott. Shift + jobb klikk kikapcsolja. Csak a gépházat töltsétek be, ne az egész bázist.</li>
+    <li><b>Csapat és barátok:</b> az FTB gombokkal az inventoryban vegyétek fel egymást, hogy a lefoglalt területen mindenki építhessen.</li>
+    <li><b>Teleport parancsok:</b> <code>/tpa &lt;játékos&gt;</code> teleport-kérés, <code>/back</code> vissza az utolsó halál vagy teleport helyére, <code>/spawn</code> a spawnra.</li>
+    <li><b>Közös láda bárhol:</b> Ender Storage ládák azonos színkóddal. Tegyetek egyet a bázisra, egyet mindenki hátizsákjába vagy a kint lévő bázisokra.</li>
+    <li><b>Waystone-hálózat:</b> minden fontos helyre (portálok, Nether-bázis, bánya) tegyetek Waystone-t.</li>
+    <li><b>Alvás:</b> a Morpheus miatt nem kell mindenkinek egyszerre ágyba bújnia.</li>
+  </ul>
+</section>
+
+<!-- ================= SZÓTÁR ================= -->
+<section id="szotar" role="tabpanel" aria-labelledby="tab-szotar" hidden>
+  <h2>Szótár</h2>
+  <p class="lede">A modok kézikönyvei tele vannak szakszavakkal. Itt a leggyakoribbak, magyarul.</p>
+  <div class="search"><input type="search" id="glossSearch" placeholder="Keresés a szótárban…" aria-label="Keresés a szótárban"></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<!-- ================= TELJESÍTMÉNY ================= -->
+<section id="teljesitmeny" role="tabpanel" aria-labelledby="tab-teljesitmeny" hidden>
+  <h2>Teljesítmény, lag és összeomlás</h2>
+  <p class="lede">Egy ekkora pack sokat kér a gépektől. Néhány beállítással és jó szokással a legtöbb akadás megelőzhető.</p>
+  <div class="grid2">
+    <div class="inset">
+      <h4>Memória (RAM)</h4>
+      <ul class="plain">
+        <li>CurseForge app: fogaskerék (Settings), <b>Minecraft</b>, <b>Java Settings</b>, <b>Allocated Memory</b>.</li>
+        <li>6–8 GB a jó érték. 4 GB-tal sokat fog akadni.</li>
+        <li>Ne adj többet, mint a géped RAM-jának nagyjából a fele: a túl sok memória is okozhat hosszabb akadásokat.</li>
+        <li>A szervernek legalább annyi kell, mint a kliensnek, több játékosnál inkább több.</li>
+      </ul>
+    </div>
+    <div class="inset">
+      <h4>Grafikai beállítások</h4>
+      <ul class="plain">
+        <li>Látótávolság (Render Distance): 8–10 chunk.</li>
+        <li>Graphics: Fast (a levelek így sokkal olcsóbbak).</li>
+        <li>Particles: Decreased, Smooth Lighting: Minimum vagy Off.</li>
+        <li>Use VBOs: On, VSync: Off.</li>
+        <li>Shaderekhez OptiFine kell, és egy ekkora packban nagyon sokat ront az FPS-en.</li>
+      </ul>
+    </div>
+    <div class="inset">
+      <h4>Jó szokások a lag ellen</h4>
+      <ul class="plain">
+        <li>A mobfarmok lootja ládába menjen, ne a földre: a sok heverő tárgy a legnagyobb lag-forrás.</li>
+        <li>Kevés chunkot töltsetek be, csak a gépházat és a farmokat.</li>
+        <li>Redstone-órák, nagy mennyiségű cső és sok apró tank helyett használjatok raktárrendszert.</li>
+        <li>A szerver állapotát a <code>/forge tps</code> parancs mutatja: 20 a tökéletes.</li>
+      </ul>
+    </div>
+    <div class="inset">
+      <h4>Ha összeomlik</h4>
+      <ul class="plain">
+        <li>A pack mappájában a <code>crash-reports</code> és a <code>logs/latest.log</code> fájlban van az ok. A fájl elején lévő „Description” sor sokat elárul.</li>
+        <li><b>Out of memory:</b> adj több RAM-ot.</li>
+        <li><b>Ticking entity / Ticking block entity:</b> egy konkrét blokk vagy mob okozza. Ilyenkor a mentés visszaállítása a legbiztosabb.</li>
+        <li>Mod hozzáadása vagy a pack frissítése előtt mindig készíts mentést a <code>saves</code> mappáról.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- ================= VESZÉLYEK ================= -->
 <section id="veszelyek" role="tabpanel" aria-labelledby="tab-veszelyek" hidden>
   <h2>Vigyázz! Gyakori hibák és veszélyek</h2>
@@ -516,10 +733,15 @@ const TABS = [
   {id:"utvonal",  label:"Útvonal",  ico:"#e6c34a"},
   {id:"receptek", label:"Receptek", ico:"#9a6a3a"},
   {id:"tinkers",  label:"Tinkers'", ico:"#3f8fd0"},
+  {id:"feldolgozas", label:"Ércfeldolgozás", ico:"#d9a070"},
   {id:"modok",    label:"Modok",    ico:"#6c8ed8"},
   {id:"helyek",   label:"Helyek",   ico:"#a0a0a0"},
   {id:"energia",  label:"Energia",  ico:"#d01b1b"},
   {id:"magia",    label:"Mágia",    ico:"#b24fd8"},
+  {id:"twilight", label:"Twilight", ico:"#2f7a4a"},
+  {id:"csapat",   label:"Csapat",   ico:"#55ffff"},
+  {id:"szotar",   label:"Szótár",   ico:"#f0f0e8"},
+  {id:"teljesitmeny", label:"Teljesítmény", ico:"#80ff20"},
   {id:"veszelyek",label:"Veszélyek",ico:"#ff7a00"}
 ];
 
@@ -1240,13 +1462,13 @@ let track = "all";
 function renderPhases(){
   $("#phases").innerHTML = PHASES.map((p,pi)=>{
     const goals = p.goals.map((g,gi)=>{
-      const key=`${pi}-${gi}`; const chk=!!done[key];
+      const G=goalsMap(); const key=`${pi}-${gi}`; const chk=!!G[key]; const who=(TEAM.connected&&typeof G[key]==="string")?G[key]:"";
       const show = track==="all" || g[0]===track || (g[0]==="core") || (track==="tech" && g[0]==="explore");
       return `<li class="goal${chk?" checked":""}" data-k="${key}" ${show?"":"hidden"}>
         <input type="checkbox" id="g${key}" ${chk?"checked":""}>
-        <label for="g${key}"><span class="t">${esc(g[1])}</span> <span class="chip ${g[0]==="core"?"core":g[0]}">${g[0]==="core"?"Alap":CAT[g[0]]?CAT[g[0]].n:g[0]}</span><span class="d">${esc(g[2])}</span></label></li>`;
+        <label for="g${key}"><span class="t">${esc(g[1])}</span> <span class="chip ${g[0]==="core"?"core":g[0]}">${g[0]==="core"?"Alap":CAT[g[0]]?CAT[g[0]].n:g[0]}</span><span class="d">${esc(g[2])}</span>${who?`<span class="who">Kipipálta: ${esc(who)}</span>`:""}</label></li>`;
     }).join("");
-    const allDone = p.goals.every((g,gi)=>done[`${pi}-${gi}`]);
+    const allDone = p.goals.every((g,gi)=>goalsMap()[`${pi}-${gi}`]);
     return `<article class="phase${allDone?" done":""}">
       <div class="phase-num" aria-hidden="true">${pi+1}</div>
       <div><h3>${esc(p.t)}</h3><p class="why">${esc(p.why)}</p>
@@ -1257,7 +1479,7 @@ function renderPhases(){
 }
 function updateXP(){
   const total = PHASES.reduce((a,p)=>a+p.goals.length,0);
-  const n = Object.keys(done).filter(k=>done[k]).length;
+  const G=goalsMap(); const n = Object.keys(G).filter(k=>G[k]).length;
   const pct = total? Math.round(n/total*100):0;
   $("#xpFill").style.width = pct+"%";
   $("#xpBar").setAttribute("aria-valuenow",pct);
@@ -1267,9 +1489,8 @@ function updateXP(){
 document.addEventListener("change",e=>{
   if(e.target.matches(".goal input")){
     const li=e.target.closest(".goal"); const k=li.dataset.k;
-    if(e.target.checked) done[k]=true; else delete done[k];
-    store("rev-goals",JSON.stringify(done));
-    renderPhases();
+    if(TEAM.connected){ teamWrite("goals/"+k, e.target.checked?TEAM.name:null); }
+    else { if(e.target.checked) done[k]=true; else delete done[k]; store("rev-goals",JSON.stringify(done)); renderPhases(); }
     const again=document.getElementById("g"+k); if(again) again.focus();
   }
 });
@@ -1282,7 +1503,8 @@ let resetArmed=false;
 $("#resetGoals").addEventListener("click",e=>{
   const b=e.currentTarget;
   if(!resetArmed){resetArmed=true;b.textContent="Biztos? Kattints újra";setTimeout(()=>{resetArmed=false;b.textContent="Pipák törlése";},3000);return;}
-  done={}; store("rev-goals","{}"); resetArmed=false; b.textContent="Pipák törlése"; renderPhases();
+  if(TEAM.connected){ teamWrite("goals",null); } else { done={}; store("rev-goals","{}"); }
+  resetArmed=false; b.textContent="Pipák törlése"; renderPhases();
 });
 
 /* ===================== RECEPTEK ===================== */
@@ -1637,8 +1859,282 @@ async function kvSet(k,v){try{const db=await idb();await new Promise(res=>{const
 async function loadCachedTex(){const v=await kvGet("rev-tex");if(v&&typeof v==="object"&&Object.keys(v).length){TEXO=v;renderTexPanels();rerenderIcons();}}
 
 
+/* ===================== ÉRCFELDOLGOZÁS ===================== */
+const FLOW = [
+  {n:"Sima kemence", mod:"Minecraft", x:1, lbl:"×1", in:["ore"], m:"Kemence", out:[["ingot",1]],
+    note:"Így az érc felét elveszíted. Csak a legelején, vagy ha nincs más."},
+  {n:"Tinkers' Smeltery", mod:"Tinkers' Construct", x:2, lbl:"×2", in:["ore"], m:"Smeltery (288 mB)", out:[["ingot",2]],
+    note:"Az első napoktól elérhető. Egy érc 288 mB, egy rúd 144 mB."},
+  {n:"Pulverizer, majd kemence", mod:"Thermal Expansion", x:2.2, lbl:"×2 + bónusz", in:["ore"], m:"Pulverizer", out:[["dust",2],["bonus",1,"esély"]],
+    note:"2 por, esélyes melléktermékkel (például nikkelből platina). A port Redstone Furnace-ben olvasztod."},
+  {n:"SAG Mill", mod:"Ender IO", x:2.2, lbl:"×2 + bónusz", in:["ore"], m:"SAG Mill", out:[["dust",2],["bonus",1,"esély"]],
+    note:"Grinding Ball-lal több a bónusz, és kevesebb áramot eszik."},
+  {n:"Crusher vagy Arc Furnace", mod:"Immersive Engineering", x:2.2, lbl:"×2 + bónusz", in:["ore"], m:"Crusher / Arc Furnace", out:[["dust",2],["bonus",1,"esély"]],
+    note:"A Crusher melléktermékeket ad, az Arc Furnace ércből közvetlenül 2 rudat önt. Nagy multiblokkok, sok árammal."},
+  {n:"Macerator, Ore Washing, Thermal Centrifuge", mod:"IndustrialCraft 2", x:2.35, lbl:"kb. ×2,3", in:["ore"], m:"IC2 gépsor", out:[["dust",2],["bonus",1,"apró"]],
+    note:"Apró porokkal valamivel több mint 2×, de három gép és EU-hálózat kell hozzá."},
+  {n:"Induction Smelter + Cinnabar", mod:"Thermal Expansion", x:3, lbl:"×3", in:["ore","cinnabar"], m:"Induction Smelter", out:[["ingot",3],["richslag",1,"esély"]],
+    note:"A legjobb a packban: ércenként 3 rúd. A Cinnabart a redstone érc Pulverizerben adja melléktermékként."}
+];
+function renderFlow(){
+  $("#oreflow").innerHTML = FLOW.map(f=>`<div class="flow">
+    <div class="flow-head"><b>${esc(f.n)}</b><span class="chip tech">${esc(f.mod)}</span></div>
+    <div class="flow-body">${machineBlock(f.in,f.m,f.out)}
+      <div class="yield"><div class="ybar" role="img" aria-label="${esc(f.lbl)} rúd ércenként"><i style="width:${Math.round(f.x/3*100)}%"></i></div><span>${esc(f.lbl)}</span></div></div>
+    <p class="flow-note">${esc(f.note)}</p></div>`).join("");
+}
+
+/* ===================== TWILIGHT FOREST ===================== */
+const TF = {
+  start:[
+    {n:"Naga", where:"Naga Courtyard, a sima erdőben", drop:"Naga Scale (Naga páncél), trófea", tip:"Nyílt arénában rohamoz. Ugorj félre a rohama elől, és a fejét üsd."},
+    {n:"Twilight Lich", where:"Lich Tower, a sima erdőben", drop:"Lich-pálcák (Twilight, Zombie, Life Drain Scepter), trófea", tip:"Több fázisa van: pajzsok és klónok, a végén közelharc. Vigyél sok kaját és íjat."}
+  ],
+  branches:[
+    {biome:"Mocsár és Fire Swamp", col:"#5f8f3a", bosses:[
+      {n:"Minoshroom", where:"Labyrinth, a mocsár alatt", drop:"Minotaur Axe, Meef Stroganoff", tip:"A Meef Stroganoffot megenni kötelező: ez véd a Fire Swamp égetése ellen."},
+      {n:"Hydra", where:"Hydra Lair, Fire Swamp", drop:"Fiery Blood (Fiery páncél és eszközök), Hydra Chops, trófea", tip:"Tűzálló italt vigyél. A fejeket akkor üsd, amikor nyitva a szájuk."}]},
+    {biome:"Dark Forest", col:"#3a3f5f", bosses:[
+      {n:"Knight Phantoms", where:"Goblin Knight Stronghold", drop:"Knightmetal felszerelés, Phantom páncél, trófea", tip:"Hat lovag egymás után. Jó páncél és gyógyítás kell."},
+      {n:"Ur-Ghast", where:"Dark Tower", drop:"Fiery Tears, Carminite, trófea", tip:"A torony belül trükkös. A ghast tűzgolyói ellen íj és tűzállóság segít."}]},
+    {biome:"Hó és Glacier", col:"#6f9fc0", bosses:[
+      {n:"Alpha Yeti", where:"Yeti Cave, Snowy Forest", drop:"Alpha Yeti Fur (Arctic páncél), Ice Bombs", tip:"Jégcsapokat ejt a plafonról. Mozogj folyamatosan."},
+      {n:"Snow Queen", where:"Aurora Palace, Glacier", drop:"Seeker Bow vagy Tri-bow, trófea", tip:"A palota tetején vár. Melegítő italok és jó íj kell."}]}
+  ]
+};
+function bossCard(b){return `<div class="boss"><b>${esc(b.n)}</b><dl><dt>Hol</dt><dd>${esc(b.where)}</dd><dt>Mit dob</dt><dd>${esc(b.drop)}</dd><dt>Tipp</dt><dd>${esc(b.tip)}</dd></dl></div>`;}
+function renderTF(){
+  $("#tfmap").innerHTML = `<div class="tf-start">${TF.start.map((b,i)=>`${i?'<div class="tf-arrow" aria-hidden="true">↓</div>':""}${bossCard(b)}`).join("")}</div>
+    <p class="tf-split">A Lich után három ág nyílik, bármelyik sorrendben mehettek. Csapatban akár párhuzamosan is.</p>
+    <div class="tf-branches">${TF.branches.map(br=>`<div class="tf-branch" style="--bc:${br.col}"><div class="tf-biome">${esc(br.biome)}</div>${br.bosses.map((b,i)=>`${i?'<div class="tf-arrow" aria-hidden="true">↓</div>':""}${bossCard(b)}`).join("")}</div>`).join("")}</div>`;
+}
+
+/* ===================== SZÓTÁR ===================== */
+const GLOSS = [
+  ["RF / FE","Redstone Flux / Forge Energy. A tech modok közös árama; a kettő ugyanaz."],
+  ["RF/t","Ennyi RF-et termel vagy fogyaszt egy gép tickenként. 1 másodperc = 20 tick, vagyis 100 RF/t = 2000 RF/s."],
+  ["Tick","A játék időegysége. Másodpercenként 20 tick van, ha nincs lag."],
+  ["TPS","Ticks Per Second. 20 a tökéletes; ha a szerveren lejjebb esik, minden lelassul (gépek, mobok, növények). Lekérdezés: /forge tps"],
+  ["EU","Az IndustrialCraft 2 árama, feszültségszintekkel (LV, MV, HV, EV). Nem azonos az RF-fel."],
+  ["GP","Grid Power: az Extra Utilities 2 hálózati kapacitása. Nem tárolható, csak „lefoglalható”."],
+  ["mB","Millibucket: 1000 mB = 1 vödör. A Tinkers'-ben 1 rúd = 144 mB."],
+  ["Multiblokk","Több blokkból összerakott gép (pl. Coke Oven, Smeltery, Extreme Reactor). Pontos minta szerint kell felépíteni, a kézikönyv mutatja."],
+  ["Ore Dictionary (oredict)","A különböző modok azonos anyagai (pl. öt féle réz) egymást helyettesítik a receptekben. A UniDict egy fajtára egységesíti őket."],
+  ["Tier / szint","A gépek, kábelek és eszközök fokozatai. A magasabb tier gyorsabb, többet bír, de drágább."],
+  ["Augment","Thermal gépekbe tehető kiegészítő, ami módosítja a működést (pl. több melléktermék)."],
+  ["Upgrade Kit","Thermal gépet helyben fejleszt magasabb tierre, nem kell újraépíteni."],
+  ["Machine Frame","A Thermal gépek alapja; ebből craftolod a konkrét gépet."],
+  ["Dynamo / generátor","Áramtermelő blokk. A Thermal dynamók egy irányba adják le az áramot (a kimenet oldala számít)."],
+  ["Melléktermék (byproduct)","A gép a fő termék mellett esélyre mást is ad (pl. Pulverizerből platina por)."],
+  ["Dust, ingot, nugget, plate, gear","Por, rúd, rög, lemez, fogaskerék. A legtöbb fém mind az öt formában létezik."],
+  ["Slag","Salak; olvasztás mellékterméke. A Rich Slag Induction Smelterben extra fémet ad."],
+  ["Alloy (ötvözet)","Több fém keveréke (pl. Bronze, Electrum, Enderium, Manyullyn)."],
+  ["Casting (öntés)","Olvadt fém öntése Casting Table-re vagy Basinre, formával (cast)."],
+  ["Autocrafting","A raktárrendszer (AE2, RS) magától legyártja a kért tárgyat a megadott minták alapján."],
+  ["Pattern","Minta egy recepthez az autocraftinghoz (AE2, RS), vagy a Tinkers' alkatrészekhez."],
+  ["Channel (csatorna)","AE2-ben egy kábel 8 (dense kábel 32) eszközt bír. Ha elfogy, az eszközök nem működnek."],
+  ["Quarry","Automata bánya, ami egy területet lebont (pl. RFTools Builder, ExU2 Quantum Quarry)."],
+  ["Void miner","Gép, ami a semmiből termel ércet (Environmental Tech, Industrial Foregoing Laser Drill)."],
+  ["Chunk","16×16 blokkos oszlop a világban. A játék chunkonként tölti be a világot."],
+  ["Claim","FTB Utilities-ben lefoglalt chunk; mások nem tudnak benne építeni vagy bontani."],
+  ["Chunkload","Betöltve tartott chunk: a gépek akkor is futnak, ha senki sincs a közelben."],
+  ["Lag","Akadozás. Kliensoldalon FPS-esés, szerveroldalon TPS-esés."],
+  ["Spawner / mobfarm","Mobokat termelő berendezés lootért (Woot, Ender IO Powered Spawner, Soul Shards)."],
+  ["LP","Life Points: a Blood Magic „valutája”, a Soul Networkben tárolódik."],
+  ["Mana","A Botania energiája; virágok termelik, Mana Pool tárolja."],
+  ["Starlight","Az Astral Sorcery energiája; éjszaka, tiszta égből gyűjtöd."],
+  ["Vis, Essentia, Flux","Thaumcraft: a Vis a chunk aurája, az Essentia tárgyakból nyert aspektus, a Flux a mágia szennyezése."],
+  ["Warp","Thaumcraft: tiltott tudástól kapott mellékhatás (rémálmok, debuffok)."],
+  ["Attunement","Astral Sorcery: egy csillagképre hangolódsz, és megnyílik a perkfa."],
+  ["Trait / modifier","Tinkers': a trait az anyag beépített tulajdonsága, a modifier az utólag rátett fejlesztés."],
+  ["Bauble","Extra felszerelés-hely (gyűrű, nyaklánc, öv) a Baubles moddal."],
+  ["Soulbound","Halál után nálad maradó tárgy (Ender IO bűvölés, Tinkers' módosító)."],
+  ["JEI (R és U)","Receptkereső: R = hogyan készül, U = mire használható."],
+  ["The One Probe (TOP)","Ha egy blokkra nézel, kiírja, mi az és mi van benne."],
+  ["Kitchen sink","Olyan modpack, amiben „minden benne van”, kötött küldetéslánc nélkül. A Revelation ilyen."]
+];
+function renderGloss(){
+  const q=norm(($("#glossSearch")||{value:""}).value.trim());
+  const list=GLOSS.filter(g=>!q||norm(g[0]+" "+g[1]).includes(q));
+  $("#gloss").innerHTML = list.length? list.map(g=>`<div class="gl"><dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd></div>`).join("")
+    : `<div class="empty">Nincs ilyen kifejezés a szótárban.</div>`;
+}
+
+/* ===================== GLOBÁLIS KERESŐ ===================== */
+function buildIndex(){
+  const I=[];
+  const go=(h,fn)=>()=>{ if(fn)fn(); if(location.hash.slice(1)!==h) location.hash=h; else showTab(); window.scrollTo({top:$("main").offsetTop-60}); };
+  PHASES.forEach(p=>p.goals.forEach(g=>I.push({c:"Útvonal",t:g[1],x:p.t+" "+g[2],go:go("utvonal")})));
+  RECIPES.forEach(g=>g.items.forEach(r=>I.push({c:"Recept",t:r.n,x:g.g+" "+r.note,go:go("receptek",()=>{curRecipe=r.id;renderRecipe();})})));
+  TIERS.forEach(g=>Object.values(g.rows).flat().forEach(i=>I.push({c:"Tinkers'",t:i[1]+(i[2]?" ("+i[2]+")":""),x:g.t+" "+i[3],go:go("tinkers")})));
+  FLOW.forEach(f=>I.push({c:"Feldolgozás",t:f.n,x:f.mod+" "+f.note+" érc duplázás triplázás",go:go("feldolgozas")}));
+  MODS.forEach(m=>I.push({c:"Mod",t:m.n,x:m.w+" "+m.s+" "+m.x+" "+CAT[m.c].n,go:go("modok",()=>{$("#modSearch").value=m.n;modCat="all";document.querySelectorAll("[data-cat]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.cat==="all"?"true":"false"));renderMods();})}));
+  ORES.forEach(o=>I.push({c:"Érc",t:o[0],x:o[2]+" "+o[3]+" "+o[4],go:go("helyek")}));
+  DIMS.forEach(d=>I.push({c:"Dimenzió",t:d[0],x:d[1],go:go("helyek")}));
+  LADDER.forEach(l=>I.push({c:"Energia",t:l[0],x:l[1]+" "+l[3],go:go("energia")}));
+  MAGIC.forEach(m=>I.push({c:"Mágia",t:m.n,x:m.tag+" "+m.steps.join(" "),go:go("magia")}));
+  TF.start.concat(...TF.branches.map(b=>b.bosses)).forEach(b=>I.push({c:"Twilight",t:b.n,x:b.where+" "+b.drop+" "+b.tip,go:go("twilight")}));
+  GLOSS.forEach(g=>I.push({c:"Szótár",t:g[0],x:g[1],go:go("szotar",()=>{$("#glossSearch").value=g[0];renderGloss();})}));
+  DANGERS.forEach(d=>I.push({c:"Veszély",t:d[1],x:d[2],go:go("veszelyek")}));
+  [["Repülés","jetpack Angel Ring Draconic páncél Hang Glider RFTools Environmental Controller repülés",go("modok",()=>{$("#modSearch").value="repül";renderMods();})],
+   ["Chunkload és claim","FTB Utilities Claimed Chunks shift bal klikk",go("csapat")],
+   ["RAM és FPS","memória lag akadás összeomlás crash",go("teljesitmeny")]].forEach(e=>I.push({c:"Téma",t:e[0],x:e[1],go:e[2]}));
+  I.forEach(e=>{e.nt=norm(e.t);e.nx=norm(e.x||"");});
+  return I;
+}
+let GIDX=null, gSel=0, gRes=[];
+function gSearch(){
+  const raw=$("#gq").value.trim(); const box=$("#gres");
+  if(!raw){box.hidden=true;return;}
+  if(!GIDX)GIDX=buildIndex();
+  const words=norm(raw).split(/\s+/).filter(Boolean);
+  gRes=GIDX.map(e=>{ if(!words.every(w=>e.nt.includes(w)||e.nx.includes(w)))return null;
+      let s=0; words.forEach(w=>{ if(e.nt.startsWith(w))s+=6; else if(e.nt.includes(w))s+=4; else s+=1; }); return [s,e]; })
+    .filter(Boolean).sort((a,b)=>b[0]-a[0]).slice(0,12).map(x=>x[1]);
+  gSel=0;
+  box.innerHTML = gRes.length ? gRes.map((e,i)=>`<button type="button" class="gr${i===0?" sel":""}" data-i="${i}" role="option"><span class="chip core">${esc(e.c)}</span><span class="gt">${esc(e.t)}</span><span class="gx">${esc((e.x||"").slice(0,110))}</span></button>`).join("")
+    : `<div class="gempty">Nincs találat erre: „${esc(raw)}”. Próbálj egy rövidebb szót, például „acél” vagy „repül”.</div>`;
+  box.hidden=false;
+}
+function gGo(i){const e=gRes[i]; if(!e)return; $("#gres").hidden=true; $("#gq").blur(); e.go();}
+function initSearch(){
+  const q=$("#gq");
+  q.addEventListener("input",gSearch);
+  q.addEventListener("focus",()=>{ if(q.value.trim())gSearch(); });
+  q.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){$("#gres").hidden=true;return;}
+    if(!gRes.length)return;
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();gSel=(gSel+(e.key==="ArrowDown"?1:-1)+gRes.length)%gRes.length;
+      document.querySelectorAll("#gres .gr").forEach((b,i)=>b.classList.toggle("sel",i===gSel));}
+    if(e.key==="Enter"){e.preventDefault();gGo(gSel);}
+  });
+  $("#gres").addEventListener("click",e=>{const b=e.target.closest(".gr"); if(b)gGo(+b.dataset.i);});
+  document.addEventListener("click",e=>{ if(!e.target.closest(".gsearch")) $("#gres").hidden=true; });
+}
+
+/* ===================== KÖZÖS MÓD (Firebase Realtime Database, REST + élő stream) ===================== */
+/* Ha a csapat adatbázisának címét ide beírod, a társaidnak csak a csapatkódot és a nevüket kell megadniuk. */
+const TEAM_DB_DEFAULT = "";
+const ROLES = ["Tech és áram","Mágia","Felfedezés","Bányászat és feldolgozás","Farm és kaja","Építés","Mindenes"];
+const DIMOPTS = ["Overworld","Nether","End","Twilight Forest","Bányadimenzió","Egyéb"];
+const TEAM = {db:"",code:"",name:"",state:{},connected:false,es:null,err:"",status:""};
+function loadTeamCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem("rev-team")||"{}")||{}; }catch(e){}
+  TEAM.db=c.db||TEAM_DB_DEFAULT; TEAM.code=c.code||""; TEAM.name=c.name||""; return !!(c.auto && TEAM.db && TEAM.code && TEAM.name); }
+function saveTeamCfg(auto){ try{ localStorage.setItem("rev-team",JSON.stringify({db:TEAM.db,code:TEAM.code,name:TEAM.name,auto:!!auto})); }catch(e){} }
+const fbKey=s=>String(s).trim().replace(/[.#$\[\]\/]/g,"_").slice(0,60)||"_";
+function teamUrl(path){ return TEAM.db.replace(/\/+$/,"")+"/teams/"+encodeURIComponent(fbKey(TEAM.code))+(path?"/"+path.split("/").map(encodeURIComponent).join("/"):"")+".json"; }
+async function teamWrite(path,val){
+  setIn(TEAM.state,path,val); onTeamState();
+  try{ const r=await fetch(teamUrl(path),{method:val===null?"DELETE":"PUT",body:val===null?undefined:JSON.stringify(val)});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+  }catch(e){ TEAM.err="Nem sikerült menteni ("+e.message+"). Ellenőrizd az adatbázis szabályait."; renderTeamPanel(); }
+}
+function setIn(obj,path,val){
+  const parts=path.split("/").filter(Boolean); let o=obj;
+  for(let i=0;i<parts.length-1;i++){ if(typeof o[parts[i]]!=="object"||o[parts[i]]===null) o[parts[i]]={}; o=o[parts[i]]; }
+  const last=parts[parts.length-1]; if(val===null||val===undefined) delete o[last]; else o[last]=val;
+}
+function teamDisconnect(keepErr){
+  if(TEAM.es){ try{TEAM.es.close();}catch(e){} } TEAM.es=null; TEAM.connected=false; TEAM.state={}; TEAM.status="";
+  if(!keepErr) TEAM.err="";
+  onTeamState();
+}
+function teamConnect(){
+  if(TEAM.es) teamDisconnect();
+  if(!TEAM.db||!TEAM.code||!TEAM.name){ TEAM.err="Add meg az adatbázis címét, a csapatkódot és a neved."; renderTeamPanel(); return; }
+  if(!/^https:\/\/[a-z0-9.-]+\.(firebaseio\.com|firebasedatabase\.app)\/?$/i.test(TEAM.db)){
+    TEAM.err="Az adatbázis címe így néz ki: https://valami-default-rtdb.europe-west1.firebasedatabase.app"; renderTeamPanel(); return; }
+  let es; try{ es=new EventSource(teamUrl("")); }catch(e){ TEAM.err="Ez a böngésző nem tud élő kapcsolatot nyitni."; renderTeamPanel(); return; }
+  TEAM.es=es; TEAM.err=""; TEAM.status="Kapcsolódás…"; renderTeamPanel();
+  es.addEventListener("put",ev=>{ const m=JSON.parse(ev.data); if(m.path==="/") TEAM.state=m.data||{}; else setIn(TEAM.state,m.path,m.data);
+    const first=!TEAM.connected; TEAM.connected=true; TEAM.status=""; if(first){ saveTeamCfg(true); } onTeamState(); });
+  es.addEventListener("patch",ev=>{ const m=JSON.parse(ev.data); const base=m.path==="/"?"":m.path; for(const k in m.data) setIn(TEAM.state,base+"/"+k,m.data[k]); onTeamState(); });
+  es.addEventListener("cancel",()=>{ TEAM.err="Az adatbázis elutasította az olvasást. Ellenőrizd a szabályokat (Rules) a Firebase-ben."; teamDisconnect(true); });
+  es.onerror=()=>{
+    if(!TEAM.connected){ TEAM.err="Nem sikerült kapcsolódni. Ellenőrizd a címet és a szabályokat. A claude.ai-os előnézetben a közös mód nem működik, csak a GitHub-os oldalon."; teamDisconnect(true); }
+    else { TEAM.status="Újrakapcsolódás…"; renderTeamPanel(); }
+  };
+}
+function goalsMap(){ return TEAM.connected ? (TEAM.state.goals||{}) : done; }
+function onTeamState(){ renderTeamPanel(); renderRoster(); renderNotes(); renderPhases(); }
+
+function renderTeamPanel(){
+  const el=$("#teamPanel"); if(!el) return;
+  const conn=TEAM.connected;
+  const pc=conn?Object.keys(TEAM.state.players||{}).length:0;
+  el.innerHTML = `<div class="tm-state ${conn?"on":""}"><span class="dotlive" aria-hidden="true"></span>${
+      conn ? `Kapcsolódva a(z) <b>${esc(TEAM.code)}</b> csapathoz, ${esc(TEAM.name)} néven. ${pc} játékos van a táblán.${TEAM.status?" "+esc(TEAM.status):""}`
+           : TEAM.status ? esc(TEAM.status) : "Nincs kapcsolat. Most minden csak a saját böngésződben mentődik."}</div>
+    ${TEAM.err?`<p class="tm-err" role="alert">${esc(TEAM.err)}</p>`:""}
+    <form id="teamForm" class="tm-form">
+      <label for="tmDb">Adatbázis címe</label>
+      <input id="tmDb" type="url" placeholder="https://…firebasedatabase.app" value="${esc(TEAM.db)}" ${conn?"disabled":""}>
+      <label for="tmCode">Csapatkód</label>
+      <input id="tmCode" type="text" maxlength="40" placeholder="pl. revelation-banda-42" value="${esc(TEAM.code)}" ${conn?"disabled":""}>
+      <label for="tmName">A neved</label>
+      <input id="tmName" type="text" maxlength="30" placeholder="pl. Tamás" value="${esc(TEAM.name)}" ${conn?"disabled":""}>
+      <div class="tm-actions">${conn?`<button type="button" class="btn" id="tmLeave">Kilépés</button>`:`<button type="submit" class="btn">Csatlakozás</button>`}</div>
+    </form>
+    <p class="tm-hint">Aki ugyanazt a csapatkódot adja meg, ugyanazt a közös táblát látja. A kód olyan, mint egy jelszó: csak a csapattal oszd meg.</p>`;
+}
+document.addEventListener("submit",e=>{
+  if(e.target.id==="teamForm"){ e.preventDefault();
+    TEAM.db=$("#tmDb").value.trim(); TEAM.code=$("#tmCode").value.trim(); TEAM.name=$("#tmName").value.trim();
+    saveTeamCfg(false); teamConnect(); }
+  if(e.target.id==="rosterForm"){ e.preventDefault();
+    if(!TEAM.connected) return;
+    teamWrite("players/"+fbKey(TEAM.name),{name:TEAM.name,role:$("#rRole").value,task:$("#rTask").value.trim().slice(0,200),t:Date.now()}); }
+  if(e.target.id==="noteForm"){ e.preventDefault();
+    if(!TEAM.connected) return;
+    const title=$("#nTitle").value.trim(); if(!title){ $("#nTitle").focus(); return; }
+    const num=v=>{const n=parseInt(v,10);return isNaN(n)?null:n;};
+    const id="n"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    teamWrite("notes/"+id,{title:title.slice(0,80),dim:$("#nDim").value,x:num($("#nX").value),y:num($("#nY").value),z:num($("#nZ").value),text:$("#nText").value.trim().slice(0,300),by:TEAM.name,t:Date.now()});
+    e.target.reset(); }
+});
+document.addEventListener("click",e=>{
+  if(e.target.id==="tmLeave"){ saveTeamCfg(false); teamDisconnect(); }
+  const del=e.target.closest("[data-delnote]");
+  if(del){ if(del.dataset.armed){ teamWrite("notes/"+del.dataset.delnote,null); } else { del.dataset.armed="1"; del.textContent="Biztos?"; setTimeout(()=>{ if(del.isConnected){ delete del.dataset.armed; del.textContent="Törlés"; } },3000); } }
+  if(e.target.id==="rClear" && TEAM.connected){ teamWrite("players/"+fbKey(TEAM.name),null); }
+});
+function ago(t){ if(!t) return ""; const m=Math.round((Date.now()-t)/60000); if(m<1) return "most"; if(m<60) return m+" perce"; const h=Math.round(m/60); if(h<24) return h+" órája"; return Math.round(h/24)+" napja"; }
+function renderRoster(){
+  const el=$("#roster"); if(!el) return;
+  if(!TEAM.connected){ el.innerHTML=`<p class="tm-off">Kapcsolódj a csapathoz fent, és itt láthatjátok, ki min dolgozik.</p>`; return; }
+  const ps=Object.values(TEAM.state.players||{}).sort((a,b)=>(b.t||0)-(a.t||0));
+  const me=(TEAM.state.players||{})[fbKey(TEAM.name)]||{};
+  el.innerHTML = `<form id="rosterForm" class="roster-form">
+      <label for="rRole">Szereped</label>
+      <select id="rRole">${ROLES.map(r=>`<option${r===me.role?" selected":""}>${esc(r)}</option>`).join("")}</select>
+      <label for="rTask">Min dolgozol most?</label>
+      <input id="rTask" type="text" maxlength="200" placeholder="pl. Smeltery építése, kobaltot keresek a Netherben" value="${esc(me.task||"")}">
+      <div class="tm-actions"><button class="btn" type="submit">Mentés</button>${me.name?`<button class="btn small" type="button" id="rClear">Levesz a tábláról</button>`:""}</div>
+    </form>
+    <div class="roster-list">${ps.length? ps.map(p=>`<div class="rp"><b>${esc(p.name)}</b><span class="chip core">${esc(p.role||"")}</span><p>${esc(p.task||"Nincs megadva feladat.")}</p><small>${esc(ago(p.t))}</small></div>`).join("")
+      : `<p class="tm-off">Még senki nincs a táblán. Írd be, min dolgozol, és mentsd el.</p>`}</div>`;
+}
+function renderNotes(){
+  const el=$("#notes"); if(!el) return;
+  if(!TEAM.connected){ el.innerHTML=`<p class="tm-off">Kapcsolódás után itt gyűjthetitek a fontos helyeket: bázis, portálok, falvak, slime-szigetek, meteoritok.</p>`; return; }
+  const ns=Object.entries(TEAM.state.notes||{}).sort((a,b)=>(b[1].t||0)-(a[1].t||0));
+  const co=n=>[n.x,n.y,n.z].some(v=>v!==null&&v!==undefined)?`X ${n.x??"?"} / Y ${n.y??"?"} / Z ${n.z??"?"}`:"";
+  el.innerHTML = `<form id="noteForm" class="note-form">
+      <label for="nTitle">Mi ez?</label><input id="nTitle" type="text" maxlength="80" placeholder="pl. Nether portál, kobalt-lelőhely">
+      <label for="nDim">Dimenzió</label><select id="nDim">${DIMOPTS.map(d=>`<option>${esc(d)}</option>`).join("")}</select>
+      <div class="xyz"><label for="nX">X</label><input id="nX" inputmode="numeric" type="text"><label for="nY">Y</label><input id="nY" inputmode="numeric" type="text"><label for="nZ">Z</label><input id="nZ" inputmode="numeric" type="text"></div>
+      <label for="nText">Megjegyzés</label><input id="nText" type="text" maxlength="300" placeholder="opcionális">
+      <div class="tm-actions"><button class="btn" type="submit">Hozzáadás</button></div>
+    </form>
+    <div class="note-list">${ns.length? ns.map(([id,n])=>`<div class="nt"><div class="nt-head"><b>${esc(n.title)}</b><span class="chip explore">${esc(n.dim||"")}</span></div>
+      ${co(n)?`<code>${esc(co(n))}</code>`:""}${n.text?`<p>${esc(n.text)}</p>`:""}
+      <div class="nt-foot"><small>${esc(n.by||"")}, ${esc(ago(n.t))}</small><button class="btn small" type="button" data-delnote="${esc(id)}">Törlés</button></div></div>`).join("")
+      : `<p class="tm-off">Még nincs közös jegyzet.</p>`}</div>`;
+}
+
 /* ===================== INDÍTÁS ===================== */
-renderTabs(); renderPhases(); renderRecipeList(); renderRecipe(); renderCatFilters(); renderMods(); renderStatic(); renderTiers(); renderTexPanels(); loadCachedTex();
+renderTabs(); renderPhases(); renderRecipeList(); renderRecipe(); renderCatFilters(); renderMods(); renderStatic(); renderTiers(); renderTexPanels(); loadCachedTex(); renderFlow(); renderTF(); renderGloss(); initSearch(); $("#glossSearch").addEventListener("input",renderGloss);
+{ const auto=loadTeamCfg(); renderTeamPanel(); renderRoster(); renderNotes(); if(auto) teamConnect(); }
 showTab(); addEventListener("hashchange",showTab);
 </script>
 </body>

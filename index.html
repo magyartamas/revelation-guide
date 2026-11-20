@@ -1787,7 +1787,7 @@ let texBusy=false, texMsg="";
 function texPanelHTML(){
   const n=Object.keys(TEXO).length;
   const status = texBusy ? texMsg
-    : n ? `<b>${n} eredeti ikon betöltve.</b> ${esc(texMsg)}`
+    : n ? `<b>${n} eredeti ikon betöltve.</b> ${esc(texMsg)} Ebben a böngészőben elmentve, legközelebb maguktól megjelennek.`
     : "Most a saját rajzolású ikonokat látod. Ha betöltöd a gépeden lévő mod-fájlokat, a játék eredeti ikonjai jelennek meg. A fájlok nem töltődnek fel sehová, a böngésződ helyben olvassa őket.";
   return `<div class="tp-actions">
       <label class="btn small">Mods mappa kiválasztása<input type="file" class="tp-dir" webkitdirectory directory multiple></label>
@@ -1842,6 +1842,7 @@ async function handleTexFiles(fileList,fromDir){
     const still=missing.filter(id=>!TEXO[id]);
     texMsg = still.length ? `${still.length} tárgyhoz nem találtam textúrát, azoknál marad a rajzolt ikon. Ha hiányzik a vanilla jar, add hozzá.` : "Minden ikon megvan.";
     kvSet("rev-tex",TEXO);
+    try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(err){}
   } finally { texBusy=false; renderTexPanels(); rerenderIcons(); }
 }
 document.addEventListener("change",e=>{

@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FTB Revelation útmutató</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap&subset=latin-ext" rel="stylesheet">
+<style>
+:root{
+  /* Egyetlen vizuális világ: a Minecraft inventory GUI. Sötét deepslate háttér, szürke, domború panelek, besüllyesztett slotok. */
+  --night:#2a2c33;
+  --night-2:#30333b;
+  --panel:#c6c6c6;
+  --hi:#ffffff;
+  --lo:#555555;
+  --slot:#8b8b8b;
+  --ink:#373737;
+  --ink-soft:#4e4e4e;
+  --xp:#80ff20;
+  --splash:#ffff55;
+  --tip-bg:#100010;
+  --tip-edge:#5000ff;
+  /* Minecraft formázókódok – modkategóriák */
+  --c-tech:#ffaa00;
+  --c-magic:#ff55ff;
+  --c-storage:#55ffff;
+  --c-explore:#55ff55;
+  --c-util:#ffff55;
+  --c-farm:#ff7f7f;
+  --f-display:"Pixelify Sans", "Courier New", monospace;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-ui:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background-color:var(--night);
+  background-image:
+    linear-gradient(45deg, var(--night-2) 25%, transparent 25%, transparent 75%, var(--night-2) 75%),
+    linear-gradient(45deg, var(--night-2) 25%, transparent 25%, transparent 75%, var(--night-2) 75%);
+  background-size:32px 32px;
+  background-position:0 0,16px 16px;
+  font-family:var(--f-body);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.55;
+}
+a{color:#1d4fa8}
+:focus-visible{outline:3px solid var(--splash);outline-offset:2px}
+
+/* ---------- Címképernyő ---------- */
+.title{
+  max-width:1100px;margin:0 auto;padding:40px 16px 18px;
+  display:grid;justify-items:center;text-align:center;gap:10px;position:relative;
+}
+.logo{
+  font-family:var(--f-display);font-weight:700;
+  font-size:clamp(40px,8vw,84px);line-height:.95;margin:0;letter-spacing:.02em;
+  color:#e8e8e8;
+  text-shadow:
+    0 2px 0 #9c9c9c,0 4px 0 #7a7a7a,0 6px 0 #5d5d5d,0 8px 0 #3d3d3d,
+    0 12px 18px rgba(0,0,0,.55);
+  text-wrap:balance;
+}
+.logo small{display:block;font-size:.42em;color:#bfbfbf;letter-spacing:.18em;margin-bottom:6px;text-shadow:0 3px 0 #3d3d3d}
+.splash{
+  position:absolute;right:max(16px,calc(50% - 400px));top:clamp(92px,15vw,140px);
+  font-family:var(--f-display);font-weight:600;color:var(--splash);
+  text-shadow:2px 2px 0 #3f3f15;font-size:clamp(14px,2.2vw,20px);
+  transform:rotate(-17deg);transform-origin:center;white-space:nowrap;pointer-events:none;
+  animation:splash .55s ease-in-out infinite alternate;
+}
+@keyframes splash{from{transform:rotate(-17deg) scale(1)}to{transform:rotate(-17deg) scale(1.08)}}
+.subtitle{color:#d0d0d0;margin:6px 0 0;font-size:15px}
+.xp{width:min(560px,100%);margin-top:14px;display:grid;gap:4px;justify-items:center}
+.xp-level{font-family:var(--f-display);font-weight:700;color:var(--xp);font-size:22px;text-shadow:2px 2px 0 #1b3b06, -1px -1px 0 #1b3b06}
+.xp-bar{width:100%;height:12px;background:#1f1f1f;border:2px solid #000;position:relative;overflow:hidden}
+.xp-fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(#b4ff70,var(--xp) 45%,#4fae10);transition:width .4s ease}
+.xp-bar::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(5.55% - 2px),#000 calc(5.55% - 2px) 5.55%)}
+.xp-label{color:#cfcfcf;font-size:13px}
+
+/* ---------- Fülek (creative inventory tabok) ---------- */
+.tabs-wrap{position:sticky;top:0;z-index:20;background:linear-gradient(var(--night) 70%,transparent)}
+.tabs{
+  max-width:1100px;margin:0 auto;padding:10px 16px 0;display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;
+}
+.tab{
+  flex:0 0 auto;font-family:var(--f-ui);font-size:16px;font-weight:600;
+  background:#a8a8a8;color:#2e2e2e;border:0;cursor:pointer;
+  padding:9px 14px 8px;
+  box-shadow:inset 2px 2px 0 #dcdcdc, inset -2px 0 0 #6a6a6a;
+  border-radius:3px 3px 0 0;
+  display:flex;align-items:center;gap:8px;
+}
+.tab:hover{background:#b8b8b8}
+.tab[aria-selected="true"]{background:var(--panel);color:#1f1f1f;padding-bottom:12px;margin-bottom:-4px;box-shadow:inset 2px 2px 0 var(--hi), inset -2px 0 0 var(--lo)}
+.tab .ico{width:18px;height:18px;image-rendering:pixelated}
+
+/* ---------- Fő panel ---------- */
+main{max-width:1100px;margin:0 auto;padding:0 16px 60px}
+.gui{
+  background:var(--panel);
+  border:2px solid #000;
+  box-shadow:inset 3px 3px 0 var(--hi), inset -3px -3px 0 var(--lo);
+  padding:clamp(18px,3vw,34px);
+  border-radius:0 4px 4px 4px;
+}
+section[hidden]{display:none}
+h2{font-family:var(--f-display);font-size:clamp(28px,3.6vw,36px);font-weight:600;letter-spacing:.02em;margin:0 0 6px;color:#2a2a2a;text-wrap:balance;line-height:1.1}
+h3{font-family:var(--f-ui);font-size:21px;font-weight:700;margin:28px 0 8px;color:#2a2a2a;text-wrap:balance}
+h4{font-family:var(--f-ui);font-size:17px;font-weight:700;margin:0 0 6px;color:#2a2a2a}
+.lede{max-width:70ch;margin:0 0 18px;color:var(--ink-soft);font-size:17px}
+p{max-width:72ch;margin:0 0 12px}
+ul.plain{margin:0 0 12px;padding-left:20px;max-width:72ch}
+ul.plain li{margin:3px 0}
+kbd{font-family:var(--f-ui);background:#e9e9e9;border:2px solid #000;box-shadow:inset -2px -2px 0 #9a9a9a, inset 2px 2px 0 #fff;padding:0 7px;font-size:14px;white-space:nowrap}
+
+/* Besüllyesztett doboz (slot-szerű) */
+.inset{
+  background:#b4b4b4;
+  box-shadow:inset 2px 2px 0 #8a8a8a, inset -2px -2px 0 #e2e2e2;
+  padding:16px 18px;
+}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+
+/* Chat-szerű kategóriacímke */
+.chip{
+  display:inline-block;font-family:var(--f-ui);font-size:13px;font-weight:600;
+  background:#2b2b2b;padding:1px 8px 2px;color:#fff;white-space:nowrap;
+  text-shadow:1px 1px 0 rgba(0,0,0,.6);
+}
+.chip.tech{color:var(--c-tech)} .chip.magic{color:var(--c-magic)} .chip.storage{color:var(--c-storage)}
+.chip.explore{color:var(--c-explore)} .chip.util{color:var(--c-util)} .chip.farm{color:var(--c-farm)} .chip.core{color:#fff}
+
+/* ---------- Haladási útvonal ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 18px}
+.btn{
+  font-family:var(--f-ui);font-size:15px;font-weight:600;cursor:pointer;
+  background:#6f6f6f;color:#fff;border:2px solid #000;padding:6px 14px;
+  box-shadow:inset 2px 2px 0 #a9a9a9, inset -2px -3px 0 #3d3d3d;
+  text-shadow:1px 1px 0 #3a3a3a;
+}
+.btn:hover{background:#7d86c4;box-shadow:inset 2px 2px 0 #b8c0ff, inset -2px -3px 0 #3a4080}
+.btn[aria-pressed="true"]{background:#5a6bc0;box-shadow:inset 2px 2px 0 #aab6ff, inset -2px -3px 0 #2d3678}
+.btn.small{font-size:13px;padding:3px 10px}
+
+.phases{display:grid;gap:18px;counter-reset:ph}
+.phase{display:grid;grid-template-columns:64px 1fr;gap:16px}
+.phase-num{
+  font-family:var(--f-display);font-weight:700;font-size:30px;color:#fff;
+  background:#5b5b5b;border:2px solid #000;height:64px;display:grid;place-items:center;
+  box-shadow:inset 3px 3px 0 #8d8d8d, inset -3px -3px 0 #333;
+  text-shadow:2px 2px 0 #222;
+}
+.phase.done .phase-num{background:#3f8a12;box-shadow:inset 3px 3px 0 #7fd23f, inset -3px -3px 0 #22500a}
+.phase h3{margin:2px 0 4px}
+.phase .why{color:var(--ink-soft);margin:0 0 10px;max-width:75ch}
+.goals{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.goal{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;padding:8px 10px;background:#bdbdbd;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f}
+.goal[hidden]{display:none}
+.goal input{appearance:none;width:22px;height:22px;margin:1px 0 0;background:#8b8b8b;border:0;cursor:pointer;
+  box-shadow:inset 2px 2px 0 #373737, inset -2px -2px 0 #fff;position:relative}
+.goal input:checked{background:#8b8b8b}
+.goal input:checked::after{content:"";position:absolute;left:7px;top:2px;width:6px;height:12px;border:solid var(--xp);border-width:0 3px 3px 0;transform:rotate(45deg);filter:drop-shadow(1px 1px 0 #1b3b06)}
+.goal label{cursor:pointer}
+.goal .t{font-weight:700}
+.goal .d{display:block;color:var(--ink-soft);font-size:15px}
+.goal.checked .t{text-decoration:line-through;text-decoration-color:#3f8a12;text-decoration-thickness:2px}
+.needs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0;align-items:center;font-size:14px;color:var(--ink-soft)}
+
+/* ---------- Receptek ---------- */
+.recipe-layout{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
+.recipe-list{display:grid;gap:14px;max-height:none}
+.recipe-list h4{font-size:16px;margin:0 0 4px;color:#2f2f2f}
+.recipe-list .group{display:grid;gap:3px}
+.rbtn{
+  text-align:left;font-family:var(--f-body);font-size:15px;cursor:pointer;
+  background:transparent;border:0;padding:5px 8px;color:var(--ink);
+  display:flex;gap:8px;align-items:center;
+}
+.rbtn:hover{background:#b0b0b0}
+.rbtn[aria-current="true"]{background:#8b8b8b;color:#fff;box-shadow:inset 2px 2px 0 #373737, inset -2px -2px 0 #fff}
+.rbtn .mini{width:24px;height:24px;flex:0 0 24px}
+.recipe-view{min-height:320px}
+.craft{
+  display:flex;flex-wrap:wrap;align-items:center;gap:18px;padding:20px;
+  background:var(--panel);border:2px solid #000;box-shadow:inset 3px 3px 0 var(--hi), inset -3px -3px 0 var(--lo);
+  width:fit-content;max-width:100%;
+}
+.craft-title{font-family:var(--f-ui);color:#404040;font-size:17px;flex-basis:100%;margin:-8px 0 -6px}
+.cgrid{display:grid;gap:0}
+.cgrid.g3{grid-template-columns:repeat(3,54px)}
+.cgrid.g2{grid-template-columns:repeat(2,54px)}
+.slot{
+  width:54px;height:54px;background:var(--slot);
+  box-shadow:inset 2px 2px 0 #373737, inset -2px -2px 0 #fff;
+  display:grid;place-items:center;position:relative;
+}
+.slot.out{width:72px;height:72px}
+.item{
+  width:48px;height:48px;display:block;cursor:help;
+  image-rendering:pixelated;image-rendering:crisp-edges;
+}
+.item:hover,.item:focus-visible{background:rgba(255,255,255,.45)}
+.slot.out .item{width:48px;height:48px}
+.spr{image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;vertical-align:middle}
+.count{position:absolute;right:4px;bottom:1px;font-family:var(--f-display);font-weight:700;color:#fff;text-shadow:2px 2px 0 #3f3f3f;font-size:16px;pointer-events:none}
+.chance{position:absolute;left:3px;top:1px;font-family:var(--f-ui);font-size:11px;color:#ffff55;text-shadow:1px 1px 0 #3f3f15;pointer-events:none}
+.arrow{display:grid;justify-items:center;gap:4px;min-width:56px}
+.arrow svg{width:44px;height:30px;image-rendering:pixelated}
+.arrow span{font-family:var(--f-ui);font-size:14px;color:#404040;text-align:center;max-width:140px;line-height:1.15}
+.furnace-in{display:grid;justify-items:center;gap:2px}
+.flame{width:30px;height:30px;image-rendering:pixelated}
+.arrow .amt{font-family:var(--f-ui);font-weight:700;font-size:14px;color:#6a6a6a}
+.inputs{display:flex;flex-wrap:wrap;gap:6px;max-width:190px}
+.outputs{display:flex;flex-wrap:wrap;gap:6px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:14px 0 0;font-size:14px;color:var(--ink-soft)}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend img{width:24px;height:24px}
+.rnote{margin:14px 0 0;max-width:70ch}
+.chain{display:grid;gap:14px}
+.mcnote{font-size:14px;color:var(--ink-soft);margin-top:18px;max-width:75ch}
+
+/* ---------- Modok ---------- */
+.search{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.search input{
+  font-family:var(--f-ui);font-size:17px;padding:8px 10px;min-width:min(320px,100%);flex:1 1 260px;max-width:420px;
+  background:#000;color:#fff;border:2px solid #a0a0a0;outline:none;
+}
+.search input:focus{border-color:#fff}
+.search input::placeholder{color:#8a8a8a}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.mod{background:#bdbdbd;box-shadow:inset 2px 2px 0 #e8e8e8, inset -2px -2px 0 #8a8a8a;padding:14px 16px;display:grid;gap:6px;align-content:start}
+.mod-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.mod h4{margin:0}
+.mod dl{margin:0;display:grid;gap:4px;font-size:15px}
+.mod dt{font-weight:700;font-size:13px;color:#555;margin-top:4px}
+.mod dd{margin:0}
+.mod dd.warn{color:#7a1d10}
+.empty{padding:20px;text-align:center;color:var(--ink-soft)}
+
+/* ---------- Táblázatok ---------- */
+.tbl-wrap{overflow-x:auto;background:#b4b4b4;box-shadow:inset 2px 2px 0 #8a8a8a, inset -2px -2px 0 #e2e2e2}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:680px}
+th{font-family:var(--f-ui);font-weight:600;text-align:left;font-size:15px;background:#8b8b8b;color:#fff;text-shadow:1px 1px 0 #3a3a3a;padding:8px 10px}
+td{padding:8px 10px;border-top:1px solid #9a9a9a;vertical-align:top}
+tr:nth-child(even) td{background:#bcbcbc}
+td.res{font-weight:700;white-space:nowrap}
+.dot{display:inline-block;width:12px;height:12px;border:1px solid rgba(0,0,0,.6);margin-right:6px;vertical-align:-1px}
+
+/* Energia létra */
+.ladder{display:grid;gap:8px}
+.rung{display:grid;grid-template-columns:minmax(170px,230px) 140px 1fr;gap:14px;align-items:center;padding:10px 12px;background:#bdbdbd;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f}
+.rung b{font-family:var(--f-ui);font-size:16px;font-weight:700;display:block;line-height:1.15}
+.rung small{color:#555}
+.pips{display:flex;gap:3px}
+.pips i{width:20px;height:14px;background:#6b6b6b;box-shadow:inset 1px 1px 0 #3a3a3a}
+.pips i.on{background:#d01b1b;box-shadow:inset 1px 1px 0 #ff6b6b, inset -1px -1px 0 #7a0e0e}
+.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.unit{padding:10px 12px;background:#2b2b2b;color:#e6e6e6;font-size:14px}
+.unit b{font-family:var(--f-ui);font-size:18px;display:block;color:#fff}
+
+/* Mágia ösvények */
+.track{display:grid;gap:0;margin:8px 0 0;padding:0;list-style:none;counter-reset:st}
+.track li{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:6px 0;position:relative}
+.track li::before{counter-increment:st;content:counter(st);font-family:var(--f-ui);font-weight:700;color:#fff;background:#7a3b9a;width:28px;height:28px;display:grid;place-items:center;border:2px solid #000;box-shadow:inset 2px 2px 0 #c37fe6, inset -2px -2px 0 #3e1450;font-size:14px}
+.track li:not(:last-child)::after{content:"";position:absolute;left:13px;top:36px;bottom:-4px;width:4px;background:#7a3b9a;opacity:.45}
+.magic-card{background:#bdbdbd;box-shadow:inset 2px 2px 0 #e8e8e8, inset -2px -2px 0 #8a8a8a;padding:16px 18px}
+.magic-card .tagline{color:var(--ink-soft);margin:0 0 6px;font-size:15px}
+.res-chip{display:inline-block;font-family:var(--f-ui);font-size:13px;background:#4a1d5c;color:#ffb3ff;padding:1px 8px;margin:4px 0 0}
+
+/* Veszélyek */
+.dangers{display:grid;gap:10px}
+.danger{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:12px 14px;background:#bdbdbd;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f;align-items:start}
+.sev{font-family:var(--f-ui);font-weight:700;font-size:14px;padding:3px 8px;text-align:center;color:#fff;border:2px solid #000}
+.sev.s3{background:#a11313;box-shadow:inset 2px 2px 0 #ff5b5b}
+.sev.s2{background:#c06a00;box-shadow:inset 2px 2px 0 #ffb04d}
+.sev.s1{background:#5f6d7a;box-shadow:inset 2px 2px 0 #a6b6c4}
+.danger h4{margin:0 0 2px}
+.danger p{margin:0;font-size:15px}
+
+/* Minecraft tooltip */
+#tip{
+  position:fixed;z-index:100;pointer-events:none;display:none;max-width:280px;
+  background:var(--tip-bg);color:#fff;padding:6px 9px;font-family:var(--f-ui);font-size:15px;line-height:1.3;
+  border:2px solid var(--tip-bg);
+  box-shadow:inset 0 0 0 2px #2d0a6b, inset 0 0 0 1px var(--tip-edge);
+  outline:2px solid #100010;
+}
+#tip .sub{color:#7f7fff;font-size:13px;display:block;margin-top:2px}
+#tip .mod{color:#5555ff;font-style:italic;font-size:13px;display:block;padding:0;background:none;box-shadow:none}
+
+/* Textúra-betöltő */
+.texpanel{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin:0 0 20px;padding:12px 14px;background:#2b2b2b;color:#e6e6e6;font-size:14px}
+.texpanel .tp-actions{display:flex;flex-wrap:wrap;gap:8px}
+.texpanel .tp-status{color:#cfcfcf;max-width:80ch}
+.texpanel .tp-status b{color:var(--xp)}
+.texpanel details{grid-column:1/-1;color:#cfcfcf}
+.texpanel summary{cursor:pointer;color:#fff;font-family:var(--f-ui)}
+.texpanel code{background:#000;padding:0 4px;color:#ffff55}
+.texpanel input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.texpanel label.btn{display:inline-block}
+@media (max-width:760px){.texpanel{grid-template-columns:1fr}}
+
+/* Tier list */
+.tierlist{margin:22px 0 0}
+.tierlist h3{margin:0 0 8px}
+.tier{display:grid;grid-template-columns:64px 1fr;border:2px solid #000;margin-top:-2px}
+.tier-label{display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:30px;color:#1f1f1f;text-shadow:1px 1px 0 rgba(255,255,255,.4)}
+.tier.S .tier-label{background:#ff7f7f}.tier.A .tier-label{background:#ffbf7f}.tier.B .tier-label{background:#ffdf7f}.tier.C .tier-label{background:#bfff7f}
+.tier-items{display:flex;flex-wrap:wrap;gap:8px;padding:8px;background:#3a3a3a;min-height:70px}
+.tile{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:start;background:#4a4a4a;color:#eee;padding:7px 10px 7px 7px;width:min(100%,300px);box-shadow:inset 2px 2px 0 #5f5f5f, inset -2px -2px 0 #2e2e2e}
+.tile b{font-family:var(--f-ui);font-size:16px;font-weight:700;display:block;color:#fff;line-height:1.15}
+.tile small{display:block;font-size:13.5px;color:#d6d6d6;line-height:1.35;margin-top:2px}
+.tile .trait{color:#ffff55;font-family:var(--f-ui);font-size:13px;font-weight:700}
+
+footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:#a9a9a9;font-size:14px}
+footer p{max-width:90ch}
+
+@media (max-width:760px){
+  .recipe-layout{grid-template-columns:1fr}
+  .recipe-list{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .phase{grid-template-columns:1fr}
+  .phase-num{width:56px;height:48px;font-size:24px}
+  .rung{grid-template-columns:1fr}
+  .danger{grid-template-columns:1fr}
+  .splash{display:none}
+  .gui{border-radius:0 0 4px 4px}
+}
+@media (prefers-reduced-motion: reduce){
+  .splash{animation:none}
+  .xp-fill{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="title">
+  <h1 class="logo"><small>FTB</small>Revelation</h1>
+  <div class="splash" aria-hidden="true">Most már magyarul is!</div>
+  <p class="subtitle">Magyar útmutató a Minecraft 1.12.2-es modpackhez: sorrend, receptláncok, modok, veszélyek</p>
+  <div class="xp" aria-live="polite">
+    <div class="xp-level" id="xpLevel">0</div>
+    <div class="xp-bar" role="progressbar" aria-label="Kipipált haladási célok" aria-valuemin="0" aria-valuemax="100" id="xpBar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    <div class="xp-label" id="xpLabel">0 / 0 cél kész. Az Útvonal fülön pipálhatod ki őket.</div>
+  </div>
+</header>
+
+<div class="tabs-wrap">
+  <nav class="tabs" role="tablist" aria-label="Útmutató fejezetei" id="tabs"></nav>
+</div>
+
+<main>
+<div class="gui">
+
+<!-- ================= KEZDÉS ================= -->
+<section id="kezdes" role="tabpanel" aria-labelledby="tab-kezdes">
+  <h2>Kezdés: mi ez a pack, és hogyan indulj</h2>
+  <p class="lede">A Revelation az FTB „kitchen sink” csomagja: tech, mágia, felfedezés és farmolás egyben, kötött küldetéslánc nélkül. Te döntöd el, merre haladsz, ezért könnyű elveszni. Ez az útmutató egy bevált sorrendet ad, és megmutatja, melyik mod mire jó.</p>
+
+  <div class="grid2">
+    <div class="inset">
+      <h4>Az első 10 perc</h4>
+      <ul class="plain">
+        <li>Nyisd meg az inventoryt: a kezdő tárgyak között gyakran ott az <b>Akashic Tome</b>, amiben szinte az összes mod kézikönyve egy könyvben van. Jobb klikkel válthatsz a könyvek között.</li>
+        <li>Fát vágj, de kőszerszám helyett rögtön <b>Tinkers' Construct</b> kovakő (flint) szerszámokat csinálj: kavicsot ásva jön a flint.</li>
+        <li>Építs egy kis menedéket, és az első éjszakát aludd át. Többjátékos szerveren a <b>Morpheus</b> miatt elég, ha a játékosok egy része alszik.</li>
+        <li>Tegyél le egy JourneyMap waypointot a bázisodnál (<kbd>B</kbd>).</li>
+      </ul>
+    </div>
+    <div class="inset">
+      <h4>Billentyűk, amiket tényleg használni fogsz</h4>
+      <ul class="plain">
+        <li><kbd>R</kbd> egy tárgy fölött a JEI-ben: hogyan készül (recept).</li>
+        <li><kbd>U</kbd> egy tárgy fölött: mire használható.</li>
+        <li><kbd>M</kbd> vagy <kbd>J</kbd>: JourneyMap térkép (a pack beállításától függ).</li>
+        <li>Görgő a crafting kimeneten / <kbd>Shift</kbd>+kattintás: Mouse Tweaks és Inventory Tweaks gyorsításai.</li>
+        <li>A JEI keresőben <code>@modnév</code> szűr modra, például <code>@botania</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Hogyan gondolkodj a packról</h3>
+  <div class="grid3">
+    <div class="inset"><span class="chip core">Gerinc</span><h4 style="margin-top:6px">Ércfeldolgozás</h4><p>Minden későbbi gép fémet zabál. Amint lehet, dupláztasd az érceket (Tinkers' Smeltery, majd Pulverizer vagy SAG Mill). Ez a legjobb korai befektetés.</p></div>
+    <div class="inset"><span class="chip tech">Tech</span><h4 style="margin-top:6px">Energia (RF)</h4><p>A legtöbb tech mod RF/FE-t használ, így egy generátor mindet ellátja. Kivétel az IndustrialCraft 2 (EU) és az Extra Utilities 2 (GP).</p></div>
+    <div class="inset"><span class="chip storage">Tárolás</span><h4 style="margin-top:6px">Digitális raktár</h4><p>Az AE2 vagy a Refined Storage a középjáték fordulópontja: kereshető raktár és automatikus craftolás. Elég az egyiket megépíteni.</p></div>
+    <div class="inset"><span class="chip magic">Mágia</span><h4 style="margin-top:6px">Párhuzamos ösvény</h4><p>A Botania és az Astral Sorcery szinte semmi technikát nem kér, nyugodtan kezdd az első napokban. A Blood Magic és a Thaumcraft inkább középjátékra való.</p></div>
+    <div class="inset"><span class="chip explore">Felfedezés</span><h4 style="margin-top:6px">Twilight Forest</h4><p>A legjobb kalandtartalom, sok értékes loottal. A portálhoz egy 2×2-es, virágokkal körbevett vízmedencébe dobj be egy gyémántot.</p></div>
+    <div class="inset"><span class="chip util">Végcél</span><h4 style="margin-top:6px">Draconic Evolution</h4><p>A klasszikus endgame: Ender Dragon szív, Fusion Crafting, Draconic páncél és Energy Core. Ide fut ki a tech-ág.</p></div>
+  </div>
+
+  <h3>Ajánlott beállítások</h3>
+  <ul class="plain">
+    <li><b>Memória:</b> 6–8 GB RAM-ot adj a launcherben; 4 GB-tal sokat akadhat.</li>
+    <li><b>Verzió:</b> az útmutató a 3.x kiadásokhoz készült. Régebbi 1.x/2.x verziókban más volt a modlista; ha valamit nem találsz, nézd meg a JEI-ben.</li>
+    <li><b>Mentés:</b> az FTB Utilities automatikusan készít backupot. Nagy kísérlet előtt (például Draconic reaktor) készíts kézzel is.</li>
+  </ul>
+</section>
+
+<!-- ================= ÚTVONAL ================= -->
+<section id="utvonal" role="tabpanel" aria-labelledby="tab-utvonal" hidden>
+  <h2>Haladási útvonal</h2>
+  <p class="lede">Hat szakasz az első naptól az endgame-ig. A célokat kipipálhatod, a böngésződ megjegyzi őket, és a fenti XP-csík mutatja, hol tartasz. A tech és a mágia célokat külön is szűrheted.</p>
+  <div class="filters" role="group" aria-label="Célok szűrése">
+    <button class="btn" data-track="all" aria-pressed="true">Mind</button>
+    <button class="btn" data-track="tech" aria-pressed="false">Csak tech</button>
+    <button class="btn" data-track="magic" aria-pressed="false">Csak mágia</button>
+    <button class="btn small" id="resetGoals" style="margin-left:auto">Pipák törlése</button>
+  </div>
+  <div class="phases" id="phases"></div>
+</section>
+
+<!-- ================= RECEPTEK ================= -->
+<section id="receptek" role="tabpanel" aria-labelledby="tab-receptek" hidden>
+  <h2>Receptláncok: mihez mi kell</h2>
+  <p class="lede">A legfontosabb köztes anyagok és gépi folyamatok, crafting-rácsban és gép-sémában. Vidd az egeret egy slot fölé a tárgy nevéért.</p>
+  <div class="texpanel"></div>
+  <div class="recipe-layout">
+    <nav class="recipe-list" id="recipeList" aria-label="Receptek"></nav>
+    <div class="recipe-view" id="recipeView" aria-live="polite"></div>
+  </div>
+  <p class="mcnote">A Revelation néhány receptet configgal módosíthat, a modok frissítései is változtathatnak rajtuk. Ha egy recept nem működik, a JEI-ben (<kbd>R</kbd>) a pontos változatot látod.</p>
+</section>
+
+<!-- ================= TINKERS ================= -->
+<section id="tinkers" role="tabpanel" aria-labelledby="tab-tinkers" hidden>
+  <h2>Tinkers' Construct: anyagok és módosítók</h2>
+  <p class="lede">Egy Tinkers' eszköz részekből áll: fej, nyél, kötés (a nagyobbaknál több rész is). Az anyag adja a statokat és a tulajdonságot (trait), a módosítókat pedig utólag teszed rá a Tool Stationben. Ez a tier list a 1.12-es Tinkers'-hez készült, és vélemény: a saját játékstílusod számít.</p>
+  <div class="texpanel"></div>
+  <div class="grid3" style="margin-bottom:8px">
+    <div class="inset"><h4>Módosító helyek</h4><p style="margin:0">Egy új eszköznek 3 szabad helye van. A papír (Writable) +1 helyet ad, és a packban lévő Tinkers' Tool Leveling miatt az eszköz használat közben szintet lép, és szintenként újabb helyet kap.</p></div>
+    <div class="inset"><h4>Mennyiség számít</h4><p style="margin:0">A Haste, a Luck és a Sharpness több darabból töltődik fel, a Tool Station kijelzi, hol tartasz. Egy szinthez akár egész blokkot (pl. redstone blokkot) is betehetsz.</p></div>
+    <div class="inset"><h4>Javítás</h4><p style="margin:0">Az eszközt a fej anyagával javítod a Tool Stationben. A Mending Moss vagy az Ecological (fa) trait magától javít.</p></div>
+  </div>
+  <div id="tiers"></div>
+</section>
+
+<!-- ================= MODOK ================= -->
+<section id="modok" role="tabpanel" aria-labelledby="tab-modok" hidden>
+  <h2>Modkalauz</h2>
+  <p class="lede">A pack fontos modjai: mire jók, mivel kezdd, és mire figyelj. Szűrhetsz kategóriára vagy név szerint.</p>
+  <div class="search">
+    <input type="search" id="modSearch" placeholder="Keresés: pl. Botania, tárolás, repülés…" aria-label="Modok keresése">
+  </div>
+  <div class="filters" role="group" aria-label="Kategória szűrő" id="catFilters"></div>
+  <div class="mods" id="mods"></div>
+</section>
+
+<!-- ================= HELYEK ================= -->
+<section id="helyek" role="tabpanel" aria-labelledby="tab-helyek" hidden>
+  <h2>Ércek, helyek, dimenziók</h2>
+  <p class="lede">Mit hol keress, és mire kell. A pontos magasság a configtól függ; a Just Enough Resources (JER) a JEI-ben grafikonon is mutatja az érceloszlást.</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Nyersanyag</th><th>Hol találod</th><th>Mire kell</th><th>Tipp</th></tr></thead>
+      <tbody id="oreRows"></tbody>
+    </table>
+  </div>
+
+  <h3>Dimenziók</h3>
+  <div class="grid3" id="dims"></div>
+</section>
+
+<!-- ================= ENERGIA ================= -->
+<section id="energia" role="tabpanel" aria-labelledby="tab-energia" hidden>
+  <h2>Energia: mivel termelj, és mikor válts</h2>
+  <p class="lede">Kezdd kicsiben, és lépj feljebb, amikor a gépeid már várnak az áramra. A piros jelzések a relatív teljesítményt mutatják, nem pontos értékeket.</p>
+  <div class="ladder" id="ladder"></div>
+
+  <h3>Energiafajták a packban</h3>
+  <p>Nem minden mod RF-et használ. Ezek egymásba általában nem alakíthatók át közvetlenül, ezért érdemes tudni, melyik gép mit eszik.</p>
+  <div class="units" id="units"></div>
+
+  <h3>Szállítás</h3>
+  <ul class="plain">
+    <li><b>Thermal Dynamics Fluxduct:</b> egyszerű, olcsó, korai RF-vezeték. A Leadstone kis, a Hardened és a Redstone Energy egyre nagyobb átvitelt bír.</li>
+    <li><b>Ender IO Conduit:</b> egy blokkban elfér RF, item, folyadék és redstone vezeték. Rendezett gépsorokhoz ideális.</li>
+    <li><b>Immersive Engineering vezetékek:</b> LV, MV és HV kábelek oszlopokon, nagy távolságra. A transzformátor itt kötelező.</li>
+    <li><b>Flux Networks:</b> vezeték nélküli RF. Flux Plug a termelőnél, Flux Point a fogyasztónál, akár dimenziók között is.</li>
+  </ul>
+</section>
+
+<!-- ================= MÁGIA ================= -->
+<section id="magia" role="tabpanel" aria-labelledby="tab-magia" hidden>
+  <h2>Mágia ösvények</h2>
+  <p class="lede">Minden mágiamodnak saját „valutája” és sorrendje van. Ezek a lépcsők a fő mérföldköveket mutatják, a részleteket a mod saját könyve adja.</p>
+  <div class="grid2" id="magic"></div>
+</section>
+
+<!-- ================= VESZÉLYEK ================= -->
+<section id="veszelyek" role="tabpanel" aria-labelledby="tab-veszelyek" hidden>
+  <h2>Vigyázz! Gyakori hibák és veszélyek</h2>
+  <p class="lede">A legtöbb világ nem a creeperek miatt megy tönkre, hanem egy rosszul bekötött gép vagy egy felrobbant reaktor miatt. Ezeket érdemes előre tudni.</p>
+  <div class="dangers" id="dangers"></div>
+</section>
+
+</div>
+</main>
+
+<footer>
+  <p>Készült a Revelation 3.x modlistája alapján. A Minecraft a Mojang védjegye, az FTB Revelation a Feed The Beast csapat modpackje; ez egy nem hivatalos rajongói útmutató.</p>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+/* ===================== ADATOK ===================== */
+const TABS = [
+  {id:"kezdes",   label:"Kezdés",   ico:"#5fb236"},
+  {id:"utvonal",  label:"Útvonal",  ico:"#e6c34a"},
+  {id:"receptek", label:"Receptek", ico:"#9a6a3a"},
+  {id:"tinkers",  label:"Tinkers'", ico:"#3f8fd0"},
+  {id:"modok",    label:"Modok",    ico:"#6c8ed8"},
+  {id:"helyek",   label:"Helyek",   ico:"#a0a0a0"},
+  {id:"energia",  label:"Energia",  ico:"#d01b1b"},
+  {id:"magia",    label:"Mágia",    ico:"#b24fd8"},
+  {id:"veszelyek",label:"Veszélyek",ico:"#ff7a00"}
+];
+
+const CAT = {
+  tech:{n:"Tech"}, magic:{n:"Mágia"}, storage:{n:"Tárolás"},
+  explore:{n:"Felfedezés"}, util:{n:"Eszközök"}, farm:{n:"Farm és kaja"}
+};
+
+const PHASES = [
+  {t:"Első nap: túlélés és alap szerszámok",
+   why:"A cél, hogy legyen biztonságos bázisod, kaja és jó szerszámok. A vanilla kőcsákány helyett a Tinkers' már az első percben jobb.",
+   goals:[
+    ["core","Tinkers' asztalok","Crafting Station, Part Builder, Tool Station, Pattern Chest. Mintát (Pattern) fából craftolsz."],
+    ["core","Kovakő (flint) csákány és fejsze","Olcsó, és a Crude tulajdonság miatt páncél nélküli ellenfeleken többet sebez. A nyél lehet fa is."],
+    ["core","Bázis, ágy, alap farm","Pam's HarvestCraft kerteket keress (bokros növények a tájban), magokból sokféle termény lesz."],
+    ["core","Storage Drawers vagy Iron Chests","A kő, föld és kavics fiókba kerüljön, ne a ládákba."],
+    ["magic","Botania: Petal Apothecary és első virágok","Mystical Flowerekből szirmot nyersz; a Pure Daisy kell a Livingrockhoz és a Livingwoodhoz."]
+   ], needs:["Fa","Kavics","Kő"]},
+  {t:"Smeltery és vaskor",
+   why:"A Tinkers' Smeltery megduplázza az érceket, és fémszerszámokat önt. Ez az első valódi gyorsítás.",
+   goals:[
+    ["core","Grout és Seared Brick","1 agyag + 1 homok + 1 kavics = 2 grout. Kemencében égetve Seared Brick lesz belőle."],
+    ["core","Smeltery felépítése","Controller, Drain, Faucet, Casting Table/Basin, Seared Tank. Ércből 2 rúd lesz."],
+    ["core","Vas és bronz szerszámok, módosítók","Redstone = gyorsaság, lapis = szerencse, kvarc = sebzés. A gyémánt egy bányászati szintet ad."],
+    ["explore","Slime-sziget keresése","Az égben lebegő kék és lila szigetekről Slime és Knightslime alapanyag jön."],
+    ["magic","Astral Sorcery: Aquamarine és Astral Tome","Aquamarint folyók és tengerek homokjában találsz. Tiszta égbolt és éjszaka kell hozzá."]
+   ], needs:["Agyag","Homok","Kavics","Vasérc"]},
+  {t:"Első gépek és áram",
+   why:"Itt kezdődik a tech. Egy Pulverizer vagy SAG Mill már 2× ércet ad melléktermékkel, és innen jön a szilícium, az acél és az ötvözetek.",
+   goals:[
+    ["tech","Thermal: Machine Frame és Pulverizer","Az ércből 2 por lesz, gyakran bónusz melléktermékkel (például a nikkelből platina)."],
+    ["tech","Első generátor","Stirling Dynamo (Thermal) vagy Coal Generator (Actually Additions). Mindkettő szenet éget."],
+    ["tech","Immersive Engineering: Coke Oven, majd Blast Furnace","Szénből koksz és kreozot lesz, vasból és kokszból acél. Kalapáccsal rakod össze a multiblokkokat."],
+    ["tech","Ender IO: SAG Mill és Alloy Smelter","Homokból szilícium, abból Electrical Steel és a többi ötvözet."],
+    ["tech","Grains of Infinity","Gyújts tüzet a bedrockon (kőzetágyon). Ebből jön a Simple SAG Mill és a Simple Alloy Smelter, amiket később fejlesztesz."],
+    ["magic","Blood Magic: Blood Altar és Weak Blood Orb","Sacrificial Daggerrel töltöd az oltárt, gyémántból lesz az első orb."]
+   ], needs:["Ón","Réz","Szén","Homok"]},
+  {t:"Automatizálás és tárolás",
+   why:"A kézi munkát gépek veszik át. A digitális raktárral és az automatikus craftolással rengeteg időt nyersz.",
+   goals:[
+    ["tech","AE2 vagy Refined Storage","AE2: meteoritokban vannak a presszek, és figyelni kell a csatornákra. RS: egyszerűbb, csatornák nélkül."],
+    ["tech","Automatikus ércfeldolgozás","Az érc csőben megy a Pulverizerbe, onnan a kemencébe. Az Induction Smelter Cinnabarral 3 rudat ad ércenként."],
+    ["tech","Nagyobb áram","IE Diesel Generator biodízellel, vagy passzív Extreme Reactor yelloriummal."],
+    ["explore","Nether: Cobalt és Ardite","Legalább Obsidian/Diamond szintű csákány kell. Együtt öntve Manyullyn lesz belőlük, a Tinkers' legjobb anyaga."],
+    ["tech","Repülés: Simply Jetpacks 2","Ender IO vagy Thermal jetpack. Később az Angel Ring vagy a Draconic páncél is repít."],
+    ["magic","Thaumcraft 6: Salis Mundus és Thaumonomicon","A Salis Mundust könyvespolcra szórva kapod meg a kutatókönyvet."],
+    ["explore","Twilight Forest: Naga és Lich","A főellenségek sorban nyitják meg a dimenzió veszélyes részeit."]
+   ], needs:["Acél","Szilícium","Certus Quartz","Gyémánt"]},
+  {t:"Középkései szakasz",
+   why:"A tömeges nyersanyag és a kényelem korszaka: void-bányák, mobfarmok, teleportok.",
+   goals:[
+    ["tech","Aktív Extreme Reactor és Turbine","A gőzt turbina alakítja RF-fé. A reaktor nem robban fel, nyugodtan kísérletezz."],
+    ["tech","Industrial Foregoing Laser Drill","Lencsével az adott színű érceket részesíti előnyben, és a semmiből bányászik."],
+    ["tech","Environmental Tech Void Ore Miner","Hat szint, mindegyikhez saját kristály kell. A legjobb érc-forrás a packban."],
+    ["tech","Mobfarm: Woot vagy Ender IO Powered Spawner","Kell a gyöngy, a blaze rod, a csont és a wither koponya."],
+    ["tech","RFTools: Builder, Teleporter, Crafter","A Builder quarry-kártyával is működik. A Matter Transmitter és Receiver között teleportálsz."],
+    ["magic","Botania: Terrasteel és Alfheim portál","Terrestrial Agglomeration Plate kell hozzá; az elf kereskedelemből Elementium lesz."]
+   ], needs:["Ender gyöngy","Nether Star","Sok RF"]},
+  {t:"Endgame",
+   why:"A végső célok: Draconic szint, hatalmas energiatárolás, a mágiamodok csúcsa.",
+   goals:[
+    ["tech","Ender Dragon újra és újra","Négy End Crystal a kijárati portál szélén újraidézi. Minden ölés egy Dragon Heartot ad."],
+    ["tech","Draconic Evolution: Wyvern szint és Fusion Crafting","Fusion Crafting Core és Injectorok kellenek; Awakened Draconium készül velük."],
+    ["tech","Energy Core","Óriási RF-tároló multiblokk Energy Pylonokkal, 8 szinttel."],
+    ["tech","Chaos Guardian","Messze az Endben lévő Chaos Islanden él. Chaos Shardot dob, az kell a Chaotic szinthez."],
+    ["magic","Blood Magic: Archmage's Blood Orb","Ötödik szintű oltár és Nether Star kell hozzá."],
+    ["magic","Botania: Gaia Guardian","Beacon és négy Gaia Pylon kell, Terrasteel ingottal idézed meg."],
+    ["tech","Draconic Reactor (csak óvatosan!)","Hatalmas teljesítmény, de rossz kezelésnél óriási krátert hagy. Előtte készíts backupot."]
+   ], needs:["Dragon Heart","Chaos Shard","Awakened Draconium"]}
+];
+
+/* Tárgyak: [név, alapszín, forma, mod, opciók]  –  a formák saját rajzolású 16×16-os pixelartok */
+const IT = {
+  clay:["Agyaggolyó (Clay Ball)","#a4aab9","ball","Minecraft"],
+  sand:["Homok","#e3d9a2","cube","Minecraft",{tex:"noise",acc:"#c4b67c",sp:.22}],
+  gravel:["Kavics","#8a817c","cube","Minecraft",{tex:"noise",acc:"#5b5450",sp:.38}],
+  grout:["Grout","#b9b4ad","lump","Tinkers' Construct",{acc:"#8c8780",sp:.25}],
+  searedbrick:["Seared Brick","#5d5754","brick","Tinkers' Construct",{acc:"#46413e",sp:.18}],
+  searedbricks:["Seared Bricks (blokk)","#625b57","cube","Tinkers' Construct",{tex:"brick",acc:"#2b2725"}],
+  ore:["Fémérc (vas, arany, réz…)","#8f8f8f","cube","bármely",{tex:"ore",acc:"#d9a070"}],
+  ingot:["Fémrúd (ingot)","#d6d0c4","ingot","bármely"],
+  dust:["Fémpor (dust)","#c2baad","dust","bármely"],
+  bonus:["Melléktermék (pl. nikkelből platina)","#9fc6e6","dust","Thermal Expansion"],
+  cobalt:["Cobalt Ingot","#2f6fdc","ingot","Tinkers' Construct"],
+  ardite:["Ardite Ingot","#d8742a","ingot","Tinkers' Construct"],
+  manyullyn:["Manyullyn Ingot","#8e4fc4","ingot","Tinkers' Construct"],
+  iron:["Vasrúd (Iron Ingot)","#d8d8d8","ingot","Minecraft"],
+  ironnugget:["Vasrög (Iron Nugget)","#c8c8c8","nugget","Minecraft"],
+  tin:["Ónrúd (Tin Ingot)","#c4d3e6","ingot","Thermal Foundation"],
+  tingear:["Ón fogaskerék (Tin Gear)","#b4c4d8","gear","Thermal Foundation"],
+  glass:["Üveg","#bfe9f3","cube","Minecraft",{tex:"glass"}],
+  frame:["Machine Frame","#9aa3ab","cube","Thermal Expansion",{tex:"frame",acc:"#39424a"}],
+  cinnabar:["Cinnabar","#c9302c","gem","Thermal Foundation"],
+  richslag:["Rich Slag","#6b4f3a","lump","Thermal Foundation",{acc:"#d6a74a",sp:.2}],
+  coal:["Szén (Coal)","#333333","lump","Minecraft",{acc:"#111111",sp:.2}],
+  coalcoke:["Coal Coke","#4a4843","lump","Immersive Engineering",{acc:"#76726a",sp:.3}],
+  creosote:["Creosote Oil (folyadék)","#6a5218","drop","Immersive Engineering"],
+  steel:["Acélrúd (Steel Ingot)","#8d939a","ingot","Immersive Engineering"],
+  slag:["Salak (Slag)","#8a847a","lump","Immersive Engineering",{acc:"#5e5951",sp:.3}],
+  coaldust:["Szénpor (Powdered Coal)","#3a3a3a","dust","Ender IO"],
+  silicon:["Silicon","#6d6a78","slab","Ender IO",{tex:"plain"}],
+  redstone:["Redstone por","#d01b1b","dust","Minecraft"],
+  gold:["Aranyrúd (Gold Ingot)","#f5cf3a","ingot","Minecraft"],
+  glowstone:["Glowstone por","#f2d36b","dust","Minecraft"],
+  enderpearl:["Ender gyöngy","#1f6f63","ball","Minecraft",{acc:"#63d6b6",sp:.12}],
+  obsidian:["Obszidián","#2a1f3d","cube","Minecraft",{tex:"noise",acc:"#5b3f8f",sp:.2}],
+  soulsand:["Lélekhomok (Soul Sand)","#5a4332","cube","Minecraft",{tex:"noise",acc:"#36271c",sp:.3}],
+  electricalsteel:["Electrical Steel","#b8b8b8","ingot","Ender IO"],
+  energetic:["Energetic Alloy","#e89d3c","ingot","Ender IO"],
+  vibrant:["Vibrant Alloy","#a8d64f","ingot","Ender IO"],
+  darksteel:["Dark Steel","#4b4b4b","ingot","Ender IO"],
+  conductive:["Conductive Iron","#d9a3a3","ingot","Ender IO"],
+  pulsating:["Pulsating Iron","#6fcf9f","ingot","Ender IO"],
+  redstonealloy:["Redstone Alloy","#b5413a","ingot","Ender IO"],
+  soularium:["Soularium","#7a5b3a","ingot","Ender IO"],
+  certus:["Certus Quartz Crystal","#bcd8f2","crystal","Applied Energistics 2"],
+  chargedcertus:["Charged Certus Quartz","#e4f2ff","crystal","Applied Energistics 2",{acc:"#ffffff",spark:true}],
+  netherquartz:["Nether Quartz","#e8ded2","crystal","Minecraft"],
+  fluix:["Fluix Crystal","#7b4fc8","crystal","Applied Energistics 2"],
+  diamond:["Gyémánt","#4fe0d8","gem","Minecraft"],
+  press_logic:["Inscriber Logic Press","#a3acb6","slab","Applied Energistics 2",{tex:"press",acc:"#e8c84a"}],
+  press_calc:["Inscriber Calculation Press","#a3acb6","slab","Applied Energistics 2",{tex:"press",acc:"#bcd8f2"}],
+  press_eng:["Inscriber Engineering Press","#a3acb6","slab","Applied Energistics 2",{tex:"press",acc:"#4fe0d8"}],
+  press_sil:["Inscriber Silicon Press","#a3acb6","slab","Applied Energistics 2",{tex:"press",acc:"#6d6a78"}],
+  pr_logic:["Printed Logic Circuit","#e0bd3a","board","Applied Energistics 2",{acc:"#7a5e10"}],
+  pr_calc:["Printed Calculation Circuit","#b4cfea","board","Applied Energistics 2",{acc:"#4a6a8a"}],
+  pr_eng:["Printed Engineering Circuit","#6fd6d2","board","Applied Energistics 2",{acc:"#1f6a68"}],
+  pr_sil:["Printed Silicon","#77748a","board","Applied Energistics 2",{acc:"#3a3848"}],
+  proc:["Logic / Calculation / Engineering Processor","#3d7a4a","chip","Applied Energistics 2",{acc:"#e0bd3a"}],
+  stone:["Kő","#8f8f8f","cube","Minecraft",{tex:"noise",acc:"#6e6e6e",sp:.25}],
+  livingrock:["Livingrock","#e2e2d6","cube","Botania",{tex:"noise",acc:"#bdbdac",sp:.22}],
+  log:["Fa rönk","#6b5232","cube","Minecraft",{tex:"log",acc:"#b38b55"}],
+  livingwood:["Livingwood","#5a3f22","cube","Botania",{tex:"log",acc:"#8f6a3a"}],
+  manasteel:["Manasteel Ingot","#4f9fe0","ingot","Botania"],
+  manadiamond:["Mana Diamond","#7fe3ff","gem","Botania"],
+  manapearl:["Mana Pearl","#3fb7c8","ball","Botania",{acc:"#bff4ff",sp:.06}],
+  terrasteel:["Terrasteel Ingot","#3fbf3f","ingot","Botania"],
+  redstoneblock:["Redstone blokk","#b51717","cube","Minecraft",{tex:"plain"}],
+  goldblock:["Aranyblokk","#f1c21b","cube","Minecraft",{tex:"plain"}],
+  weakshard:["Weak Blood Shard","#a01828","crystal","Blood Magic"],
+  netherstar:["Nether Star","#f4f4d8","star","Minecraft"],
+  orb1:["Weak Blood Orb (1. szint)","#b2182b","orb","Blood Magic",{acc:"#ff8a8a"}],
+  orb2:["Apprentice Blood Orb (2. szint)","#b2182b","orb","Blood Magic",{acc:"#ff8a8a"}],
+  orb3:["Magician's Blood Orb (3. szint)","#b2182b","orb","Blood Magic",{acc:"#ffd36b"}],
+  orb4:["Master Blood Orb (4. szint)","#b2182b","orb","Blood Magic",{acc:"#c58aff"}],
+  orb5:["Archmage's Blood Orb (5. szint)","#b2182b","orb","Blood Magic",{acc:"#ffffff"}],
+  draconium:["Draconium Ingot","#7b3fc4","ingot","Draconic Evolution"],
+  dracocore:["Draconium Core","#7b3fc4","core","Draconic Evolution",{gem:"#f5cf3a"}],
+  wyverncore:["Wyvern Core","#4a2390","core","Draconic Evolution",{gem:"#d070ff"}],
+  lapis:["Lápisz lazuli","#2f5bd0","gem","Minecraft"],
+  emerald:["Smaragd","#2fc65a","gem","Minecraft"],
+  flint:["Kovakő (Flint)","#4d4d4d","gem","Minecraft"],
+  bone:["Csont","#e8e4d4","rod","Minecraft"],
+  planks:["Fa deszka","#a8834f","cube","Minecraft",{tex:"noise",acc:"#8a6a3a",sp:.12}],
+  cobble:["Zúzottkő (Cobblestone)","#7c7c7c","cube","Minecraft",{tex:"noise",acc:"#555555",sp:.35}],
+  knightslime:["Knightslime Ingot","#b77fd6","ingot","Tinkers' Construct"],
+  pigiron:["Pig Iron Ingot","#e8a3a3","ingot","Tinkers' Construct"],
+  bronze:["Bronzrúd","#d39b4f","ingot","Thermal Foundation"],
+  electrum:["Electrum rúd","#e8d97a","ingot","Thermal Foundation"],
+  silver:["Ezüstrúd","#d8e0e8","ingot","Thermal Foundation"],
+  copper:["Rézrúd","#d8854a","ingot","Thermal Foundation"],
+  paper:["Papír","#f0f0e8","board","Minecraft",{acc:"#c8c8c0"}],
+  prismarine:["Prismarine Shard","#6fc7b5","crystal","Minecraft"],
+  netherrack:["Netherrack","#7a2e2e","cube","Minecraft",{tex:"noise",acc:"#4f1a1a",sp:.3}],
+  endstone:["End Stone","#e8e6b0","cube","Minecraft",{tex:"noise",acc:"#c9c68a",sp:.3}],
+  slimeball:["Slime Ball","#6fcf4f","ball","Minecraft",{acc:"#a8f08a",sp:.1}],
+  reinforcement:["Reinforcement","#3a2a4f","slab","Tinkers' Construct",{tex:"plain"}],
+  mendingmoss:["Mending Moss","#4a8f3a","lump","Tinkers' Construct",{acc:"#2f5f24",sp:.25}],
+  silkyjewel:["Silky Jewel","#e2f0c8","gem","Tinkers' Construct"],
+  necroticbone:["Necrotic Bone","#3a3a3a","rod","Tinkers' Construct"],
+  consecrated:["Consecrated Soil","#8a6a4a","cube","Tinkers' Construct",{tex:"noise",acc:"#e8d07a",sp:.15}],
+  spidereye:["Erjesztett pókszem","#8a2f4f","ball","Minecraft",{acc:"#4a1426",sp:.2}],
+  blazepowder:["Blaze por","#f0a020","dust","Minecraft"],
+  piston:["Dugattyú (Piston)","#9a8a6a","cube","Minecraft",{tex:"plain"}],
+  chorus:["Popped Chorus Fruit","#c7a0d8","ball","Minecraft",{acc:"#8a5aa0",sp:.15}]
+};
+
+/* ===== Pixelart motor: 16×16-os sprite-ok, egységes bal-felső fénnyel ===== */
+const ART = {
+  ingot:[
+    "................","................","................","................",
+    ".......oooooo...",".....oohhhhhlo..","...oohhllllbbdo.",".oohlllllbbbbdo.",
+    "ohllllbbbbbbddo.","oblllbbbbbbddo..","obbbbbbbbbddo...","odbbbbbbddoo....",
+    ".oddddddoo......","..oooooo........","................","................"],
+  nugget:[
+    "................","................","................","................",
+    "................","......ooo.......","....oohllo......","...ohllbbdo.....",
+    "...olbbbbdo.oo..","....odbbdo.ohlo.",".....oooo..obdo.","............oo..",
+    ".....ooo........","....ohlbo.......","....obddo.......",".....ooo........"],
+  dust:[
+    "................","................","................","................",
+    "................","................",".......oo.......","......ohlo......",
+    ".....ohllbo.....","....ohlbbbbo....","...ohlbxbbbdo...","..ohlbbbbbxbdo..",
+    ".olbbxbbbbbbbdo.",".oddddddddddddo.","..oooooooooooo..","................"],
+  gem:[
+    "................","................","................",".....oooooo.....",
+    "....ohhllbbo....","...ohlllbbbdo...","..ohllllbbbbdo..",".ohhlllbbbbbbdo.",
+    ".odhlllbbbbbddo.","..odllbbbbbddo..","...odlbbbbddo...","....odbbbddo....",
+    ".....odbddo.....","......oddo......",".......oo.......","................"],
+  crystal:[
+    "................",".........oo.....","........ohlo....",".......ohlbdo...",
+    ".......ohlbdo...","......ohllbdo...","......ohlbbdo...",".oo...ohlbbdo...",
+    "ohlo..ohlbbdo...","ohbdo.ohlbbdo...","ohbdooohlbbdo...",".obdoohllbbddo..",
+    ".oddoodlbbbddo..","..oooodddddddo..","....ooooooooo...","................"],
+  brick:[
+    "................","................","................","................",
+    "................","..oooooooooooo..",".ohhllllllllbbo.",".ohllxlllllbbdo.",
+    ".olbbbbbbxbbbdo.",".obbxbbbbbbbddo.",".oddddddddddddo.","..oooooooooooo..",
+    "................","................","................","................"],
+  chip:[
+    "................","................","................","................",
+    "..oooooooooooo..",".lohhllllllbbol.","..ohlxxxxxxbdo..",".lohlxbbbbxbdol.",
+    "..ohlxbbbbxbdo..",".lohlxbbbbxbdol.","..ohlxxxxxxbdo..",".lobbbbbbbbddol.",
+    "..oddddddddddo..","..oooooooooooo..","................","................"],
+  board:[
+    "................","................","................","................",
+    "................","..oooooooooooo..","..ohhllllllbbo..","..ohxxxxlxxbdo..",
+    "..olbbbxbbxbdo..","..olxxbxxxxbdo..","..obbxbbbxbddo..","..oddddddddddo..",
+    "..oooooooooooo..","................","................","................"],
+  rod:[
+    "................","............oo..","...........ohlo.","..........ohlbo.",
+    ".........ohlbo..","........ohlbo...",".......ohlbo....","......ohlbo.....",
+    ".....ohlbo......","....ohlbo.......","...ohlbo........","..ohlbo.........",
+    ".ohlbdo.........",".obddo..........","..oo............","................"],
+  core:[
+    "................","..oooooooooooo..",".ohhhhllllllbbo.",".ohoooooooooodo.",
+    ".oho...xx...odo.",".oho..xggx..odo.",".oho.xggmmx.odo.",".ohoxggmmkkxodo.",
+    ".ohoxgmmkkkxodo.",".oho.xmkkkx.odo.",".oho..xkkx..odo.",".oho...xx...odo.",
+    ".ohoooooooooodo.",".obdddddddddddo.","..oooooooooooo..","................"]
+};
+
+function _rgb(h){const n=parseInt(h.slice(1),16);return [(n>>16)&255,(n>>8)&255,n&255];}
+function _mix(c,t,a){return c.map((v,i)=>Math.round(v+(t[i]-v)*a));}
+function _css(c,a){return a==null?`rgb(${c[0]},${c[1]},${c[2]})`:`rgba(${c[0]},${c[1]},${c[2]},${a})`;}
+function _hash(x,y,s){const v=Math.sin(x*12.9898+y*78.233+(s||0)*37.719)*43758.5453;return v-Math.floor(v);}
+function palette(base,o){
+  const c=_rgb(base),W=[255,255,255],K=[0,0,0];
+  const dark = (0.299*c[0]+0.587*c[1]+0.114*c[2])<70;
+  const p={
+    o:_css(_mix(c,K,dark?.55:.62)), d:_css(_mix(c,K,.28)), b:_css(c),
+    l:_css(_mix(c,W,dark?.18:.25)), h:_css(_mix(c,W,dark?.38:.55)),
+    x:o&&o.acc?o.acc:_css(_mix(c,K,.42))
+  };
+  if(o&&o.gem){const g=_rgb(o.gem);p.g=_css(_mix(g,W,.45));p.m=_css(g);p.k=_css(_mix(g,K,.3));p.x=_css(_mix(g,K,.6));}
+  return p;
+}
+/* árnyalás pozíció alapján: bal-felül világos, jobb-alul sötét */
+function tone(x,y,s){const t=(x+y)/30+(_hash(x,y,s)-.5)*.08;return t<.3?"h":t<.46?"l":t<.7?"b":"d";}
+function fromMask(mask,s,o){
+  const g=[];
+  for(let y=0;y<16;y++){g.push([]);for(let x=0;x<16;x++){
+    if(!mask(x,y)){g[y].push(".");continue;}
+    const edge=!mask(x-1,y)||!mask(x+1,y)||!mask(x,y-1)||!mask(x,y+1);
+    if(edge){g[y].push("o");continue;}
+    if(o&&o.sp&&_hash(x,y,s+9)<o.sp){g[y].push("x");continue;}
+    g[y].push(tone(x,y,s));
+  }}
+  return g.map(r=>r.join(""));
+}
+const inRange=(x,y)=>x>=0&&y>=0&&x<16&&y<16;
+const PROC = {
+  gear(o,s){return fromMask((x,y)=>{if(!inRange(x,y))return false;const dx=x+.5-8,dy=y+.5-8,r=Math.hypot(dx,dy),a=Math.atan2(dy,dx);
+    const R=Math.cos(8*a+.39)>0.25?7.7:5.7;return r<=R&&r>2.3;},s);},
+  ball(o,s){return fromMask((x,y)=>inRange(x,y)&&Math.hypot(x+.5-8,y+.5-8.5)<=5.7,s,o);},
+  orb(o,s){const g=fromMask((x,y)=>inRange(x,y)&&Math.hypot(x+.5-8,y+.5-8)<=6.6,s);
+    return g.map((r,y)=>r.split("").map((c,x)=>{const d=Math.hypot(x+.5-8,y+.5-8);
+      if(c!=="o"&&c!=="."&&Math.abs(d-3.2)<.6&&(x+y)%3!==0)return "x";return c;}).join(""));},
+  lump(o,s){return fromMask((x,y)=>{if(!inRange(x,y))return false;const dx=x+.5-8,dy=(y+.5-9)*1.25,a=Math.atan2(dy,dx);
+    const k=Math.floor((a+Math.PI)/(2*Math.PI)*9);return Math.hypot(dx,dy)<=5.4+_hash(k,3,s)*1.9;},s,o);},
+  star(o,s){return fromMask((x,y)=>{if(!inRange(x,y))return false;const ax=Math.abs(x+.5-8),ay=Math.abs(y+.5-8);
+    return (ax+ay<=7.7&&(ax<=1.6||ay<=1.6))||(ax+ay<=4.3);},s);},
+  drop(o,s){return fromMask((x,y)=>{if(!inRange(x,y))return false;const dx=x+.5-8,py=y+.5;
+    return (py>=8&&Math.hypot(dx,py-10.3)<=5.3)||(py<8&&py>1.6&&Math.abs(dx)<=(py-1.6)*.78);},s);}
+};
+
+/* izometrikus kocka / lap: felső lap világos, bal közép, jobb sötét */
+function drawIso(ctx,base,o,s,slab){
+  const c=_rgb(base),W=[255,255,255],K=[0,0,0];
+  const oy=slab?5:0,H=slab?3:8,tex=(o&&o.tex)||"plain";
+  const acc=o&&o.acc?_rgb(o.acc):_mix(c,K,.4);
+  const shades=[_mix(c,K,.32),_mix(c,K,.12),c,_mix(c,W,.18),_mix(c,W,.36)];
+  const face=(x,y)=>{
+    const px=x+.5,py=y+.5;
+    let u=(px-2*(py-oy-4))/2,v=(px+2*(py-oy-4))/2;
+    if(u>=0&&u<8&&v>=0&&v<8)return{f:"t",u,v};
+    if(px<8){const vv=py-oy-4-px/2;if(vv>=0&&vv<H)return{f:"l",u:px,v:vv};}
+    else{const vv=py-oy-8+(px-8)/2;if(vv>=0&&vv<H)return{f:"r",u:px-8,v:vv};}
+    return null;
+  };
+  for(let y=0;y<16;y++)for(let x=0;x<16;x++){
+    const F=face(x,y);if(!F)continue;
+    const edge=[[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>!(inRange(x+a,y+b)&&face(x+a,y+b)));
+    let si=F.f==="t"?3:F.f==="l"?2:1, col=null, alpha=null;
+    const n=_hash(x,y,s);
+    if(tex==="noise"||tex==="ore"){ if(n<.16)si--; else if(n>.86)si++; if(o.sp&&_hash(x,y,s+3)<o.sp)col=acc; }
+    if(tex==="ore"){ const cl=_hash(Math.floor(F.u/3),Math.floor(F.v/3)+(F.f==="t"?9:F.f==="l"?19:29),s); if(cl<.45&&_hash(x,y,s+5)<.55)col=_mix(acc,F.f==="t"?W:K,F.f==="t"?.15:F.f==="r"?.25:0); }
+    if(tex==="brick"&&F.f!=="t"){ const row=Math.floor(F.v/2.67),off=(row%2)*4; if((F.v%2.67)<.9||((F.u+off)%8)<1)col=acc; }
+    if(tex==="brick"&&F.f==="t"){ if(n<.12)si--; }
+    if(tex==="plain"){ if((F.u<1||F.v<1)&&F.f!=="t")si++; if(F.f==="t"&&(F.u<1||F.v<1))si=4; }
+    if(tex==="frame"){ const inner=F.u>1.4&&F.u<6.6&&F.v>1.4&&F.v<(F.f==="t"?6.6:H-1.4); if(inner)col=_mix(acc,K,F.f==="r"?.3:F.f==="l"?.1:0); }
+    if(tex==="log"){ if(F.f==="t"){const d=Math.hypot(F.u-4,F.v-4);col=Math.floor(d*1.1)%2===0?_mix(acc,K,.12):acc;if(d>3.6)col=null;}
+      else if(Math.floor(F.u)%3===0)si--; }
+    if(tex==="press"&&F.f==="t"){ const fu=Math.floor(F.u),fv=Math.floor(F.v); if(((fv===2||fv===5)&&fu>0&&fu<7)||((fu===2||fu===5)&&fv>1&&fv<6))col=acc; }
+    if(tex==="glass"){ alpha=.28; const diag=F.f!=="t"&&Math.abs(F.u-F.v*(F.f==="l"?1:-1)-(F.f==="l"?1:6))<.7; if(diag){col=W;alpha=.85;} }
+    si=Math.max(0,Math.min(4,si));
+    let fill=col||shades[si];
+    if(edge){fill=_mix(c,K,.6);alpha=tex==="glass"?.9:null;}
+    ctx.fillStyle=_css(fill,alpha);ctx.fillRect(x,y,1,1);
+  }
+}
+
+/* hasábok (rúd, rög): izometrikus doboz, a hosszú él jobbra-le fut */
+function drawBoxes(ctx,base,boxes){
+  const c=_rgb(base),W=[255,255,255],K=[0,0,0];
+  const grid=[...Array(16)].map(()=>Array(16).fill(null));
+  boxes.forEach((B,bi)=>{
+    for(let y=0;y<16;y++)for(let x=0;x<16;x++){
+      const px=x+.5-B.tx,py=y+.5-B.ty; let F=null;
+      const u=(px+2*py)/2,v=(2*py-px)/2;
+      if(u>=0&&u<B.a&&v>=0&&v<B.b)F={f:"t",u,v};
+      else{
+        const u2=px+B.b,w2=py-(u2+B.b)/2;
+        if(u2>=0&&u2<B.a&&w2>=0&&w2<B.h)F={f:"l",u:u2,w:w2};
+        else{const v3=B.a-px,w3=py-(B.a+v3)/2; if(v3>=0&&v3<B.b&&w3>=0&&w3<B.h)F={f:"r",v:v3,w:w3};}
+      }
+      if(F){F.bi=bi;grid[y][x]=F;}
+    }
+  });
+  for(let y=0;y<16;y++)for(let x=0;x<16;x++){
+    const F=grid[y][x]; if(!F)continue;
+    const same=(a,b)=>inRange(a,b)&&grid[b][a]&&grid[b][a].bi===F.bi;
+    const edge=!same(x-1,y)||!same(x+1,y)||!same(x,y-1)||!same(x,y+1);
+    let col;
+    if(edge) col=_mix(c,K,.6);
+    else if(F.f==="t") col = F.u<1.2 ? _mix(c,W,.6) : F.v<1.2 ? _mix(c,W,.42) : _mix(c,W,.26);
+    else if(F.f==="l") col = F.w<1 ? _mix(c,W,.05) : c;
+    else col=_mix(c,K,.3);
+    ctx.fillStyle=_css(col);ctx.fillRect(x,y,1,1);
+  }
+}
+const BOXES={
+  ingot:[{tx:5,ty:3,a:10,b:4,h:3}],
+  nugget:[{tx:5,ty:3,a:4,b:3,h:2},{tx:11,ty:6,a:3,b:3,h:2},{tx:6,ty:8,a:5,b:3,h:2}]
+};
+const _spriteCache={};
+let TEXO={}; /* betöltött eredeti textúrák: id -> dataURL (csak a néző böngészőjében) */
+function sprite(id){
+  if(TEXO[id])return TEXO[id];
+  if(_spriteCache[id])return _spriteCache[id];
+  const it=IT[id]; if(!it) return "";
+  const [,base,shape,,opt]=it; const o=opt||{}; const s=id.length*7+id.charCodeAt(0);
+  const cv=document.createElement("canvas");cv.width=16;cv.height=16;const ctx=cv.getContext("2d");
+  if(shape==="cube"||shape==="slab"){ drawIso(ctx,base,o,s,shape==="slab"); }
+  else if(BOXES[shape]){ drawBoxes(ctx,base,BOXES[shape]); }
+  else{
+    const p=palette(base,o);
+    let rows=ART[shape]?ART[shape]:PROC[shape](o,s);
+    if(ART[shape]&&o.sp) rows=rows.map((r,y)=>r.split("").map((c,x)=>("bl".includes(c)&&_hash(x,y,s)<o.sp)?"x":c).join(""));
+    rows.forEach((r,y)=>{for(let x=0;x<16;x++){const ch=r[x];if(!ch||ch===".")continue;ctx.fillStyle=p[ch]||p.b;ctx.fillRect(x,y,1,1);}});
+    if(o.spark){ctx.fillStyle="#ffffff";[[3,3],[12,2],[13,9],[2,10]].forEach(([x,y])=>{ctx.fillRect(x,y,1,1);});}
+  }
+  return _spriteCache[id]=cv.toDataURL();
+}
+
+const RECIPES = [
+  {g:"Tinkers' Construct", items:[
+    {id:"grout", n:"Grout", type:"grid", size:2, shapeless:true,
+      grid:["clay","sand","gravel",null], out:"grout", cnt:2,
+      note:"Formátlan recept: a három hozzávaló bárhol lehet a rácsban. Nagyobb tételben 8 homok + 8 kavics + 8 agyag is megy."},
+    {id:"seared", n:"Seared Bricks", type:"chain", steps:[
+      {in:["grout"], m:"Kemence", out:[["searedbrick",1]]},
+      {grid:["searedbrick","searedbrick","searedbrick","searedbrick"], size:2, out:"searedbricks", cnt:1, title:"Crafting"}
+    ], note:"A Smeltery fala, padlója és tartályai mind ebből készülnek. A Controllert, a Draint és a Faucetet a JEI-ben nézd meg."},
+    {id:"smelt", n:"Érc duplázás a Smelteryben", type:"machine", in:["ore"], m:"Smeltery, majd Casting Table", amt:"288 mB", out:[["ingot",2]],
+      note:"Egy érc 288 mB olvadt fémet ad, egy rúd 144 mB, vagyis 2 rúd lesz belőle. Ingot Casttal a Casting Table-re öntöd. Ez az első érc-duplázásod, mielőtt gépeid lennének."},
+    {id:"many", n:"Manyullyn", type:"machine", in:["cobalt","ardite"], m:"Smeltery (ötvözés)", out:[["manyullyn",1]],
+      note:"A két olvadt fémet egyszerre tartsd a Smelteryben, és automatikusan ötvöződnek. Kiváló csákányfej-anyag."}
+  ]},
+  {g:"Thermal Expansion", items:[
+    {id:"gear", n:"Fogaskerék (Gear)", type:"grid", size:3,
+      grid:[null,"tin",null,"tin","ironnugget","tin",null,"tin",null], out:"tingear", cnt:1,
+      note:"Bármely fémből ugyanígy: 4 rúd keresztben, középen egy vasrög. A fogaskerekek a Thermal gépek alapjai."},
+    {id:"frame", n:"Machine Frame", type:"grid", size:3,
+      grid:["iron","glass","iron","glass","tingear","glass","iron","glass","iron"], out:"frame", cnt:1,
+      note:"Minden Thermal gép alapja. Egy Redstone Reception Coil és a gépre jellemző alkatrész kell még hozzá."},
+    {id:"pulv", n:"Pulverizer", type:"machine", in:["ore"], m:"Pulverizer", out:[["dust",2],["bonus",1,"esély"]],
+      note:"2 por ércenként, és sokszor melléktermék. A port aztán Redstone Furnace-ben olvasztod."},
+    {id:"induct", n:"Induction Smelter + Cinnabar", type:"machine", in:["ore","cinnabar"], m:"Induction Smelter", out:[["ingot",3],["richslag",1,"esély"]],
+      note:"A Cinnabar a redstone érc porításának mellékterméke. Ércenként 3 rúd, ez a korai triplázás."}
+  ]},
+  {g:"Immersive Engineering", items:[
+    {id:"coke", n:"Coal Coke", type:"machine", in:["coal"], m:"Coke Oven", out:[["coalcoke",1],["creosote",1]],
+      note:"A Coke Oven 3×3×3-as multiblokk Coke Brickből; az Engineer's Hammerrel üss a közepére. A kreozot a fakezeléshez kell."},
+    {id:"steel", n:"Acél (Steel)", type:"machine", in:["iron","coalcoke"], m:"Blast Furnace", out:[["steel",1],["slag",1]],
+      note:"Lassú, de üzemanyag nélkül megy. Az Improved Blast Furnace gyorsabb, és dupla bemenettel is etethető."},
+    {id:"crush", n:"Crusher", type:"machine", in:["ore"], m:"Crusher (multiblokk)", out:[["dust",2],["bonus",1,"esély"]],
+      note:"Árammal működő nagy daráló, sok bemenettel. Az Arc Furnace ércből közvetlenül 2 rudat ad."}
+  ]},
+  {g:"Ender IO", items:[
+    {id:"sil", n:"Silicon", type:"machine", in:["sand"], m:"SAG Mill", out:[["silicon",1]],
+      note:"A SAG Mill Grinding Balls-szal még többet ad. Ércből 2 port csinál, esélyes bónusszal."},
+    {id:"alloys", n:"Ötvözetek (Alloy Smelter)", type:"chain", steps:[
+      {in:["iron","coaldust","silicon"], m:"Alloy Smelter", out:[["electricalsteel",1]]},
+      {in:["redstone","gold","glowstone"], m:"Alloy Smelter", out:[["energetic",1]]},
+      {in:["energetic","enderpearl"], m:"Alloy Smelter", out:[["vibrant",1]]},
+      {in:["iron","coaldust","obsidian"], m:"Alloy Smelter", out:[["darksteel",1]]},
+      {in:["iron","redstone"], m:"Alloy Smelter", out:[["conductive",1]]},
+      {in:["iron","enderpearl"], m:"Alloy Smelter", out:[["pulsating",1]]},
+      {in:["redstone","silicon"], m:"Alloy Smelter", out:[["redstonealloy",1]]},
+      {in:["gold","soulsand"], m:"Alloy Smelter", out:[["soularium",1]]}
+    ], note:"Az Electrical Steel a gépházakhoz, az Energetic és Vibrant a jobb kondenzátorokhoz és conduitokhoz, a Dark Steel a páncélhoz kell. A Dark Steel szénpor helyett sima szénnel is készülhet."}
+  ]},
+  {g:"Applied Energistics 2", items:[
+    {id:"charged", n:"Charged Certus Quartz", type:"machine", in:["certus"], m:"Charger", out:[["chargedcertus",1]],
+      note:"A Charger áramot kér. A Charged Certus kell a Fluixhoz és a Meteorite Compasshoz."},
+    {id:"fluix", n:"Fluix Crystal", type:"machine", in:["chargedcertus","netherquartz","redstone"], m:"Dobd vízbe", out:[["fluix",2]],
+      note:"A három tárgyat egyszerre dobd egy vízblokkba, néhány másodperc múlva összeolvadnak. Gépesíteni a Fluix-szal lehet."},
+    {id:"proc", n:"Processzorok", type:"chain", steps:[
+      {in:["press_logic","gold"], m:"Inscriber", out:[["pr_logic",1]]},
+      {in:["press_calc","certus"], m:"Inscriber", out:[["pr_calc",1]]},
+      {in:["press_eng","diamond"], m:"Inscriber", out:[["pr_eng",1]]},
+      {in:["press_sil","silicon"], m:"Inscriber", out:[["pr_sil",1]]},
+      {in:["pr_logic","redstone","pr_sil"], m:"Inscriber", out:[["proc",1]]}
+    ], note:"A négy presszt meteoritok közepén, egy Sky Stone ládában találod. Ha egy megvan, az Inscriber le is másolja."}
+  ]},
+  {g:"Botania", items:[
+    {id:"daisy", n:"Pure Daisy", type:"chain", steps:[
+      {in:["stone"], m:"Pure Daisy köré", out:[["livingrock",1]]},
+      {in:["log"], m:"Pure Daisy köré", out:[["livingwood",1]]}
+    ], note:"Tedd a 8 blokkot a virág köré; kis idő múlva átalakulnak. Áram és mana nem kell hozzá."},
+    {id:"mana", n:"Mana Pool termékek", type:"chain", steps:[
+      {in:["iron"], m:"Mana Pool", out:[["manasteel",1]]},
+      {in:["diamond"], m:"Mana Pool", out:[["manadiamond",1]]},
+      {in:["enderpearl"], m:"Mana Pool", out:[["manapearl",1]]}
+    ], note:"A tárgyat dobd a teli Mana Poolba. A manát Endoflame vagy Hydroangeas termeli, a Mana Spreader viszi a poolba."},
+    {id:"terra", n:"Terrasteel", type:"machine", in:["manasteel","manadiamond","manapearl"], m:"Terrestrial Agglomeration Plate", out:[["terrasteel",1]],
+      note:"Nagyon sok mana kell hozzá, tegyél több Spreadert a lap köré. A Terrasteel a Botania középjátékának kapuja."}
+  ]},
+  {g:"Blood Magic", items:[
+    {id:"orbs", n:"Blood Orbok", type:"chain", steps:[
+      {in:["diamond"], m:"Blood Altar, 1. szint", out:[["orb1",1]]},
+      {in:["redstoneblock"], m:"Blood Altar, 2. szint", out:[["orb2",1]]},
+      {in:["goldblock"], m:"Blood Altar, 3. szint", out:[["orb3",1]]},
+      {in:["weakshard"], m:"Blood Altar, 4. szint", out:[["orb4",1]]},
+      {in:["netherstar"], m:"Blood Altar, 5. szint", out:[["orb5",1]]}
+    ], note:"Az orb a hálózatodban tárolja a LP-t (Life Points). Minden szinthez nagyobb oltár (rúnák, pillérek) kell, a pontos felépítést a Sanguine Scientiumban látod."}
+  ]},
+  {g:"Draconic Evolution", items:[
+    {id:"dcore", n:"Draconium Core", type:"grid", size:3,
+      grid:["draconium","gold","draconium","gold","diamond","gold","draconium","gold","draconium"], out:"dracocore", cnt:1,
+      note:"A Draconic alapalkatrésze. A Draconium port Pulverizerben duplázd, mielőtt kiolvasztod."},
+    {id:"wcore", n:"Wyvern Core", type:"grid", size:3,
+      grid:["draconium","dracocore","draconium","dracocore","netherstar","dracocore","draconium","dracocore","draconium"], out:"wyverncore", cnt:1,
+      note:"Wyvern szerszámokhoz, páncélhoz és a Fusion Crafting injectorokhoz kell. Egy Wither ölés egy Nether Star."}
+  ]}
+];
+
+const MODS = [
+  {n:"Tinkers' Construct", c:"util", w:"Moduláris szerszámok és fegyverek, amik szintet lépnek és módosíthatók. Smeltery az ércduplázáshoz. Lásd a Tinkers' fület.", s:"Stencil Table, Part Builder, Tool Station, kovakő fejekkel.", x:"A Cobalt és az Ardite legalább Obsidian/Diamond szintű csákányt kér."},
+  {n:"Construct's Armory", c:"util", w:"Tinkers'-szerű moduláris páncél ugyanazokból az anyagokból.", s:"Armor Station a Tinkers' asztalok mellé.", x:""},
+  {n:"Thermal Expansion", c:"tech", w:"Klasszikus gépsor: Pulverizer, Induction Smelter, Fluid Transposer, Dynamók. Augmentekkel fejleszthető.", s:"Machine Frame, majd Pulverizer és Redstone Furnace.", x:"A gépek alapból lassúak; tegyél beléjük Upgrade Kitet és augmentet."},
+  {n:"Thermal Dynamics", c:"tech", w:"Fluxduct (RF), Itemduct és Fluiduct.", s:"Leadstone Fluxduct a generátortól a gépekig.", x:"Az Itemductba szervókat tegyél, különben nem húz ki semmit."},
+  {n:"Ender IO", c:"tech", w:"Ötvözetek, egy blokkba pakolható conduitok, Dark Steel páncél, Soul Binder, Travel Anchor.", s:"SAG Mill (szilícium), Alloy Smelter, Stirling Generator.", x:"Grains of Infinity: gyújts tüzet a bedrockon."},
+  {n:"Immersive Engineering", c:"tech", w:"Ipari multiblokkok (Coke Oven, Blast Furnace, Crusher, Excavator, Diesel Generator), vezetékek oszlopokon.", s:"Engineer's Hammer és az Engineer's Manual; Coke Oven Coke Brickből.", x:"A vezetékeknek feszültségszintjük van, LV, MV és HV kell transzformátorral."},
+  {n:"Immersive Petroleum", c:"tech", w:"Olajkutak (Pumpjack) és Distillation Tower; dízel és benzin.", s:"Core Sample Drill: megmutatja az olajmezőt a chunkban.", x:""},
+  {n:"IndustrialCraft 2", c:"tech", w:"EU-alapú gépek, gumi, reaktor. Az ércmosás és a centrifuga extra port ad.", s:"Treetap a gumifához, aztán Generator és Macerator.", x:"Túl nagy feszültségtől a gép felrobban. Csak csavarkulccsal bontsd, különben Machine Casing marad."},
+  {n:"Actually Additions", c:"tech", w:"Atomic Reconstructor, Empowerer, Laser Relay, Canola-alapú áram, sok QoL.", s:"Az Actually Additions Manual könyv mindent leír. Kezdj a Coal Generatorral.", x:"A Reconstructor lézere sebez, ne állj elé."},
+  {n:"Extra Utilities 2", c:"tech", w:"Grid Power (GP) rendszer, Quantum Quarry, Transfer Node, Angel Ring, dobok.", s:"Szélmalom vagy vízimalom GP-hez, Transfer Node a csövezéshez.", x:"A GP nem RF; csak az ExU2 saját gépei használják."},
+  {n:"Industrial Foregoing", c:"tech", w:"Laser Drill, Mob Crusher, Tree Fluid Extractor (latex → műanyag), Black Hole Unit.", s:"Latex és Plastic a legtöbb géphez.", x:"A Laser Drillhez Laser Base és lencse kell, áramigényes."},
+  {n:"Environmental Tech", c:"tech", w:"Void Ore Miner, Void Botanic Miner, napelem-tömbök. A semmiből bányászik.", s:"Litherite kristály, majd Void Ore Miner Tier 1.", x:"Szintek sorrendje: Litherite, Erodium, Kyronite, Pladium, Ionite, Aethium."},
+  {n:"Extreme Reactors", c:"tech", w:"Méretezhető reaktor yelloriummal, aktív módban turbinával.", s:"Passzív 5×5×5-ös reaktor sima RF-kimenettel.", x:"Nem robban fel. A Cyanite a hulladék, újrahasznosítható."},
+  {n:"Draconic Evolution", c:"tech", w:"Endgame szerszámok és páncél, Energy Core, Fusion Crafting, Dislocator, Draconic Reactor.", s:"Draconium érc (mélyen, a Netherben és az Endben több).", x:"A reaktor rossz kezelésnél óriási krátert robbant."},
+  {n:"RFTools", c:"tech", w:"Builder (quarry, másolás), Teleporter, Crafter, Storage Scanner, Environmental Controller (repülés zónában).", s:"Machine Frame és Dimensional Shard (ritka érc).", x:"A Builder quarry módban chunkokat tölt, szerveren figyelj a lagra."},
+  {n:"RFTools Power", c:"tech", w:"Coalgen, Blazing Generator, Endergenic Generator és Power Cellek.", s:"Coalgen korai, egyszerű RF-forrás.", x:"Az Endergenic időzítést igényel, olvasd el a leírását."},
+  {n:"Deep Resonance", c:"tech", w:"Rezonáló kristályokból nagy teljesítményű generátor-multiblokk.", s:"Resonating Ore és Crystalizer.", x:"Sugárzás és szennyezés lehetséges; előbb olvasd el a kézikönyvet."},
+  {n:"Woot", c:"tech", w:"Szimulált mobfarm: nem kell valódi mob, mégis jön a loot.", s:"Mob Sharddal programozol egy mobot, majd ölsz belőle, hogy feltöltődjön.", x:"Sok RF-et és magas szintű Factory multiblokkot kér."},
+  {n:"Soul Shards: The Old Ways", c:"tech", w:"Soul Shard ölésekkel töltődik; a Soul Cage-ben spawnerként működik.", s:"Soul Shard + ölj sok azonos mobot.", x:""},
+  {n:"Flux Networks", c:"tech", w:"Vezeték nélküli RF akár dimenziók között.", s:"Flux Plug a termelőhöz, Flux Point a fogyasztóhoz, ugyanabban a hálózatban.", x:""},
+  {n:"Compact Machines", c:"tech", w:"Kis kocka, amiben egy egész szoba van: gépsorok összenyomva.", s:"Miniaturization Field Projector ×4.", x:"Tunnelekkel kötöd ki az áramot és az itemeket."},
+  {n:"OpenComputers", c:"tech", w:"Programozható számítógépek Lua nyelven, robotok, drónok.", s:"Case, CPU, RAM, HDD, EEPROM, OpenOS lemez.", x:"Programozás nélkül kevés értelme van."},
+  {n:"Project Red", c:"tech", w:"Haladó redstone: vezetékek, logikai kapuk, lámpák, gépek.", s:"Red Alloy Wire és Gate-ek.", x:""},
+  {n:"Steve's Carts Reborn", c:"tech", w:"Moduláris csillék: favágó, bányász, farmoló vonatok.", s:"Cart Assembler.", x:"Összetett, érdemes a kézikönyvvel kezdeni."},
+  {n:"XNet", c:"tech", w:"Kompakt kábelhálózat itemekhez, folyadékhoz, áramhoz, redstone-hoz egy GUI-ból.", s:"Controller + Connectorok.", x:""},
+  {n:"Simply Jetpacks 2", c:"tech", w:"Ender IO és Thermal alapú jetpackek és fluxpackek.", s:"Az első szint olcsó; a legjobb hover módot is tud.", x:"Figyeld a töltöttséget, különben lezuhansz."},
+  {n:"Botania", c:"magic", w:"Virág-alapú „technológiai mágia”: mana, automatizálás, erős eszközök.", s:"Lexica Botania, Petal Apothecary, Pure Daisy, Endoflame.", x:"A Hydroangeas és több generáló virág idővel elszárad."},
+  {n:"Blood Magic", c:"magic", w:"Vér (LP) a valuta: oltárok, sigilek, rituálék, Bound fegyverek.", s:"Sacrificial Dagger és Blood Altar.", x:"A tőr sebez. Teli élettel használd, vagy építs Well of Sufferinget."},
+  {n:"Astral Sorcery", c:"magic", w:"Csillagfény és csillagképek: attunement, perkfa, rituálék.", s:"Aquamarine → Astral Tome → Luminous Crafting Table.", x:"Tiszta égbolt és éjszaka kell; a blokkok az ég felé gyengítik."},
+  {n:"Thaumcraft 6", c:"magic", w:"Kutatás, essentia, infúzió, golemek.", s:"Salis Mundus könyvespolcra → Thaumonomicon.", x:"A Flux szennyezés riftet és warpot okoz."},
+  {n:"Embers Rekindled", c:"magic", w:"Ember energia: steampunk-mágia, ötvözetek, kiegészítők.", s:"Ember Bore mélyen lent, Ember Activator, Emitter/Receptor.", x:"A Bore minél mélyebben van, annál jobban termel."},
+  {n:"Soot", c:"magic", w:"Az Embers kiegészítője, új gépekkel és alkímiával.", s:"Az Embers alapok után.", x:""},
+  {n:"Roots", c:"magic", w:"Természetmágia: mozsár, varázsporok, rituálék, staff.", s:"Wildroot, Pestle és Mortar.", x:""},
+  {n:"Reliquary", c:"magic", w:"Különleges ereklyék: Mercy Cross, Rending Gale, Handgun, Alkahestry Tome.", s:"Mobokból ritka alapanyagok esnek.", x:""},
+  {n:"Applied Energistics 2", c:"storage", w:"Digitális tárolás és autocrafting, hatalmas méretben.", s:"Meteorit (Meteorite Compass), Inscriber, presszek.", x:"Csatornák: sima kábel 8, dense 32. Controller kell a több eszközhöz."},
+  {n:"Refined Storage", c:"storage", w:"Egyszerűbb digitális raktár csatornák nélkül, autocraftinggal.", s:"Quartz Enriched Iron és processzorok.", x:"Minden eszköz folyamatosan RF-et fogyaszt."},
+  {n:"Storage Drawers", c:"storage", w:"Fiókok tömeges blokkoknak, Drawer Controllerrel egy bemenetre.", s:"Fa fiókok és Controller.", x:""},
+  {n:"Iron Chests", c:"storage", w:"Nagyobb ládák, fejleszthetők helyben.", s:"Upgrade itemmel a meglévő ládát fejleszted.", x:""},
+  {n:"YABBA", c:"storage", w:"Hordók egy fajta tárgynak, fejleszthetők.", s:"Item Barrel.", x:""},
+  {n:"/dank/null", c:"storage", w:"Zsebben hordható tároló, automatikus felvétellel.", s:"A szemét blokkok gyűjtésére ideális.", x:""},
+  {n:"Iron Backpacks", c:"storage", w:"Hátizsákok fejlesztésekkel.", s:"Basic Backpack bőrből.", x:""},
+  {n:"Ender Storage", c:"storage", w:"Színkóddal összekötött ládák és tankok, bárhol.", s:"Ugyanaz a háromszínű kód = közös tartalom.", x:"Szerveren mindenki látja a publikus kódot."},
+  {n:"The Twilight Forest", c:"explore", w:"Varázslatos dimenzió főellenségekkel és kincsekkel.", s:"Portál: 2×2 víz, virággal körbevéve, dobj bele gyémántot.", x:"A biomok zárva vannak, amíg a megfelelő bosst le nem győzöd."},
+  {n:"Quark", c:"explore", w:"Vanilla-szerű fejlesztések: új kövek, mobok, QoL.", s:"Magától működik.", x:""},
+  {n:"Natura és Traverse", c:"explore", w:"Új fák, biomok és Nether növények.", s:"", x:""},
+  {n:"Waystones", c:"explore", w:"Teleportkövek: bármelyik felfedezett kőhöz utazhatsz.", s:"Waystone vagy Warp Scroll.", x:""},
+  {n:"Nature's Compass", c:"explore", w:"Megadott biom keresése.", s:"Válaszd ki a biomot, és mutatja az irányt.", x:""},
+  {n:"JourneyMap", c:"explore", w:"Minitérkép, világtérkép, waypointok.", s:"B billentyű: waypoint.", x:""},
+  {n:"Aroma1997's Dimensional World", c:"explore", w:"Külön bányadimenzió, hogy a fő világ ép maradjon.", s:"A portál receptjét a JEI-ben nézd.", x:""},
+  {n:"Pam's HarvestCraft", c:"farm", w:"Rengeteg növény, gyümölcs és étel.", s:"Kertek a tájban, Cutting Board, Pot és Skillet.", x:""},
+  {n:"Cooking for Blockheads", c:"farm", w:"Konyha-multiblokk, ami megmutatja, mit tudsz főzni.", s:"Cooking Table, Fridge, Oven, Sink.", x:""},
+  {n:"Rustic", c:"farm", w:"Bor, mézsör, gyógynövények, főzetek.", s:"Gyógynövényeket keress, készíts Brewing Barrelt.", x:""},
+  {n:"Forestry és Gendustry", c:"farm", w:"Méhek, fák, genetika; Gendustry Mutatronnal a tenyésztés gépesíthető.", s:"Scoop + kaptárak, Apiary.", x:"A méheknek biom- és klímaigénye van."},
+  {n:"Magic Bees és Career Bees", c:"farm", w:"Még több méhfaj és termék.", s:"A Forestry alapok után.", x:""},
+  {n:"Just Enough Items", c:"util", w:"Receptkereső. R a recept, U a felhasználás.", s:"Mindig nyitva legyen.", x:""},
+  {n:"The One Probe", c:"util", w:"Ha egy blokkra nézel, megmutatja a tartalmát és állapotát.", s:"Sisakra is szerelhető a Probe.", x:""},
+  {n:"FTB Utilities", c:"util", w:"Chunk claim, chunkload, home, backup.", s:"Az inventory oldalsávjában a Claimed Chunks gombbal.", x:""},
+  {n:"Chisel és Chisels & Bits", c:"util", w:"Dekoratív blokkváltozatok és apró blokkdarabok.", s:"Chisel eszköz.", x:""},
+  {n:"Better Builder's Wands és Exchangers", c:"util", w:"Gyors építés pálcával és blokkcsere területre.", s:"", x:""},
+  {n:"OpenBlocks", c:"util", w:"Elevator, Hang Glider, sírkő haláláskor és sok apróság.", s:"A Hang Glider olcsó, korai siklórepülés.", x:""},
+  {n:"Torchmaster", c:"util", w:"Megatorch: nagy körzetben tiltja a mobok spawnolását.", s:"Rakd le a bázis közepére.", x:""},
+  {n:"Long Fall Boots", c:"util", w:"Csizma, ami kioltja az esési sebzést.", s:"", x:""}
+];
+
+const ORES = [
+  ["Vas, arany, redstone, gyémánt","#dcdcdc","Overworld, a megszokott magasságokon","Szinte minden","Duplázd vagy triplázd, ne olvaszd nyersen."],
+  ["Réz, ón","#d58a4a","Overworld, gyakori, közepes mélység","Bronz, Thermal gépek, Embers","A réz és az ón kell az első gépekhez."],
+  ["Ezüst, ólom","#b9c3d4","Overworld, közepes és mély","Invar, Electrum, Embers, IE vezetékek","Az ólom a Thermal és az Embers fontos alapanyaga."],
+  ["Nikkel, alumínium","#d9d0a0","Overworld","Invar (vas + nikkel), IE alkatrészek","A nikkelből Pulverizerben platina jöhet melléktermékként."],
+  ["Platina, irídium","#7fb3d9","Overworld, ritka, mély","Enderium, Thermal csúcsgépek","Érdemes a Void Ore Minerrel gépesíteni."],
+  ["Certus Quartz","#cfe3f5","Overworld, mélyebben; Charged változat ritkább","AE2","A Meteorite Compass a legközelebbi meteoritot mutatja."],
+  ["Black Quartz","#2b2b2b","Overworld","Actually Additions","Kristály-alapú gépekhez."],
+  ["Yellorite","#e6e04a","Overworld, mélyen","Extreme Reactors fűtőanyag","Yelloriummá olvasztod."],
+  ["Uránium","#4fa04f","Overworld","IC2 reaktor","Csak ha IC2 nukleárisat építesz."],
+  ["Apatit","#4fa0c8","Overworld, hegyek, felszín közelében","Forestry trágya","Nagy telérekben."],
+  ["Aquamarine","#4fd8c8","Folyók és tengerek homokja","Astral Sorcery kezdés","Ásd a homokot a víz alatt."],
+  ["Rock Crystal","#e6f0ff","Mélyen a föld alatt, ritka","Astral Sorcery kristályok","A Resonating Wand megmutatja a közelben."],
+  ["Márvány","#ececec","Overworld","Astral Sorcery építőelem","Nagy telérekben."],
+  ["Amber, Cinnabar, vis kristályok","#f0a830","Overworld, barlangok","Thaumcraft","A kristályokat ki kell ütni a falból."],
+  ["Draconium","#7b3fc4","Overworld (ritka, mély), Nether, End","Draconic Evolution","Az Endben a legtöbb."],
+  ["Dimensional Shard","#b0e0ff","Overworld, Nether, End","RFTools","Ritka, gyűjtsd, ha látod."],
+  ["Resonating Ore","#b04fd8","Overworld, Nether, End","Deep Resonance","Óvatosan bánj vele."],
+  ["Cobalt, Ardite","#2f6fdc","Nether","Tinkers' Manyullyn","Obsidian/Diamond szintű csákány kell."],
+  ["Meteoritok","#5a5a6a","Overworld felszíne","AE2 presszek","Középen Sky Stone láda a presszekkel."],
+  ["Slime-szigetek","#6fcf4f","Az égben lebegnek","Tinkers' Slime és Knightslime","Kék és lila változatok."]
+];
+
+const DIMS = [
+  ["Overworld","Minden alapérc, bázis. Ne lyuggasd ki teljesen: bányászni a bányadimenzióba menj."],
+  ["Nether","Cobalt, Ardite, Nether Quartz, blaze-ek (Pyrotheum, Blaze Rod), Wither koponyák."],
+  ["The End","Draconium, Ender Dragon (Dragon Heart), Chaos Island messze kint, shulkerek."],
+  ["Twilight Forest","Bossok, kincsek, különleges fák. A loot sok középjátékos cuccot kiválthat."],
+  ["Bányadimenzió","Aroma1997's Dimensional World: végtelen bányászat külön világban."],
+  ["Compact Machines","Zsebdimenzió: minden gépkocka egy saját szoba."],
+  ["Lost Cities","Romos városok. Világtípusként választható a világ létrehozásakor."],
+  ["Alfheim (nem dimenzió)","A Botania elf portálja csak kereskedés: nem lehet bemenni, de tárgyakat cserél."]
+];
+
+const LADDER = [
+  ["Coal Generator / Stirling Dynamo","Actually Additions / Thermal",1,"Szenet, fát éget. A Stirling Dynamo kb. 40 RF/t. Bármire elég az első gépekhez."],
+  ["Water Wheel / Windmill + Kinetic Dynamo","Immersive Engineering",1,"Üzemanyag nélkül. Lassú, de örök."],
+  ["Magmatic Dynamo","Thermal",2,"Lávát éget; Nether közelében végtelen forrás."],
+  ["Combustion Generator","Ender IO",2,"Üzemanyag + hűtőfolyadék (víz). Hoot/Rocket Fuel-lel erős."],
+  ["Diesel Generator","Immersive Engineering",3,"Kb. 4096 RF/t biodízellel vagy dízellel. Igazi középjátékos ugrás."],
+  ["Extreme Reactor (passzív)","Extreme Reactors",3,"Yellorium; egyszerű, méretezhető, nem robban."],
+  ["Solar Array","Environmental Tech",3,"Napelemtömbök, magasabb szinten óriási kimenet, üzemanyag nélkül."],
+  ["Extreme Reactor + Turbine","Extreme Reactors",4,"Aktív reaktor gőzzel; a turbinák nagyon erősek."],
+  ["Deep Resonance generátor","Deep Resonance",4,"Kristályalapú; nagy teljesítmény, de óvatosan."],
+  ["Draconic Reactor","Draconic Evolution",5,"A legerősebb. Folyamatos felügyelet, stabilizátorok, jó beállítás kell."]
+];
+
+const UNITS = [
+  ["RF / FE","A tech modok közös árama: Thermal, Ender IO, IE, AA, RFTools, Draconic."],
+  ["EU","IndustrialCraft 2. Feszültségszintek: LV, MV, HV, EV."],
+  ["GP (Grid Power)","Extra Utilities 2. Hálózati „kapacitás”, nem tárolható."],
+  ["Mana","Botania. Virágok termelik, Spreader viszi, Pool tárolja."],
+  ["LP (Life Points)","Blood Magic. Vér, a Soul Networkben tárolódik."],
+  ["Starlight","Astral Sorcery. Éjszaka, tiszta égből gyűjtöd."],
+  ["Vis és Essentia","Thaumcraft. A Vis a chunk aurájában van, az Essentia tárgyakból desztillálható."],
+  ["Ember","Embers Rekindled. Ember Bore bányássza, Activator alakítja."]
+];
+
+const MAGIC = [
+  {n:"Botania", tag:"Mana virágokból. Nyugodt, logikai fejtörőkre épülő mágia.", cur:"Mana", steps:[
+    "Lexica Botania, Mystical Flowerek, szirmok",
+    "Petal Apothecary, Pure Daisy: Livingrock és Livingwood",
+    "Mana Spreader, Mana Pool, Endoflame vagy Hydroangeas",
+    "Runic Altar: rúnák; Manasteel eszközök",
+    "Terrasteel a Terrestrial Agglomeration Plate-en",
+    "Alfheim portál: Elementium, Pixie Dust, Dragonstone",
+    "Gaia Guardian: Gaia Spirit, endgame relikviák"]},
+  {n:"Blood Magic", tag:"Vér az erő forrása: sigilek, rituálék, démonok.", cur:"LP", steps:[
+    "Blood Altar és Sacrificial Dagger",
+    "Weak Blood Orb (gyémánt), első sigilek (víz, láva)",
+    "2. szintű oltár rúnákkal, Apprentice Orb",
+    "Hellfire Forge és Tartaric Gem: démoni akarat",
+    "Well of Suffering rituálé: mobok helyetted véreznek",
+    "3–4. szint: Magician és Master Orb, Bound páncél",
+    "5. szint: Archmage's Orb Nether Starral"]},
+  {n:"Astral Sorcery", tag:"Csillagok és csillagképek, éjszakai munkával.", cur:"Starlight", steps:[
+    "Aquamarine keresése, Astral Tome",
+    "Luminous Crafting Table nyílt ég alatt",
+    "Resonating Wand: Rock Crystal és starlight helyek",
+    "Starlight Crafting Altar, Lightwell: Liquid Starlight",
+    "Attunement Altar: hangolódj egy csillagképre",
+    "Perkfa és Constellation Paper-ek",
+    "Celestial Altar, rituálék, Iridescent Altar"]},
+  {n:"Thaumcraft 6", tag:"Kutatás, aspektusok, infúzió. A leglassabb, de a legmélyebb.", cur:"Vis és Essentia", steps:[
+    "Vis kristályok + Salis Mundus",
+    "Thaumonomicon (könyvespolcra szórva)",
+    "Arcane Workbench, Research Table, Thaumometer szkennelés",
+    "Crucible: alkímia aspektusokkal",
+    "Essentia: Smelter, Alembic, Jar-ok",
+    "Infusion Altar: Runic Matrix, piedesztálok",
+    "Golemek, Focus-ok, végső kutatások"]},
+  {n:"Embers Rekindled", tag:"Steampunk-mágia, fémekkel és ember energiával.", cur:"Ember", steps:[
+    "Tinker's Hammer, Caminite Brick",
+    "Ember Bore (minél mélyebben) és Ember Activator",
+    "Emitter és Receptor: ember szállítása",
+    "Melter, Stamper, Mixer: Dawnstone (réz + arany)",
+    "Ember Bore automatizálás, Beam Cannon",
+    "Ancient Golemek a romokban: Ancient Motive Core",
+    "Kiegészítők és Soot gépek"]},
+  {n:"Roots", tag:"Természetmágia rituálékkal és varázsporokkal.", cur:"Porok", steps:[
+    "Wildroot és Pestle/Mortar",
+    "Varázsporok növényekből",
+    "Staff: a por varázslattá válik",
+    "Rituálék kövekből",
+    "Erősebb varázslatok és relikviák"]}
+];
+
+const DANGERS = [
+  [3,"Draconic Reactor","Ha a hőmérséklet vagy a mező kicsúszik, a robbanás óriási krátert vág, és a bázisod eltűnhet. Csak backup után építsd, és olvass utána a stabilizálásnak."],
+  [3,"IC2 túlfeszültség","Ha egy IC2 gépbe a szintjénél nagyobb feszültség megy (például HV egy LV gépbe), felrobban. Használj transzformátort, és ne keverd vakon más modokkal."],
+  [3,"Thaumcraft Flux","Sok varázslat Fluxot szabadít fel; ez riftet, Flux Goot és warpot okoz. Tartsd tisztán az aurát, és ne a fő bázisban kísérletezz."],
+  [2,"Deep Resonance sugárzás","A kristályok és a generátor sugárzást okozhatnak. Olvasd el a kézikönyvet, mielőtt bárhová leteszed."],
+  [2,"Blood Magic tőr","A Sacrificial Dagger minden használatnál sebez. Ha alacsony az életerőd, megölheted magad."],
+  [2,"Twilight Forest zárt biomok","A Fire Swamp, a Dark Forest és a hó biomok büntetnek, amíg a megelőző bosst le nem győzöd. Ne ugorj előre."],
+  [2,"AE2 csatornák","Egy sima kábel 8, egy dense 32 eszközt bír. Ha egy gép nem működik, valószínűleg elfogyott a csatorna. A Controller sokat segít."],
+  [2,"Halál a mélyben","Ha az itemjeid maradnak a földön, gyorsan menj vissza. Az Ender IO Soulbound bűvölése megtartja a tárgyat halál után."],
+  [1,"Chunk-betöltés és lag","A quarryk, mobfarmok és a sok szétszórt item laggot okoz, főleg szerveren. Csak azt töltsd be, ami tényleg kell."],
+  [1,"Botania virágok elszáradnak","A Hydroangeas és több generáló virág idővel elhal. Gépesítsd az újraültetést, vagy válts Endoflame-re vagy Thermalilyre."],
+  [1,"Astral Sorcery fényigény","A gyűjtők és oltárok csak tiszta égbolt alatt, éjszaka működnek jól. A közeli fák és tetők rontják a hatásfokot."],
+  [1,"Recepteltérések","Néhány mod receptjét a pack megváltoztathatja. Ha valami nem stimmel, a JEI az igazság."]
+];
+
+/* ===================== SEGÉDFÜGGVÉNYEK ===================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function lum(hex){
+  const n=parseInt(hex.slice(1),16);const r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  return (0.299*r+0.587*g+0.114*b)/255;
+}
+function store(key,val){try{ if(val===undefined) return localStorage.getItem(key); localStorage.setItem(key,val);}catch(e){return null}}
+
+function itemHTML(id,count,chance){
+  const it = IT[id]; if(!it) return "";
+  return `<img class="item" tabindex="0" src="${sprite(id)}" alt="${esc(it[0])}" data-tip="${esc(it[0])}" data-mod="${esc(it[3])}" width="48" height="48">`
+    + (count&&count>1?`<span class="count">${count}</span>`:"")
+    + (chance?`<span class="chance">${esc(chance)}</span>`:"");
+}
+function slot(id,count,chance,out){
+  return `<div class="slot${out?" out":""}">${id?itemHTML(id,count,chance):""}</div>`;
+}
+const ARROW = `<svg viewBox="0 0 22 15" aria-hidden="true"><path fill="#8b8b8b" d="M0 5h13V0h2v1h1v1h1v1h1v1h1v1h1v1h1v1h1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-5H0z"/><path fill="#ffffff" d="M0 5h13V0h2v1h1v1h1v1h1v1h1v1h1v1h1v1h1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-5H0z" opacity=".35" transform="translate(-1 -1)"/></svg>`;
+
+function gridBlock(grid,size,out,cnt,title){
+  /* mindig 3×3-as crafting table, mint a játékban; a 2×2-es recept a bal felső sarokba kerül */
+  const g = size===3 ? grid : [grid[0],grid[1],null,grid[2],grid[3],null,null,null,null];
+  const cells = g.map(k=>slot(k)).join("");
+  return `<div class="craft"><div class="craft-title">${esc(title||"Crafting")}</div>
+    <div class="cgrid g3">${cells}</div>
+    <div class="arrow">${ARROW}</div>
+    ${slot(out,cnt,null,true)}</div>`;
+}
+const FLAME = `<svg class="flame" viewBox="0 0 10 10" aria-hidden="true" shape-rendering="crispEdges">
+  <path fill="#7a2a00" d="M4 0h1v1h1v2h1v1h1v1h1v4H8v1H2V9H1V5h1V4h1V2h1z"/>
+  <path fill="#ff6a00" d="M4 2h1v1h1v1h1v1h1v3H7v1H3V8H2V5h1V4h1z"/>
+  <path fill="#ffd23a" d="M4 5h1v1h1v2H3V6h1z"/></svg>`;
+function machineBlock(inp,m,outs,amt){
+  const furnace = m==="Kemence";
+  const left = furnace
+    ? `<div class="furnace-in">${slot(inp[0])}${FLAME}<div class="slot" title="Üzemanyag (szén, fa…)"></div></div>`
+    : `<div class="inputs">${inp.map(k=>slot(k)).join("")}</div>`;
+  return `<div class="craft"><div class="craft-title">${esc(m)}</div>
+    ${left}
+    <div class="arrow">${amt?`<span class="amt">${esc(amt)}</span>`:""}${ARROW}</div>
+    <div class="outputs">${outs.map((o,i)=>slot(o[0],o[1],o[2],i===0)).join("")}</div></div>`;
+}
+function legendFor(ids){
+  const uniq=[...new Set(ids)].filter(k=>IT[k]);
+  return `<div class="legend">${uniq.map(k=>`<span><img class="spr" src="${sprite(k)}" alt="">${esc(IT[k][0])}</span>`).join("")}</div>`;
+}
+
+/* ===================== FÜLEK ===================== */
+function renderTabs(){
+  $("#tabs").innerHTML = TABS.map(t=>`<button class="tab" role="tab" id="tab-${t.id}" aria-controls="${t.id}" aria-selected="false" data-id="${t.id}">
+     <svg class="ico" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="${t.ico}"/><rect x="0" y="0" width="8" height="1" fill="#fff" opacity=".35"/><rect x="0" y="7" width="8" height="1" fill="#000" opacity=".3"/><rect x="2" y="2" width="2" height="2" fill="#fff" opacity=".25"/></svg>${esc(t.label)}</button>`).join("");
+  $("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab"); if(b) location.hash=b.dataset.id;});
+  $("#tabs").addEventListener("keydown",e=>{
+    if(!["ArrowLeft","ArrowRight"].includes(e.key)) return;
+    const ids=TABS.map(t=>t.id); const cur=ids.indexOf(currentTab());
+    const nx=ids[(cur+(e.key==="ArrowRight"?1:-1)+ids.length)%ids.length];
+    location.hash=nx; document.getElementById("tab-"+nx).focus();
+  });
+}
+function currentTab(){const h=location.hash.slice(1); return TABS.some(t=>t.id===h)?h:"kezdes";}
+function showTab(){
+  const id=currentTab();
+  TABS.forEach(t=>{
+    const sec=document.getElementById(t.id); sec.hidden = t.id!==id;
+    const b=document.getElementById("tab-"+t.id); b.setAttribute("aria-selected", t.id===id?"true":"false"); b.tabIndex = t.id===id?0:-1;
+  });
+}
+
+/* ===================== ÚTVONAL ===================== */
+let done = {};
+try{ done = JSON.parse(store("rev-goals")||"{}") || {}; }catch(e){ done={}; }
+let track = "all";
+function renderPhases(){
+  $("#phases").innerHTML = PHASES.map((p,pi)=>{
+    const goals = p.goals.map((g,gi)=>{
+      const key=`${pi}-${gi}`; const chk=!!done[key];
+      const show = track==="all" || g[0]===track || (g[0]==="core") || (track==="tech" && g[0]==="explore");
+      return `<li class="goal${chk?" checked":""}" data-k="${key}" ${show?"":"hidden"}>
+        <input type="checkbox" id="g${key}" ${chk?"checked":""}>
+        <label for="g${key}"><span class="t">${esc(g[1])}</span> <span class="chip ${g[0]==="core"?"core":g[0]}">${g[0]==="core"?"Alap":CAT[g[0]]?CAT[g[0]].n:g[0]}</span><span class="d">${esc(g[2])}</span></label></li>`;
+    }).join("");
+    const allDone = p.goals.every((g,gi)=>done[`${pi}-${gi}`]);
+    return `<article class="phase${allDone?" done":""}">
+      <div class="phase-num" aria-hidden="true">${pi+1}</div>
+      <div><h3>${esc(p.t)}</h3><p class="why">${esc(p.why)}</p>
+      <ul class="goals">${goals}</ul>
+      <div class="needs">Fő nyersanyagok: ${p.needs.map(n=>`<span class="chip core">${esc(n)}</span>`).join("")}</div></div></article>`;
+  }).join("");
+  updateXP();
+}
+function updateXP(){
+  const total = PHASES.reduce((a,p)=>a+p.goals.length,0);
+  const n = Object.keys(done).filter(k=>done[k]).length;
+  const pct = total? Math.round(n/total*100):0;
+  $("#xpFill").style.width = pct+"%";
+  $("#xpBar").setAttribute("aria-valuenow",pct);
+  $("#xpLevel").textContent = n;
+  $("#xpLabel").textContent = `${n} / ${total} cél kész` + (n===0?". Az Útvonal fülön pipálhatod ki őket.": n===total?". Gratulálok, végigvitted a packot!":".");
+}
+document.addEventListener("change",e=>{
+  if(e.target.matches(".goal input")){
+    const li=e.target.closest(".goal"); const k=li.dataset.k;
+    if(e.target.checked) done[k]=true; else delete done[k];
+    store("rev-goals",JSON.stringify(done));
+    renderPhases();
+    const again=document.getElementById("g"+k); if(again) again.focus();
+  }
+});
+document.querySelectorAll("[data-track]").forEach(b=>b.addEventListener("click",()=>{
+  track=b.dataset.track;
+  document.querySelectorAll("[data-track]").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));
+  renderPhases();
+}));
+let resetArmed=false;
+$("#resetGoals").addEventListener("click",e=>{
+  const b=e.currentTarget;
+  if(!resetArmed){resetArmed=true;b.textContent="Biztos? Kattints újra";setTimeout(()=>{resetArmed=false;b.textContent="Pipák törlése";},3000);return;}
+  done={}; store("rev-goals","{}"); resetArmed=false; b.textContent="Pipák törlése"; renderPhases();
+});
+
+/* ===================== RECEPTEK ===================== */
+let curRecipe = "frame";
+function renderRecipeList(){
+  $("#recipeList").innerHTML = RECIPES.map(g=>`<div class="group"><h4>${esc(g.g)}</h4>${
+    g.items.map(r=>{
+      const out = r.out || (r.steps? (r.steps[r.steps.length-1].out ? (Array.isArray(r.steps[r.steps.length-1].out)? r.steps[r.steps.length-1].out[0][0] : r.steps[r.steps.length-1].out) : null) : (r.out&&r.out[0]));
+      const ic = (r.type==="machine"? r.out[0][0] : out);
+      return `<button class="rbtn" data-r="${r.id}" aria-current="${r.id===curRecipe}"><img class="mini spr" src="${sprite(ic)}" alt="">${esc(r.n)}</button>`;
+    }).join("")}</div>`).join("");
+}
+function renderRecipe(){
+  let r=null, grp=null;
+  RECIPES.forEach(g=>g.items.forEach(x=>{if(x.id===curRecipe){r=x;grp=g.g;}}));
+  if(!r) return;
+  let html=`<h3 style="margin-top:0">${esc(r.n)} <span class="chip tech" style="vertical-align:middle">${esc(grp)}</span></h3>`;
+  let ids=[];
+  if(r.type==="grid"){
+    html+=gridBlock(r.grid,r.size,r.out,r.cnt, r.shapeless?"Crafting (formátlan, bárhová teheted)":"Crafting");
+    ids=[...r.grid.filter(Boolean),r.out];
+  } else if(r.type==="machine"){
+    html+=machineBlock(r.in,r.m,r.out,r.amt);
+    ids=[...r.in,...r.out.map(o=>o[0])];
+  } else if(r.type==="chain"){
+    html+=`<div class="chain">`+r.steps.map(s=>{
+      if(s.grid){ ids.push(...s.grid.filter(Boolean),s.out); return gridBlock(s.grid,s.size,s.out,s.cnt,s.title);}
+      ids.push(...s.in,...s.out.map(o=>o[0])); return machineBlock(s.in,s.m,s.out,s.amt);
+    }).join("")+`</div>`;
+  }
+  html+=legendFor(ids);
+  html+=`<p class="rnote">${esc(r.note)}</p>`;
+  $("#recipeView").innerHTML=html;
+  document.querySelectorAll(".rbtn").forEach(b=>b.setAttribute("aria-current", b.dataset.r===curRecipe?"true":"false"));
+}
+$("#recipeList").addEventListener("click",e=>{const b=e.target.closest(".rbtn"); if(b){curRecipe=b.dataset.r; renderRecipe();}});
+
+/* ===================== MODOK ===================== */
+let modCat="all";
+function renderCatFilters(){
+  const cats=[["all","Mind"],...Object.entries(CAT).map(([k,v])=>[k,v.n])];
+  $("#catFilters").innerHTML = cats.map(([k,n])=>`<button class="btn small" data-cat="${k}" aria-pressed="${k===modCat}">${esc(n)}</button>`).join("");
+  $("#catFilters").addEventListener("click",e=>{const b=e.target.closest("[data-cat]"); if(!b) return; modCat=b.dataset.cat;
+    document.querySelectorAll("[data-cat]").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false")); renderMods();});
+}
+function norm(s){return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");}
+function renderMods(){
+  const q=norm($("#modSearch").value.trim());
+  const list=MODS.filter(m=>(modCat==="all"||m.c===modCat) && (!q || norm(m.n+" "+m.w+" "+m.s+" "+m.x+" "+CAT[m.c].n).includes(q)));
+  $("#mods").innerHTML = list.length? list.map(m=>`<article class="mod">
+    <div class="mod-head"><h4>${esc(m.n)}</h4><span class="chip ${m.c}">${CAT[m.c].n}</span></div>
+    <dl><dt>Mire jó</dt><dd>${esc(m.w)}</dd>
+    ${m.s?`<dt>Kezdés</dt><dd>${esc(m.s)}</dd>`:""}
+    ${m.x?`<dt>Figyelj</dt><dd class="warn">${esc(m.x)}</dd>`:""}</dl></article>`).join("")
+    : `<div class="empty">Nincs találat erre: „${esc($("#modSearch").value)}”. Próbálj rövidebb szót, vagy válaszd a Mind kategóriát.</div>`;
+}
+$("#modSearch").addEventListener("input",renderMods);
+
+/* ===================== TÁBLÁK ===================== */
+function renderStatic(){
+  $("#oreRows").innerHTML = ORES.map(o=>`<tr><td class="res"><span class="dot" style="background:${o[1]}"></span>${esc(o[0])}</td><td>${esc(o[2])}</td><td>${esc(o[3])}</td><td>${esc(o[4])}</td></tr>`).join("");
+  $("#dims").innerHTML = DIMS.map(d=>`<div class="inset"><h4>${esc(d[0])}</h4><p style="margin:0">${esc(d[1])}</p></div>`).join("");
+  $("#ladder").innerHTML = LADDER.map(l=>`<div class="rung"><div><b>${esc(l[0])}</b><small>${esc(l[1])}</small></div>
+    <div class="pips" role="img" aria-label="Teljesítmény: ${l[2]} az 5-ből">${[1,2,3,4,5].map(i=>`<i class="${i<=l[2]?"on":""}"></i>`).join("")}</div>
+    <div>${esc(l[3])}</div></div>`).join("");
+  $("#units").innerHTML = UNITS.map(u=>`<div class="unit"><b>${esc(u[0])}</b>${esc(u[1])}</div>`).join("");
+  $("#magic").innerHTML = MAGIC.map(m=>`<div class="magic-card"><div class="mod-head"><h4>${esc(m.n)}</h4><span class="res-chip">${esc(m.cur)}</span></div>
+    <p class="tagline">${esc(m.tag)}</p><ol class="track">${m.steps.map(s=>`<li><span>${esc(s)}</span></li>`).join("")}</ol></div>`).join("");
+  const sevName={3:"Halálos",2:"Veszélyes",1:"Bosszantó"};
+  $("#dangers").innerHTML = DANGERS.map(d=>`<div class="danger"><div class="sev s${d[0]}">${sevName[d[0]]}</div><div><h4>${esc(d[1])}</h4><p>${esc(d[2])}</p></div></div>`).join("");
+}
+
+/* ===================== TOOLTIP ===================== */
+const tip=$("#tip");
+function showTip(el,x,y){
+  tip.innerHTML = `${esc(el.dataset.tip)}<span class="mod">${esc(el.dataset.mod)}</span>`;
+  tip.style.display="block";
+  const w=tip.offsetWidth,h=tip.offsetHeight;
+  let lx=x+14, ly=y-h-8;
+  if(lx+w>innerWidth-8) lx=x-w-14;
+  if(ly<8) ly=y+18;
+  tip.style.left=lx+"px"; tip.style.top=ly+"px";
+}
+document.addEventListener("mousemove",e=>{const el=e.target.closest("[data-tip]"); if(el) showTip(el,e.clientX,e.clientY); else tip.style.display="none";});
+document.addEventListener("focusin",e=>{const el=e.target.closest("[data-tip]"); if(el){const r=el.getBoundingClientRect(); showTip(el,r.right,r.top);} });
+document.addEventListener("focusout",()=>{tip.style.display="none";});
+addEventListener("scroll",()=>{tip.style.display="none";},{passive:true});
+
+/* ===================== TINKERS' TIER LIST ===================== */
+const TIERS = [
+  {t:"Bányászó fej (csákány, ásó, fejsze)", rows:{
+    S:[["cobalt","Cobalt","Momentum","Folyamatos bányászásnál egyre gyorsabb. Az egyik leggyorsabb fej, a legjobb csákányanyag."]],
+    A:[["manyullyn","Manyullyn","Insatiable","Kobalt szintű blokkokat is bont, nagyon tartós. Csákánynak a Cobalt gyorsabb."],
+       ["ardite","Ardite","Stonebound","Minél kopottabb az eszköz, annál gyorsabban bányászik, de annál kevesebbet sebez."],
+       ["knightslime","Knightslime","Crumbling","Követ, földet és hasonló blokkokat gyorsabban bont. A slime-szigetek anyagából készül."],
+       ["steel","Acél (Steel)","","Erős, tartós, és Nether nélkül elérhető (IE Blast Furnace)."]],
+    B:[["iron","Vas","Magnetic","Magához vonzza a lehullott tárgyakat. Jó korai középszint."],
+       ["bronze","Bronz","","Olcsó, vasszintű alternatíva, ha sok a réz és az ón."],
+       ["pigiron","Pig Iron","Tasty","Néha megeheted az eszközt, ha éhes vagy. Inkább érdekesség."]],
+    C:[["flint","Kovakő","Crude","Az első napok anyaga: olcsó, de gyorsan kopik."],
+       ["cobble","Kő","Cheapskate","Olcsó és gyenge; csak a kezdéshez."],
+       ["planks","Fa","Ecological","Lassan magától javul, de nagyon gyenge."]]
+  }},
+  {t:"Fegyver fej (kard, széles kard, rapír)", rows:{
+    S:[["manyullyn","Manyullyn","Insatiable","Harc közben egymás utáni találatoknál egyre többet sebez. A legjobb fegyveranyag."]],
+    A:[["cobalt","Cobalt","Momentum","Gyors és erős; jó választás, ha még nincs Manyullynod."],
+       ["ardite","Ardite","Stonebound","Tartós, de kopással csökken a sebzése."],
+       ["steel","Acél (Steel)","","Megbízható középjátékos fegyver Nether nélkül."]],
+    B:[["silver","Ezüst","Holy","Élőhalottakon (zombi, csontváz) többet sebez."],
+       ["electrum","Electrum","","Gyors, de kevésbé tartós."],
+       ["iron","Vas","Magnetic","Korai fegyvernek rendben van."]],
+    C:[["flint","Kovakő","Crude","Páncél nélküli mobokon jó, később lecseréled."],
+       ["bone","Csont","","Olcsó, korai alternatíva."]]
+  }},
+  {t:"Nyél és kötés (handle, binding)", rows:{
+    S:[["ardite","Ardite","Petramor","Nyélként nagy tartósság-szorzót ad, ezért a legtöbb eszközhöz ideális."],
+       ["paper","Papír","Writable","+1 módosító helyet ad. Kötésnek vagy nyélnek is jó, ha sok módosítót akarsz."]],
+    A:[["cobalt","Cobalt","Lightweight","Nyélként gyorsítja a bányászást és a támadást."],
+       ["knightslime","Knightslime","","Jó, kiegyensúlyozott nyélanyag."],
+       ["planks","Fa","Ecological","A nyél lassan javítja az eszközt. Korán meglepően hasznos."]],
+    B:[["iron","Vas","","Stabil, átlagos szorzó."],
+       ["bone","Csont","","Olcsó, korrekt nyél."],
+       ["bronze","Bronz","","Átlagos, olcsó."]],
+    C:[["manyullyn","Manyullyn","Cold-Blooded","Fejként kiváló, nyélként viszont gyenge a tartósság-szorzója."],
+       ["cobble","Kő","","Rossz tartósság-szorzó, kerüld."]]
+  }},
+  {t:"Módosítók", rows:{
+    S:[["redstone","Haste","Redstone","Gyorsabb bányászás (és gyorsabb íjfeszítés). Minden csákányra."],
+       ["lapis","Luck","Lápisz","Fortune eszközön, Looting fegyveren. A Silk Touch-csal nem kombinálható."],
+       ["diamond","Diamond","Gyémánt","Több tartósság és sebesség, magasabb bányászati szint."],
+       ["emerald","Emerald","Smaragd","+50% tartósság. Gyémánttal együtt is megéri."],
+       ["reinforcement","Reinforced","Reinforcement","Esély, hogy nem fogy a tartósság. Ötödik szinten az eszköz törhetetlen."]],
+    A:[["netherquartz","Sharpness","Nether Quartz","Több sebzés fegyveren."],
+       ["silkyjewel","Silk Touch","Silky Jewel","Silk Touch; a Luck helyett. Ércekhez külön csákányt érdemes tartani."],
+       ["mendingmoss","Mending Moss","Mending Moss","Tapasztalatból magától javítja az eszközt."],
+       ["enderpearl","Beheading","Ender gyöngy + obszidián","A mobok fejet dobnak. A Wither csontváz koponyájához nagyon hasznos."],
+       ["netherstar","Soulbound","Nether Star","Halál után az eszköz nálad marad. Drága, de a fő csákánynak megéri."]],
+    B:[["necroticbone","Necrotic","Necrotic Bone","Életlopás ütéskor. A Necrotic Bone a Wither csontvázaktól esik."],
+       ["consecrated","Smite","Consecrated Soil","Több sebzés élőhalottakon."],
+       ["spidereye","Bane of Arthropods","Erjesztett pókszem","Több sebzés pókokon és ízeltlábúakon."],
+       ["blazepowder","Fiery","Blaze por","Felgyújtja a célpontot."],
+       ["piston","Knockback","Dugattyú","Hátralöki a célpontot."]],
+    C:[["glowstone","Glowing","Glowstone","Fényt hagy maga után. Inkább kényelmi."],
+       ["chorus","Shulking","Popped Chorus Fruit","Lebegést ad a célpontnak. Ritkán kell."]]
+  }}
+];
+function renderTiers(){
+  $("#tiers").innerHTML = TIERS.map(g=>`<div class="tierlist"><h3>${esc(g.t)}</h3>${
+    ["S","A","B","C"].map(t=>`<div class="tier ${t}"><div class="tier-label">${t}</div><div class="tier-items">${
+      (g.rows[t]||[]).map(i=>`<div class="tile"><div class="slot">${itemHTML(i[0])}</div><div><b>${esc(i[1])}</b>${i[2]?`<span class="trait">${esc(i[2])}</span>`:""}<small>${esc(i[3])}</small></div></div>`).join("")
+    }</div></div>`).join("")}</div>`).join("");
+}
+
+/* ===================== TEXTÚRA-BETÖLTŐ ===================== */
+/* Minden a néző saját gépén történik: a kiválasztott .jar fájlokat a böngésző olvassa, semmi nem töltődik fel. */
+const EXCL_TOOL=["block","nugget","ball","armor","helm","boots","chest","legs","leggings","sword","pick","axe","shovel","hoe","bow","gear","wire","conduit","plate","rod","shears","bars","door","ladder","cable","capacitor","glider","wing","upgrade","fluid","molten","bucket","dust","powder","ring","still","flow","ore","glass","stairs","slab"];
+const mc=p=>({p:"minecraft/"+p});
+const TEX={
+  clay:mc("items/clay_ball"), sand:mc("blocks/sand"), gravel:mc("blocks/gravel"), glass:mc("blocks/glass"),
+  obsidian:mc("blocks/obsidian"), soulsand:mc("blocks/soul_sand"), stone:mc("blocks/stone"),
+  log:{p:"minecraft/blocks/log_oak",top:"minecraft/blocks/log_oak_top"},
+  redstoneblock:mc("blocks/redstone_block"), goldblock:mc("blocks/gold_block"), ore:mc("blocks/iron_ore"),
+  iron:mc("items/iron_ingot"), ingot:mc("items/iron_ingot"), ironnugget:mc("items/iron_nugget"), gold:mc("items/gold_ingot"),
+  diamond:mc("items/diamond"), redstone:mc("items/redstone_dust"), glowstone:mc("items/glowstone_dust"),
+  enderpearl:mc("items/ender_pearl"), coal:mc("items/coal"), netherquartz:mc("items/quartz"), netherstar:mc("items/nether_star"),
+  lapis:mc("items/dye_powder_blue"), emerald:mc("items/emerald"), flint:mc("items/flint"), bone:mc("items/bone"),
+  paper:mc("items/paper"), prismarine:mc("items/prismarine_shard"), slimeball:mc("items/slimeball"),
+  blazepowder:mc("items/blaze_powder"), spidereye:mc("items/spider_eye_fermented"), chorus:mc("items/chorus_fruit_popped"),
+  planks:mc("blocks/planks_oak"), cobble:mc("blocks/cobblestone"), netherrack:mc("blocks/netherrack"), endstone:mc("blocks/end_stone"),
+  piston:{p:"minecraft/blocks/piston_side",top:"minecraft/blocks/piston_top_normal"},
+  grout:{ns:["tconstruct"],t:[["grout"]]},
+  searedbrick:{ns:["tconstruct"],t:[["searedbrick"]],x:["blocks","block","slab","stairs","furnace"]},
+  searedbricks:{ns:["tconstruct"],t:[["seared","brick"]],pref:["blocks"],x:["items","cracked","fancy","small","triangle","road","tile","creeper","slab","stairs","square","paver","cobble","furnace","glass"]},
+  cobalt:{ns:["tconstruct"],t:[["cobalt"]],pref:["ingot"],x:EXCL_TOOL},
+  ardite:{ns:["tconstruct"],t:[["ardite"]],pref:["ingot"],x:EXCL_TOOL},
+  manyullyn:{ns:["tconstruct"],t:[["manyullyn"]],pref:["ingot"],x:EXCL_TOOL},
+  knightslime:{ns:["tconstruct"],t:[["knightslime"]],pref:["ingot"],x:EXCL_TOOL},
+  pigiron:{ns:["tconstruct"],t:[["pigiron"]],pref:["ingot"],x:EXCL_TOOL},
+  reinforcement:{ns:["tconstruct"],t:[["reinforcement"]]},
+  mendingmoss:{ns:["tconstruct"],t:[["mendingmoss"]]},
+  silkyjewel:{ns:["tconstruct"],t:[["silkyjewel"]]},
+  necroticbone:{ns:["tconstruct"],t:[["necroticbone"]]},
+  consecrated:{ns:["tconstruct"],t:[["consecrated"]],x:["slab","stairs"]},
+  dust:{ns:["thermalfoundation"],t:[["dustiron"]]},
+  bonus:{ns:["thermalfoundation"],t:[["dustplatinum"]]},
+  tin:{ns:["thermalfoundation"],t:[["ingottin"]]},
+  bronze:{ns:["thermalfoundation"],t:[["ingotbronze"]]},
+  electrum:{ns:["thermalfoundation"],t:[["ingotelectrum"]]},
+  silver:{ns:["thermalfoundation"],t:[["ingotsilver"]]},
+  copper:{ns:["thermalfoundation"],t:[["ingotcopper"]]},
+  tingear:{ns:["thermalfoundation"],t:[["geartin"]]},
+  cinnabar:{ns:["thermalfoundation"],t:[["cinnabar"]],x:["ore","block","dust"]},
+  richslag:{ns:["thermalfoundation"],t:[["slagrich"],["richslag"]]},
+  frame:{ns:["thermalexpansion"],t:[["frame","machine"]],pref:["side"],x:["top","bottom","cell","tesseract","illuminator","device","light","hardened","reinforced","signalum","resonant","overlay","creative"]},
+  coalcoke:{ns:["immersiveengineering"],t:[["coalcoke"],["coke"]],pref:["material"],x:["block","brick","oven","slab","stairs","dust"]},
+  creosote:{ns:["immersiveengineering"],t:[["creosote"]],pref:["still"],x:["bucket","flow"]},
+  steel:{ns:["immersiveengineering","thermalfoundation"],t:[["ingotsteel"],["steelingot"]],x:["block","nugget"]},
+  slag:{ns:["immersiveengineering"],t:[["slag"]],pref:["material"],x:["block","gravel","glass","brick","rich"]},
+  coaldust:{ns:["enderio","thermalfoundation"],t:[["powdercoal"],["coalpowder"],["powderedcoal"],["dustcoal"]],x:["charcoal","block"]},
+  silicon:{ns:["enderio"],t:[["silicon"]],x:["block","press","print","boule"]},
+  electricalsteel:{ns:["enderio"],t:[["electricalsteel"]],pref:["ingot"],x:EXCL_TOOL},
+  energetic:{ns:["enderio"],t:[["energeticalloy"],["energetic"]],pref:["ingot"],x:EXCL_TOOL},
+  vibrant:{ns:["enderio"],t:[["vibrantalloy"],["vibrant"]],pref:["ingot"],x:EXCL_TOOL},
+  darksteel:{ns:["enderio"],t:[["darksteel"]],pref:["ingot"],x:EXCL_TOOL},
+  conductive:{ns:["enderio"],t:[["conductiveiron"]],pref:["ingot"],x:EXCL_TOOL},
+  pulsating:{ns:["enderio"],t:[["pulsatingiron"]],pref:["ingot"],x:EXCL_TOOL},
+  redstonealloy:{ns:["enderio"],t:[["redstonealloy"]],pref:["ingot"],x:EXCL_TOOL},
+  soularium:{ns:["enderio"],t:[["soularium"]],pref:["ingot"],x:EXCL_TOOL},
+  certus:{ns:["appliedenergistics2"],t:[["certusquartzcrystal"]],x:["charged","seed","ore","block"]},
+  chargedcertus:{ns:["appliedenergistics2"],t:[["certusquartzcrystalcharged"],["chargedcertus"]],x:["ore","block"]},
+  fluix:{ns:["appliedenergistics2"],t:[["fluixcrystal"]],x:["seed","block"]},
+  press_logic:{ns:["appliedenergistics2"],t:[["logicprocessorpress"]]},
+  press_calc:{ns:["appliedenergistics2"],t:[["calculationprocessorpress"]]},
+  press_eng:{ns:["appliedenergistics2"],t:[["engineeringprocessorpress"]]},
+  press_sil:{ns:["appliedenergistics2"],t:[["siliconpress"]]},
+  pr_logic:{ns:["appliedenergistics2"],t:[["logicprocessorprint"]]},
+  pr_calc:{ns:["appliedenergistics2"],t:[["calculationprocessorprint"]]},
+  pr_eng:{ns:["appliedenergistics2"],t:[["engineeringprocessorprint"]]},
+  pr_sil:{ns:["appliedenergistics2"],t:[["siliconprint"]]},
+  proc:{ns:["appliedenergistics2"],t:[["logicprocessor"]],x:["press","print"]},
+  livingrock:{ns:["botania"],t:[["livingrock"]],x:["brick","chisel","slab","stair","wall","cracked","mossy","dark","shimmer"]},
+  livingwood:{ns:["botania"],t:[["livingwood"]],x:["plank","glimmer","framed","pattern","slab","stair","wall","fence","twig","rod","wand","bow"]},
+  manasteel:{ns:["botania"],t:[["manasteel"]],pref:["ingot"],x:EXCL_TOOL},
+  manadiamond:{ns:["botania"],t:[["manadiamond"]],x:["block"]},
+  manapearl:{ns:["botania"],t:[["manapearl"]]},
+  terrasteel:{ns:["botania"],t:[["terrasteel"]],pref:["ingot"],x:EXCL_TOOL},
+  weakshard:{ns:["bloodmagic"],t:[["weak","shard"],["blood","shard"]],x:["demon","will","crystal"]},
+  orb1:{ns:["bloodmagic"],t:[["orb","weak"]]}, orb2:{ns:["bloodmagic"],t:[["orb","apprentice"]]},
+  orb3:{ns:["bloodmagic"],t:[["orb","magician"]]}, orb4:{ns:["bloodmagic"],t:[["orb","master"]]},
+  orb5:{ns:["bloodmagic"],t:[["orb","archmage"]]},
+  draconium:{ns:["draconicevolution"],t:[["draconiumingot"]],x:["awakened"]},
+  dracocore:{ns:["draconicevolution"],t:[["draconiccore"],["draconiumcore"]],x:["awakened","chaotic","wyvern","energy","reactor"]},
+  wyverncore:{ns:["draconicevolution"],t:[["wyverncore"]]}
+};
+const JAR_HINT=/tconstruct|thermalfoundation|thermalexpansion|enderio|immersiveengineering|appliedenergistics|botania|bloodmagic|draconic|^1\.12(\.2)?\.jar$|minecraft/i;
+const BAD_DIR=/(^|\/)(gui|models|entity|particle|armor|environment|misc|font|map|painting|colormap|effect|mob_effect|patterns|book|guide)\//;
+
+function nrm(s){return s.toLowerCase().replace(/[^a-z0-9]/g,"");}
+function findEntry(spec,idx,key){
+  const p=key||spec.p;
+  if(p) return idx.byPath.get(p)||null;
+  let best=null,bs=-1e9;
+  for(const e of idx.list){
+    if(spec.ns&&!spec.ns.includes(e.ns))continue;
+    if(BAD_DIR.test(e.rest))continue;
+    if(!spec.t.some(al=>al.every(tok=>e.norm.includes(tok))))continue;
+    if(spec.x&&spec.x.some(tok=>e.norm.includes(tok)))continue;
+    let sc=0;
+    if(/^(items?|blocks?)\//.test(e.rest))sc+=5;
+    (spec.pref||[]).forEach(tok=>{if(e.norm.includes(tok))sc+=10;});
+    if(/(overlay|_n$|_s$|emissive|_glow|_e$)/.test(e.rest))sc-=8;
+    sc-=e.norm.length*.2;
+    if(sc>bs){bs=sc;best=e;}
+  }
+  return best;
+}
+function loadImg(url){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});}
+async function entryImg(e){const b64=await e.file.async("base64");return loadImg("data:image/png;base64,"+b64);}
+function sq(img){const w=img.naturalWidth,h=img.naturalHeight;return {w:Math.min(w,h)};}
+function flatIcon(img){
+  const cv=document.createElement("canvas");cv.width=48;cv.height=48;const c=cv.getContext("2d");c.imageSmoothingEnabled=false;
+  const s=sq(img).w;c.drawImage(img,0,0,s,s,0,0,48,48);return cv.toDataURL();
+}
+function cubeIcon(side,top){
+  const cv=document.createElement("canvas");cv.width=48;cv.height=48;const c=cv.getContext("2d");c.imageSmoothingEnabled=false;
+  const k=1.5;
+  const face=(img,m,shade)=>{
+    const s=sq(img).w;c.setTransform(m[0]*k,m[1]*k,m[2]*k,m[3]*k,m[4]*k,m[5]*k);
+    c.drawImage(img,0,0,s,s,0,0,16,16);
+    if(shade){c.globalCompositeOperation="source-atop";c.fillStyle=`rgba(0,0,0,${shade})`;c.fillRect(0,0,16,16);c.globalCompositeOperation="source-over";}
+  };
+  face(side,[1,.5,0,1,0,8],.22);
+  face(side,[1,-.5,0,1,16,16],.42);
+  face(top||side,[1,-.5,1,.5,0,8],0);
+  c.setTransform(1,0,0,1,0,0);
+  return cv.toDataURL();
+}
+
+let texBusy=false, texMsg="";
+function texPanelHTML(){
+  const n=Object.keys(TEXO).length;
+  const status = texBusy ? texMsg
+    : n ? `<b>${n} eredeti ikon betöltve.</b> ${esc(texMsg)}`
+    : "Most a saját rajzolású ikonokat látod. Ha betöltöd a gépeden lévő mod-fájlokat, a játék eredeti ikonjai jelennek meg. A fájlok nem töltődnek fel sehová, a böngésződ helyben olvassa őket.";
+  return `<div class="tp-actions">
+      <label class="btn small">Mods mappa kiválasztása<input type="file" class="tp-dir" webkitdirectory directory multiple></label>
+      <label class="btn small">Fájlok kiválasztása<input type="file" class="tp-files" accept=".jar,.zip" multiple></label>
+      ${n?`<button class="btn small tp-clear" type="button">Eredeti ikonok törlése</button>`:""}
+    </div>
+    <div class="tp-status" aria-live="polite">${status}</div>
+    <details><summary>Hol vannak ezek a fájlok?</summary>
+      <p style="margin:8px 0 4px">A modok a pack példányának <code>mods</code> mappájában vannak. CurseForge appnál jobb klikk a packon, majd <i>Open Folder</i>; FTB appnál a példány mappája. Elég a mappát kiválasztani, az oldal csak a szükséges modokat olvassa (Tinkers', Thermal, Ender IO, IE, AE2, Botania, Blood Magic, Draconic).</p>
+      <p style="margin:0 0 4px">A vanilla ikonokhoz (vas, gyémánt, redstone…) a Minecraft 1.12.2 jar is kell, a <i>Fájlok kiválasztása</i> gombbal add hozzá. Általában a launcher <code>versions/1.12.2/1.12.2.jar</code> helyén van (CurseForge-nál: <code>Install/versions/1.12.2</code>).</p>
+      <p style="margin:0">A betöltött ikonokat a böngésződ megjegyzi, így csak egyszer kell betölteni. Minden játékostársnak a saját gépén kell egyszer megcsinálnia.</p>
+    </details>`;
+}
+function renderTexPanels(){document.querySelectorAll(".texpanel").forEach(el=>el.innerHTML=texPanelHTML());}
+function rerenderIcons(){renderRecipeList();renderRecipe();renderTiers();}
+
+async function handleTexFiles(fileList,fromDir){
+  if(texBusy)return;
+  if(typeof JSZip==="undefined"){texMsg="A kicsomagoló nem töltődött be. Frissítsd az oldalt, és próbáld újra.";renderTexPanels();return;}
+  let files=[...fileList].filter(f=>/\.(jar|zip)$/i.test(f.name));
+  if(fromDir) files=files.filter(f=>JAR_HINT.test(f.name));
+  if(!files.length){texMsg="Nem találtam használható .jar fájlt. Válaszd a pack mods mappáját, vagy add meg a jar fájlokat egyenként.";renderTexPanels();return;}
+  texBusy=true;
+  const idx={list:[],byPath:new Map()};
+  try{
+    for(let i=0;i<files.length;i++){
+      texMsg=`Fájlok olvasása: ${i+1} / ${files.length} (${files[i].name})`;renderTexPanels();
+      try{
+        const zip=await JSZip.loadAsync(files[i]);
+        zip.forEach((path,file)=>{
+          const m=path.match(/^assets\/([^/]+)\/textures\/(.+)\.png$/i); if(!m||file.dir)return;
+          const e={ns:m[1].toLowerCase(),rest:m[2].toLowerCase(),file};e.norm=nrm(e.rest);
+          idx.list.push(e);idx.byPath.set(e.ns+"/"+e.rest,e);
+        });
+      }catch(err){/* nem zip: kihagyjuk */}
+    }
+    texMsg="Ikonok összeállítása…";renderTexPanels();
+    const found={}; const missing=[];
+    for(const id of Object.keys(TEX)){
+      if(!IT[id])continue;
+      const spec=TEX[id];
+      const e=findEntry(spec,idx); if(!e){missing.push(id);continue;}
+      try{
+        const img=await entryImg(e);
+        if(IT[id][2]==="cube"){
+          const te=spec.top?findEntry(spec,idx,spec.top):null;
+          found[id]=cubeIcon(img, te?await entryImg(te):null);
+        } else found[id]=flatIcon(img);
+      }catch(err){missing.push(id);}
+    }
+    TEXO=Object.assign({},TEXO,found);
+    const still=missing.filter(id=>!TEXO[id]);
+    texMsg = still.length ? `${still.length} tárgyhoz nem találtam textúrát, azoknál marad a rajzolt ikon. Ha hiányzik a vanilla jar, add hozzá.` : "Minden ikon megvan.";
+    kvSet("rev-tex",TEXO);
+  } finally { texBusy=false; renderTexPanels(); rerenderIcons(); }
+}
+document.addEventListener("change",e=>{
+  if(e.target.matches(".tp-dir"))handleTexFiles(e.target.files,true);
+  if(e.target.matches(".tp-files"))handleTexFiles(e.target.files,false);
+});
+document.addEventListener("click",e=>{
+  if(e.target.matches(".tp-clear")){TEXO={};texMsg="";kvSet("rev-tex",{});renderTexPanels();rerenderIcons();}
+});
+
+/* IndexedDB: a betöltött ikonok megőrzése ebben a böngészőben */
+function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open("rev-guide",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);}catch(err){rej(err);}});}
+async function kvGet(k){try{const db=await idb();return await new Promise(res=>{const q=db.transaction("kv").objectStore("kv").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null);});}catch(err){return null;}}
+async function kvSet(k,v){try{const db=await idb();await new Promise(res=>{const tx=db.transaction("kv","readwrite");tx.objectStore("kv").put(v,k);tx.oncomplete=res;tx.onerror=res;});}catch(err){}}
+async function loadCachedTex(){const v=await kvGet("rev-tex");if(v&&typeof v==="object"&&Object.keys(v).length){TEXO=v;renderTexPanels();rerenderIcons();}}
+
+
+/* ===================== INDÍTÁS ===================== */
+renderTabs(); renderPhases(); renderRecipeList(); renderRecipe(); renderCatFilters(); renderMods(); renderStatic(); renderTiers(); renderTexPanels(); loadCachedTex();
+showTab(); addEventListener("hashchange",showTab);
+</script>
+</body>
+</html>

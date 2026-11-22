@@ -399,6 +399,31 @@ td.res{font-weight:700;white-space:nowrap}
 .gl dt{font-weight:700;font-size:16px}
 .gl dd{margin:2px 0 0;font-size:15px;color:#333}
 
+/* Thermal */
+.te-track li{grid-template-columns:34px 1fr}
+.te-track li b{display:inline}
+.orechain{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:8px 0}
+.orechain.sub{margin-top:0}
+.oc{background:#3a3a3a;color:#eee;padding:10px 12px;display:grid;gap:2px;min-width:150px;flex:1 1 150px;box-shadow:inset 2px 2px 0 #555, inset -2px -2px 0 #222}
+.oc b{font-family:var(--f-ui);font-size:16px;color:#fff}
+.oc small{font-size:13.5px;color:#d0d0d0}
+.oc.alt{background:#4a3a24}
+.oca{align-self:center;font-weight:700;font-size:22px;color:#555}
+.te-alloys{display:flex;flex-wrap:wrap;gap:12px}
+.te-alloys .craft{padding:14px}
+.tiers-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.tier-step{display:grid;gap:2px;background:#bdbdbd;padding:10px 12px;min-width:150px;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f}
+.tier-step .tn{font-family:var(--f-display);font-size:20px;color:#c9302c}
+.tier-step b{font-size:16px}
+.tier-step small{font-size:13.5px;color:#444}
+.tier-step .kit{color:#6a6a6a}
+.tier-arrow{font-weight:700;color:#555;font-size:20px}
+.te-elem{display:flex;flex-wrap:wrap;gap:10px}
+.tile.light{background:#bdbdbd;color:#2a2a2a;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f;width:min(100%,500px)}
+.tile.light b{color:#2a2a2a}
+.tile.light small{color:#3a3a3a}
+.tile .lbl{font-weight:700}
+
 footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:#a9a9a9;font-size:14px}
 footer p{max-width:90ch}
 
@@ -523,6 +548,84 @@ footer p{max-width:90ch}
     <div class="inset"><h4>Javítás</h4><p style="margin:0">Az eszközt a fej anyagával javítod a Tool Stationben. A Mending Moss vagy az Ecological (fa) trait magától javít.</p></div>
   </div>
   <div id="tiers"></div>
+</section>
+
+<!-- ================= THERMAL ================= -->
+<section id="thermal" role="tabpanel" aria-labelledby="tab-thermal" hidden>
+  <h2>Thermal Expansion</h2>
+  <p class="lede">A pack legfontosabb korai tech modja, és az ércfeldolgozás gerince. A gépek (Machines) áramot esznek, augmentekkel és Upgrade Kitekkel fejleszthetők; az eszközök (Devices) áram nélkül dolgoznak, és nem fejleszthetők. Minden dynamo alapból kb. 40 RF/t-t ad, ezt augmentekkel és szintlépéssel növeled.</p>
+  <div class="texpanel"></div>
+
+  <h3>Kezdő sorrend</h3>
+  <ol class="track te-track" id="teSteps"></ol>
+
+  <h3>A gép GUI-ja: amit elsőre nem látsz</h3>
+  <div class="grid3">
+    <div class="inset"><h4>Oldalak beállítása</h4><p style="margin:0">A gép ablakának jobb oldalán lévő füleken minden oldalhoz megadhatod, hogy bemenet, kimenet vagy kikapcsolt legyen. A színek a slotok színeit követik.</p></div>
+    <div class="inset"><h4>Auto-input és auto-output</h4><p style="margin:0">Ha bekapcsolod, a gép magától kiadja a terméket a szomszédos gépbe vagy ládába. Így két gép egymás mellé téve cső nélkül is lánc.</p></div>
+    <div class="inset"><h4>Redstone vezérlés</h4><p style="margin:0">Beállíthatod, hogy a gép csak redstone-jellel vagy jel nélkül fusson. Jól jön, ha egy dynamót csak akkor akarsz járatni, amikor fogy az áram.</p></div>
+  </div>
+
+  <h3>Ércmenedzsment: automata ércsor</h3>
+  <p>A cél, hogy minden ércet csak egyszer kelljen beledobni egy ládába, és a végén rudak meg melléktermékek jöjjenek ki, szétválogatva.</p>
+  <div class="orechain" aria-label="Ércsor folyamata">
+    <div class="oc"><b>Bemeneti láda</b><small>ide dobod az ércet</small></div><span class="oca">→</span>
+    <div class="oc"><b>Pulverizer</b><small>érc → 2 por + melléktermék</small></div><span class="oca">→</span>
+    <div class="oc"><b>Redstone Furnace</b><small>por → rúd</small></div><span class="oca">→</span>
+    <div class="oc"><b>Kimeneti láda</b><small>rudak</small></div>
+  </div>
+  <div class="orechain sub">
+    <div class="oc alt"><b>Melléktermék-láda</b><small>a Pulverizer másodlagos kimenete külön oldalon</small></div>
+    <div class="oc alt"><b>Cinnabar-ág</b><small>redstone-érc → Cinnabar → Induction Smelter ércekhez (×3)</small></div>
+  </div>
+  <ul class="plain">
+    <li>A Pulverizer oldalbeállításánál a fő- és a mellékterméknek adj külön kimeneti oldalt, így automatikusan szétválnak.</li>
+    <li>Gépek egymás mellett, auto-outputtal: nem kell cső. Távolabbra Itemduct + Servo.</li>
+    <li>Ha már gyűlik Cinnabar, a ritkább érceket (arany, platina, ezüst) tedd inkább az Induction Smelterbe Cinnabarral: ×3.</li>
+    <li>A Rich Slag-et ne dobd ki: érccel együtt az Induction Smelterben extra rudat ad.</li>
+  </ul>
+
+  <div class="grid2" style="align-items:start">
+    <div>
+      <h3>Pulverizer melléktermékek</h3>
+      <div class="tbl-wrap"><table style="min-width:0"><thead><tr><th>Érc</th><th>Esélyes melléktermék</th></tr></thead><tbody id="teSecondary"></tbody></table></div>
+      <p class="mcnote">Nagyjából; a pontos esélyt a JEI mutatja a Pulverizer receptjénél.</p>
+    </div>
+    <div>
+      <h3>Dynamók</h3>
+      <div class="tbl-wrap"><table style="min-width:0"><thead><tr><th>Dynamo</th><th>Üzemanyag</th><th>Mikor jó</th></tr></thead><tbody id="teDynamos"></tbody></table></div>
+      <p class="mcnote">A dynamo csak a piros tekercs felé adja le az áramot; a Crescent Hammerrel fordíthatod.</p>
+    </div>
+  </div>
+
+  <h3>Induction Smelter: ötvözetek és érc</h3>
+  <div class="te-alloys" id="teAlloys"></div>
+  <p class="mcnote">A Signalum, a Lumium és az Enderium bonyolultabb: Fluid Transposerrel készülő folyadékok is kellenek hozzájuk, a pontos receptet a JEI-ben nézd meg.</p>
+
+  <h3>Szintek és Upgrade Kitek</h3>
+  <div class="tiers-row" id="teTiers"></div>
+  <p>Az Upgrade Kitet Shift + jobb klikkel a gépre használva helyben fejleszted, nem kell újraépíteni. Minden szint gyorsabb, és több augment-helyet ad.</p>
+
+  <h3>Specializációk és augmentek</h3>
+  <ul class="plain">
+    <li><b>Specializáció:</b> gépenként egy tehető be, és megváltoztatja a működését. Például Pulverizer: Tectonic Initiator (Petrotheummal), Induction Smelter: Pyro-Concentrator (Pyrotheummal), Sawmill: Resin Funnel, Redstone Furnace: Flux Anodizers.</li>
+    <li><b>Általános augmentek:</b> sebesség, energiafogyasztás vagy melléktermék-esély. Az Induction Smelter Metallurgical Recovery augmentje esélyt ad, hogy a homok vagy a Rich Slag ne fogyjon el.</li>
+    <li><b>Dynamo augmentek:</b> a kimenetet növelik, cserébe gyorsabban fogy az üzemanyag.</li>
+  </ul>
+
+  <h3>Elemi porok</h3>
+  <p>Négy különleges por, mindegyikhez egy elemi mob pora, redstone és egy harmadik hozzávaló kell. A későbbi Thermal receptek sokat kérnek belőlük.</p>
+  <div class="te-elem" id="teElemental"></div>
+
+  <h3>Gépek áttekintése</h3>
+  <div class="mods" id="teMachines"></div>
+
+  <h3>Szállítás (Thermal Dynamics)</h3>
+  <ul class="plain">
+    <li><b>Fluxduct:</b> Leadstone (kevés áram), Hardened, Redstone Energy, majd Cryo-Stabilized (veszteség nélküli, nagyon sok áram).</li>
+    <li><b>Itemduct:</b> Servo húzza ki a tárgyat a forrásból; a Servo-ban szűrőt is beállíthatsz. A Retriever a távoli ládából „visszahív” tárgyakat.</li>
+    <li><b>Fluiduct:</b> folyadékokhoz, a Hardened változat többet visz és forró folyadékot (lávát) is bír.</li>
+  </ul>
 </section>
 
 <!-- ================= ÉRCFELDOLGOZÁS ================= -->
@@ -733,6 +836,7 @@ const TABS = [
   {id:"utvonal",  label:"Útvonal",  ico:"#e6c34a"},
   {id:"receptek", label:"Receptek", ico:"#9a6a3a"},
   {id:"tinkers",  label:"Tinkers'", ico:"#3f8fd0"},
+  {id:"thermal",  label:"Thermal", ico:"#c9302c"},
   {id:"feldolgozas", label:"Ércfeldolgozás", ico:"#d9a070"},
   {id:"modok",    label:"Modok",    ico:"#6c8ed8"},
   {id:"helyek",   label:"Helyek",   ico:"#a0a0a0"},
@@ -916,7 +1020,14 @@ const IT = {
   spidereye:["Erjesztett pókszem","#8a2f4f","ball","Minecraft",{acc:"#4a1426",sp:.2}],
   blazepowder:["Blaze por","#f0a020","dust","Minecraft"],
   piston:["Dugattyú (Piston)","#9a8a6a","cube","Minecraft",{tex:"plain"}],
-  chorus:["Popped Chorus Fruit","#c7a0d8","ball","Minecraft",{acc:"#8a5aa0",sp:.15}]
+  chorus:["Popped Chorus Fruit","#c7a0d8","ball","Minecraft",{acc:"#8a5aa0",sp:.15}],
+  nickel:["Nikkelrúd","#d9d0a0","ingot","Thermal Foundation"],
+  invar:["Invar rúd","#b8bdb0","ingot","Thermal Foundation"],
+  constantan:["Constantan rúd","#d8a070","ingot","Thermal Foundation"],
+  pyrotheum:["Blazing Pyrotheum por","#f08a20","dust","Thermal Foundation"],
+  cryotheum:["Gelid Cryotheum por","#6fd6f0","dust","Thermal Foundation"],
+  aerotheum:["Zephyrean Aerotheum por","#e8e0a0","dust","Thermal Foundation"],
+  petrotheum:["Tectonic Petrotheum por","#6a6a7a","dust","Thermal Foundation"]
 };
 
 /* ===== Pixelart motor: 16×16-os sprite-ok, egységes bal-felső fénnyel ===== */
@@ -1202,7 +1313,7 @@ const RECIPES = [
 const MODS = [
   {n:"Tinkers' Construct", c:"util", w:"Moduláris szerszámok és fegyverek, amik szintet lépnek és módosíthatók. Smeltery az ércduplázáshoz. Lásd a Tinkers' fület.", s:"Stencil Table, Part Builder, Tool Station, kovakő fejekkel.", x:"A Cobalt és az Ardite legalább Obsidian/Diamond szintű csákányt kér."},
   {n:"Construct's Armory", c:"util", w:"Tinkers'-szerű moduláris páncél ugyanazokból az anyagokból.", s:"Armor Station a Tinkers' asztalok mellé.", x:""},
-  {n:"Thermal Expansion", c:"tech", w:"Klasszikus gépsor: Pulverizer, Induction Smelter, Fluid Transposer, Dynamók. Augmentekkel fejleszthető.", s:"Machine Frame, majd Pulverizer és Redstone Furnace.", x:"A gépek alapból lassúak; tegyél beléjük Upgrade Kitet és augmentet."},
+  {n:"Thermal Expansion", c:"tech", w:"Klasszikus gépsor: Pulverizer, Induction Smelter, Fluid Transposer, Dynamók. Augmentekkel fejleszthető. Részletesen a Thermal fülön.", s:"Crescent Hammer, Machine Frame, majd Pulverizer és Redstone Furnace.", x:"A gépek alapból lassúak; tegyél beléjük Upgrade Kitet és augmentet."},
   {n:"Thermal Dynamics", c:"tech", w:"Fluxduct (RF), Itemduct és Fluiduct.", s:"Leadstone Fluxduct a generátortól a gépekig.", x:"Az Itemductba szervókat tegyél, különben nem húz ki semmit."},
   {n:"Ender IO", c:"tech", w:"Ötvözetek, egy blokkba pakolható conduitok, Dark Steel páncél, Soul Binder, Travel Anchor.", s:"SAG Mill (szilícium), Alloy Smelter, Stirling Generator.", x:"Grains of Infinity: gyújts tüzet a bedrockon."},
   {n:"Immersive Engineering", c:"tech", w:"Ipari multiblokkok (Coke Oven, Blast Furnace, Crusher, Excavator, Diesel Generator), vezetékek oszlopokon.", s:"Engineer's Hammer és az Engineer's Manual; Coke Oven Coke Brickből.", x:"A vezetékeknek feszültségszintjük van, LV, MV és HV kell transzformátorral."},
@@ -1695,6 +1806,13 @@ const TEX={
   electrum:{ns:["thermalfoundation"],t:[["ingotelectrum"]]},
   silver:{ns:["thermalfoundation"],t:[["ingotsilver"]]},
   copper:{ns:["thermalfoundation"],t:[["ingotcopper"]]},
+  nickel:{ns:["thermalfoundation"],t:[["ingotnickel"]]},
+  invar:{ns:["thermalfoundation"],t:[["ingotinvar"]]},
+  constantan:{ns:["thermalfoundation"],t:[["ingotconstantan"]]},
+  pyrotheum:{ns:["thermalfoundation"],t:[["dustpyrotheum"]]},
+  cryotheum:{ns:["thermalfoundation"],t:[["dustcryotheum"]]},
+  aerotheum:{ns:["thermalfoundation"],t:[["dustaerotheum"]]},
+  petrotheum:{ns:["thermalfoundation"],t:[["dustpetrotheum"]]},
   tingear:{ns:["thermalfoundation"],t:[["geartin"]]},
   cinnabar:{ns:["thermalfoundation"],t:[["cinnabar"]],x:["ore","block","dust"]},
   richslag:{ns:["thermalfoundation"],t:[["slagrich"],["richslag"]]},
@@ -1802,7 +1920,7 @@ function texPanelHTML(){
     </details>`;
 }
 function renderTexPanels(){document.querySelectorAll(".texpanel").forEach(el=>el.innerHTML=texPanelHTML());}
-function rerenderIcons(){renderRecipeList();renderRecipe();renderTiers();}
+function rerenderIcons(){renderRecipeList();renderRecipe();renderTiers();renderThermal();renderFlow();}
 
 async function handleTexFiles(fileList,fromDir){
   if(texBusy)return;
@@ -1874,6 +1992,8 @@ const FLOW = [
     note:"A Crusher melléktermékeket ad, az Arc Furnace ércből közvetlenül 2 rudat önt. Nagy multiblokkok, sok árammal."},
   {n:"Macerator, Ore Washing, Thermal Centrifuge", mod:"IndustrialCraft 2", x:2.35, lbl:"kb. ×2,3", in:["ore"], m:"IC2 gépsor", out:[["dust",2],["bonus",1,"apró"]],
     note:"Apró porokkal valamivel több mint 2×, de három gép és EU-hálózat kell hozzá."},
+  {n:"Induction Smelter + homok", mod:"Thermal Expansion", x:2.05, lbl:"×2", in:["ore","sand"], m:"Induction Smelter", out:[["ingot",2],["richslag",1,"esély"]],
+    note:"Pulverizer nélkül is 2 rúd, csak homok kell hozzá. Esély van Rich Slagre, ami érccel együtt újabb extra rudat ad."},
   {n:"Induction Smelter + Cinnabar", mod:"Thermal Expansion", x:3, lbl:"×3", in:["ore","cinnabar"], m:"Induction Smelter", out:[["ingot",3],["richslag",1,"esély"]],
     note:"A legjobb a packban: ércenként 3 rúd. A Cinnabart a redstone érc Pulverizerben adja melléktermékként."}
 ];
@@ -1968,6 +2088,10 @@ function buildIndex(){
   PHASES.forEach(p=>p.goals.forEach(g=>I.push({c:"Útvonal",t:g[1],x:p.t+" "+g[2],go:go("utvonal")})));
   RECIPES.forEach(g=>g.items.forEach(r=>I.push({c:"Recept",t:r.n,x:g.g+" "+r.note,go:go("receptek",()=>{curRecipe=r.id;renderRecipe();})})));
   TIERS.forEach(g=>Object.values(g.rows).flat().forEach(i=>I.push({c:"Tinkers'",t:i[1]+(i[2]?" ("+i[2]+")":""),x:g.t+" "+i[3],go:go("tinkers")})));
+  TE_MACHINES.forEach(m=>I.push({c:"Thermal",t:m[0],x:m[1]+" "+m[2],go:go("thermal")}));
+  TE_DYNAMOS.forEach(d=>I.push({c:"Thermal",t:d[0],x:d[1]+" "+d[2]+" áram generátor",go:go("thermal")}));
+  TE_ELEMENTAL.forEach(e=>I.push({c:"Thermal",t:e[1],x:e[2]+" "+e[3],go:go("thermal")}));
+  I.push({c:"Thermal",t:"Automata ércsor",x:"Pulverizer Redstone Furnace melléktermék Cinnabar ércmenedzsment",go:go("thermal")});
   FLOW.forEach(f=>I.push({c:"Feldolgozás",t:f.n,x:f.mod+" "+f.note+" érc duplázás triplázás",go:go("feldolgozas")}));
   MODS.forEach(m=>I.push({c:"Mod",t:m.n,x:m.w+" "+m.s+" "+m.x+" "+CAT[m.c].n,go:go("modok",()=>{$("#modSearch").value=m.n;modCat="all";document.querySelectorAll("[data-cat]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.cat==="all"?"true":"false"));renderMods();})}));
   ORES.forEach(o=>I.push({c:"Érc",t:o[0],x:o[2]+" "+o[3]+" "+o[4],go:go("helyek")}));
@@ -2133,8 +2257,80 @@ function renderNotes(){
       : `<p class="tm-off">Még nincs közös jegyzet.</p>`}</div>`;
 }
 
+/* ===================== THERMAL EXPANSION ===================== */
+const TE_STEPS = [
+  ["Crescent Hammer","Az első Thermal eszköz, gyakorlatilag kötelező. Shift + jobb klikkel úgy szeded fel a gépet, hogy megtartja a beállításait és a tartalmát, sima jobb klikkel elforgatod."],
+  ["Machine Frame és Redstone Reception Coil","Minden gép alapja. A Frame-hez ón fogaskerék, vas és üveg kell (lásd Receptek fül)."],
+  ["Első dynamo és Energy Cell","Egy Stirling Dynamo (régebbi verziókban Steam Dynamo) szenet vagy fát éget. Mellé egy Energy Cell, hogy a felesleg ne vesszen el."],
+  ["Pulverizer","Ércből 2 por, gyakran melléktermékkel. Ez az első igazi érc-duplázó gép."],
+  ["Redstone Furnace","Gyors, áramos kemence: a porokat olvasztja rúddá."],
+  ["Induction Smelter","Homokkal is 2 rudat ad ércenként, Cinnabarral 3-at, és ötvözeteket (Bronz, Invar, Electrum) is készít."],
+  ["Szállítás: Fluxduct és Itemduct","Fluxduct az áramnak, Itemduct a tárgyaknak. Az Itemduct végére Servo kell, ami kihúzza a tárgyat a gépből vagy ládából."],
+  ["Upgrade Kitek és augmentek","A gépet helyben fejleszted magasabb szintre, és szintenként több augment-hely nyílik."]
+];
+const TE_MACHINES = [
+  ["Redstone Furnace","Gyors kemence. Por → rúd, és minden, amit a sima kemence is tud.","Flux Anodizers specializáció"],
+  ["Pulverizer","Érc → 2 por + esélyes melléktermék; kőből kavics, kavicsból homok.","Tectonic Initiator specializáció (Petrotheummal)"],
+  ["Sawmill","Rönkből több deszka, és fűrészpor.","Resin Funnel: gyantát és nedvet is kinyer"],
+  ["Induction Smelter","Érc + homok/Rich Slag/Cinnabar; ötvözetek.","Pyro-Concentrator specializáció (Pyrotheummal)"],
+  ["Phytogenic Insolator","Növénytermesztés gépben: magból termés, csemetéből fa. Phyto-Gro trágyával gyorsabb.",""],
+  ["Compactor","Lemezek, érmék és tömörítés (pl. 9 rúd → blokk).","Numismatic Press: érmék a Numismatic Dynamóhoz"],
+  ["Magma Crucible","Kőből láva, és fémek megolvasztása folyadékká.",""],
+  ["Fluid Transposer","Folyadékot tölt tárgyba vagy fejt ki belőle (pl. Destabilized Redstone, Energized Glowstone).",""],
+  ["Energetic Infuser","Feltölti az RF-es tárgyakat (Flux Capacitor, jetpack, Fluxbore).",""],
+  ["Centrifugal Separator","Szétválasztja a keverékeket alkotóelemeikre.",""],
+  ["Fractionating Still","Folyadékokat finomít (pl. kreozotból, olajból értékesebb üzemanyag).",""],
+  ["Glacial Precipitator","Vízből hó és jég.",""],
+  ["Igneous Extruder","Lávából és vízből kő, zúzottkő vagy obszidián.",""],
+  ["Sequential Fabricator","Automatikus crafting asztal egy megadott recepthez.",""]
+];
+const TE_DYNAMOS = [
+  ["Stirling Dynamo","Szén, faszén, fa, csemete","Az első generátor. Régebbi verziókban Steam Dynamo néven fut, ott víz is kell neki."],
+  ["Magmatic Dynamo","Láva, Pyrotheum","Invar fogaskerék kell hozzá. A Nether közelében végtelen lávát kap."],
+  ["Compression Dynamo","Folyékony üzemanyag (biodízel, olaj, Refined Fuel)","Hűtőfolyadékkal (víz, Cryotheum) jobban működik."],
+  ["Enervation Dynamo","Redstone por és blokk","Akkor jó, ha sok a redstone (pl. void bányából)."],
+  ["Reactant Dynamo","Folyadék + szilárd katalizátor","Alkímiás kombinációkkal sok RF-et ad."],
+  ["Numismatic Dynamo","Érmék (Compactorból)","Fémet „éget”: érme-farm nélkül ritkán éri meg."]
+];
+const TE_TIERS = [
+  ["Basic","Alap gép","alap"],
+  ["Hardened","Invar","Hardened Upgrade Kit"],
+  ["Reinforced","Electrum + Hardened Glass","Reinforced Upgrade Kit"],
+  ["Signalum","Signalum","Signalum Upgrade Kit"],
+  ["Resonant","Enderium","Resonant Upgrade Kit"]
+];
+const TE_SECONDARY = [
+  ["Vasérc","Nikkel por"],["Rézérc","Arany por"],["Ónérc","Vas por"],["Ezüstérc","Ólom por"],
+  ["Ólomérc","Ezüst por"],["Nikkelérc","Platina por"],["Platinaérc","Irídium por"],["Redstone-érc","Cinnabar (nagyon fontos!)"]
+];
+const TE_ELEMENTAL = [
+  ["pyrotheum","Pyrotheum","Blaze por (Blaze a Netherben)","Magmatic Dynamo üzemanyag, Pyro-Concentrator az Induction Smelterben, sok magas szintű recept."],
+  ["cryotheum","Cryotheum","Blizz por (Blizz a havas biomokban)","Hűtés (Compression Dynamo, Fluxduct), tűz eloltása, gyors jégkészítés."],
+  ["aerotheum","Aerotheum","Blitz por (Blitz a sivatagos, száraz biomokban)","Fejlett receptek, többek között a szállításhoz."],
+  ["petrotheum","Petrotheum","Basalz por (Basalz a hegyes biomokban és a föld alatt)","Tectonic Initiator a Pulverizerben, gyorsabb ércfeldolgozás."]
+];
+function teAlloys(){
+  return [
+    machineBlock(["copper","copper","copper","tin"],"Induction Smelter",[["bronze",4]]),
+    machineBlock(["iron","iron","nickel"],"Induction Smelter",[["invar",3]]),
+    machineBlock(["gold","silver"],"Induction Smelter",[["electrum",2]]),
+    machineBlock(["copper","nickel"],"Induction Smelter",[["constantan",2]]),
+    machineBlock(["ore","sand"],"Induction Smelter",[["ingot",2],["richslag",1,"esély"]]),
+    machineBlock(["ore","cinnabar"],"Induction Smelter",[["ingot",3],["richslag",1,"esély"]])
+  ].join("");
+}
+function renderThermal(){
+  $("#teSteps").innerHTML = TE_STEPS.map(s=>`<li><span><b>${esc(s[0])}</b> ${esc(s[1])}</span></li>`).join("");
+  $("#teMachines").innerHTML = TE_MACHINES.map(m=>`<div class="mod"><h4>${esc(m[0])}</h4><dl><dt>Mire jó</dt><dd>${esc(m[1])}</dd>${m[2]?`<dt>Fejlesztés</dt><dd>${esc(m[2])}</dd>`:""}</dl></div>`).join("");
+  $("#teDynamos").innerHTML = TE_DYNAMOS.map(d=>`<tr><td class="res">${esc(d[0])}</td><td>${esc(d[1])}</td><td>${esc(d[2])}</td></tr>`).join("");
+  $("#teTiers").innerHTML = TE_TIERS.map((t,i)=>`<div class="tier-step"><span class="tn">${i+1}</span><b>${esc(t[0])}</b><small>${esc(t[1])}</small><small class="kit">${esc(t[2])}</small></div>`).join('<span class="tier-arrow" aria-hidden="true">→</span>');
+  $("#teSecondary").innerHTML = TE_SECONDARY.map(s=>`<tr><td class="res">${esc(s[0])}</td><td>${esc(s[1])}</td></tr>`).join("");
+  $("#teAlloys").innerHTML = teAlloys();
+  $("#teElemental").innerHTML = TE_ELEMENTAL.map(e=>`<div class="tile light"><div class="slot">${itemHTML(e[0])}</div><div><b>${esc(e[1])}</b><small><span class="lbl">Forrás:</span> ${esc(e[2])}</small><small><span class="lbl">Mire:</span> ${esc(e[3])}</small></div></div>`).join("");
+}
+
 /* ===================== INDÍTÁS ===================== */
-renderTabs(); renderPhases(); renderRecipeList(); renderRecipe(); renderCatFilters(); renderMods(); renderStatic(); renderTiers(); renderTexPanels(); loadCachedTex(); renderFlow(); renderTF(); renderGloss(); initSearch(); $("#glossSearch").addEventListener("input",renderGloss);
+renderTabs(); renderPhases(); renderRecipeList(); renderRecipe(); renderCatFilters(); renderMods(); renderStatic(); renderTiers(); renderTexPanels(); loadCachedTex(); renderFlow(); renderThermal(); renderTF(); renderGloss(); initSearch(); $("#glossSearch").addEventListener("input",renderGloss);
 { const auto=loadTeamCfg(); renderTeamPanel(); renderRoster(); renderNotes(); if(auto) teamConnect(); }
 showTab(); addEventListener("hashchange",showTab);
 </script>

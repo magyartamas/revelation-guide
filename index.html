@@ -6,469 +6,459 @@
 <title>FTB Revelation útmutató</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap&subset=latin-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap&subset=latin-ext" rel="stylesheet">
 <style>
 :root{
-  /* Egyetlen vizuális világ: a Minecraft inventory GUI. Sötét deepslate háttér, szürke, domború panelek, besüllyesztett slotok. */
-  --night:#2a2c33;
-  --night-2:#30333b;
-  --panel:#c6c6c6;
-  --hi:#ffffff;
-  --lo:#555555;
-  --slot:#8b8b8b;
-  --ink:#373737;
-  --ink-soft:#4e4e4e;
-  --xp:#80ff20;
-  --splash:#ffff55;
-  --tip-bg:#100010;
-  --tip-edge:#5000ff;
-  /* Minecraft formázókódok – modkategóriák */
-  --c-tech:#ffaa00;
-  --c-magic:#ff55ff;
-  --c-storage:#55ffff;
-  --c-explore:#55ff55;
-  --c-util:#ffff55;
-  --c-farm:#ff7f7f;
-  --f-display:"Pixelify Sans", "Courier New", monospace;
-  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
-  --f-ui:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
-  color-scheme: dark;
+  /* Egyetlen sötét világ: "deepslate" felület, glowstone-borostyán kiemelés. A játékbeli ablakok (crafting, slotok) szándékosan a világos Minecraft-GUI-t idézik. */
+  --bg:#171c24;
+  --surface:#202733;
+  --surface-2:#29323f;
+  --line:#364253;
+  --text:#e9eef4;
+  --muted:#a3afbd;
+  --accent:#f4b942;
+  --accent-ink:#1d1606;
+  --teal:#5fd0bf;
+  --xp:#7ed957;
+  --danger:#ff7a6b;
+  /* Minecraft GUI */
+  --panel:#c6c6c6; --hi:#ffffff; --lo:#555555; --slot:#8b8b8b; --mc-ink:#3a3a3a;
+  --tip-bg:#100010; --tip-edge:#5000ff;
+  --c-tech:#ffb347; --c-magic:#ff8af0; --c-storage:#6fe3ff; --c-explore:#7ef27e; --c-util:#ffe066; --c-farm:#ff9a9a;
+  --f-pixel:"Pixelify Sans","Courier New",monospace;
+  --f-display:"Chakra Petch","Segoe UI",system-ui,sans-serif;
+  --f-ui:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --r:10px;
+  --side-w:272px;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{
-  background-color:var(--night);
-  background-image:
-    linear-gradient(45deg, var(--night-2) 25%, transparent 25%, transparent 75%, var(--night-2) 75%),
-    linear-gradient(45deg, var(--night-2) 25%, transparent 25%, transparent 75%, var(--night-2) 75%);
-  background-size:32px 32px;
-  background-position:0 0,16px 16px;
-  font-family:var(--f-body);
-  color:var(--ink);
-  font-size:16px;
-  line-height:1.55;
-}
-a{color:#1d4fa8}
-:focus-visible{outline:3px solid var(--splash);outline-offset:2px}
+body{background:var(--bg);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.6}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:#11151b;border:1px solid var(--line);padding:1px 5px;border-radius:4px;color:#ffe08a}
+kbd{font-family:var(--f-ui);font-weight:700;font-size:13px;background:var(--surface-2);border:1px solid var(--line);border-bottom-width:3px;border-radius:5px;padding:0 7px;white-space:nowrap}
 
-/* ---------- Címképernyő ---------- */
-.title{
-  max-width:1100px;margin:0 auto;padding:40px 16px 18px;
-  display:grid;justify-items:center;text-align:center;gap:10px;position:relative;
-}
-.logo{
-  font-family:var(--f-display);font-weight:700;
-  font-size:clamp(40px,8vw,84px);line-height:.95;margin:0;letter-spacing:.02em;
-  color:#e8e8e8;
-  text-shadow:
-    0 2px 0 #9c9c9c,0 4px 0 #7a7a7a,0 6px 0 #5d5d5d,0 8px 0 #3d3d3d,
-    0 12px 18px rgba(0,0,0,.55);
-  text-wrap:balance;
-}
-.logo small{display:block;font-size:.42em;color:#bfbfbf;letter-spacing:.18em;margin-bottom:6px;text-shadow:0 3px 0 #3d3d3d}
-.splash{
-  position:absolute;right:max(16px,calc(50% - 400px));top:clamp(92px,15vw,140px);
-  font-family:var(--f-display);font-weight:600;color:var(--splash);
-  text-shadow:2px 2px 0 #3f3f15;font-size:clamp(14px,2.2vw,20px);
-  transform:rotate(-17deg);transform-origin:center;white-space:nowrap;pointer-events:none;
-  animation:splash .55s ease-in-out infinite alternate;
-}
-@keyframes splash{from{transform:rotate(-17deg) scale(1)}to{transform:rotate(-17deg) scale(1.08)}}
-.subtitle{color:#d0d0d0;margin:6px 0 0;font-size:15px}
-.xp{width:min(560px,100%);margin-top:14px;display:grid;gap:4px;justify-items:center}
-.xp-level{font-family:var(--f-display);font-weight:700;color:var(--xp);font-size:22px;text-shadow:2px 2px 0 #1b3b06, -1px -1px 0 #1b3b06}
-.xp-bar{width:100%;height:12px;background:#1f1f1f;border:2px solid #000;position:relative;overflow:hidden}
-.xp-fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(#b4ff70,var(--xp) 45%,#4fae10);transition:width .4s ease}
-.xp-bar::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(5.55% - 2px),#000 calc(5.55% - 2px) 5.55%)}
-.xp-label{color:#cfcfcf;font-size:13px}
-
-/* ---------- Fülek (creative inventory tabok) ---------- */
-.tabs-wrap{position:sticky;top:0;z-index:20;background:linear-gradient(var(--night) 70%,transparent)}
-.tabs{
-  max-width:1100px;margin:0 auto;padding:10px 16px 0;display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;
-}
-.tab{
-  flex:0 0 auto;font-family:var(--f-ui);font-size:16px;font-weight:600;
-  background:#a8a8a8;color:#2e2e2e;border:0;cursor:pointer;
-  padding:9px 14px 8px;
-  box-shadow:inset 2px 2px 0 #dcdcdc, inset -2px 0 0 #6a6a6a;
-  border-radius:3px 3px 0 0;
-  display:flex;align-items:center;gap:8px;
-}
-.tab:hover{background:#b8b8b8}
-.tab[aria-selected="true"]{background:var(--panel);color:#1f1f1f;padding-bottom:12px;margin-bottom:-4px;box-shadow:inset 2px 2px 0 var(--hi), inset -2px 0 0 var(--lo)}
-.tab .ico{width:18px;height:18px;image-rendering:pixelated}
-
-/* ---------- Fő panel ---------- */
-main{max-width:1100px;margin:0 auto;padding:0 16px 60px}
-.gui{
-  background:var(--panel);
-  border:2px solid #000;
-  box-shadow:inset 3px 3px 0 var(--hi), inset -3px -3px 0 var(--lo);
-  padding:clamp(18px,3vw,34px);
-  border-radius:0 4px 4px 4px;
-}
+/* ---------- Váz ---------- */
+.app{display:grid;grid-template-columns:var(--side-w) 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;overflow-y:auto;background:#12171e;border-right:1px solid var(--line);padding:18px 14px 30px;display:flex;flex-direction:column;gap:16px;scrollbar-width:thin}
+.brand{text-decoration:none;color:var(--text);display:grid;gap:2px;padding:4px 8px}
+.brand-logo{font-family:var(--f-pixel);font-weight:700;font-size:28px;line-height:1;letter-spacing:.02em;color:#f1f1f1;text-shadow:0 2px 0 #6d6d6d,0 4px 0 #3c3c3c}
+.brand-logo small{display:block;font-size:13px;letter-spacing:.3em;color:var(--muted);text-shadow:none;margin-bottom:4px}
+.brand-sub{font-size:13px;color:var(--muted)}
+.xp{display:grid;gap:5px;padding:10px 10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.xp-top{display:flex;justify-content:space-between;align-items:baseline}
+.xp-top span{font-size:13px;color:var(--muted)}
+.xp-level{font-family:var(--f-pixel);font-weight:700;color:var(--xp);font-size:20px;line-height:1}
+.xp-bar{height:8px;background:#0e1217;border-radius:99px;overflow:hidden;position:relative}
+.xp-fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#4fae10,var(--xp));border-radius:99px;transition:width .4s ease}
+.xp-label{font-size:12.5px;color:var(--muted);line-height:1.35}
+nav#nav{display:grid;gap:14px}
+.nav-group{display:grid;gap:2px}
+.nav-group > span{font-family:var(--f-display);font-weight:600;font-size:13px;color:var(--muted);padding:0 10px 4px;letter-spacing:.02em}
+.nav-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;color:#cfd8e2;text-decoration:none;font-size:15px;line-height:1.25}
+.nav-item:hover{background:var(--surface);color:#fff}
+.nav-item[aria-current="page"]{background:rgba(244,185,66,.13);color:var(--accent);font-weight:700}
+.nav-item .ico{width:18px;height:18px;flex:0 0 18px;image-rendering:pixelated;border-radius:3px}
+.shell{min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:40;display:flex;gap:12px;align-items:center;padding:12px clamp(16px,3vw,36px);background:rgba(23,28,36,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.menu-btn{display:none;font-family:var(--f-ui);font-weight:700;font-size:15px;background:var(--surface-2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+.crumb{font-family:var(--f-display);font-weight:600;color:var(--muted);font-size:14px;white-space:nowrap}
+main{padding:28px clamp(16px,3vw,36px) 60px;max-width:1080px;width:100%}
+footer{padding:0 clamp(16px,3vw,36px) 40px;color:#7f8b99;font-size:13.5px;max-width:1080px}
+footer p{max-width:90ch;margin:0}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:49}
 section[hidden]{display:none}
-h2{font-family:var(--f-display);font-size:clamp(28px,3.6vw,36px);font-weight:600;letter-spacing:.02em;margin:0 0 6px;color:#2a2a2a;text-wrap:balance;line-height:1.1}
-h3{font-family:var(--f-ui);font-size:21px;font-weight:700;margin:28px 0 8px;color:#2a2a2a;text-wrap:balance}
-h4{font-family:var(--f-ui);font-size:17px;font-weight:700;margin:0 0 6px;color:#2a2a2a}
-.lede{max-width:70ch;margin:0 0 18px;color:var(--ink-soft);font-size:17px}
+
+/* ---------- Tipográfia ---------- */
+h2{font-family:var(--f-display);font-size:clamp(28px,3.4vw,38px);font-weight:700;line-height:1.1;margin:0 0 10px;text-wrap:balance;letter-spacing:-.01em}
+h3{font-family:var(--f-display);font-size:22px;font-weight:600;margin:34px 0 10px;text-wrap:balance}
+h4{font-family:var(--f-display);font-size:17px;font-weight:600;margin:0 0 6px;line-height:1.25}
+.lede{max-width:70ch;margin:0 0 22px;color:var(--muted);font-size:17.5px}
 p{max-width:72ch;margin:0 0 12px}
-ul.plain{margin:0 0 12px;padding-left:20px;max-width:72ch}
-ul.plain li{margin:3px 0}
-kbd{font-family:var(--f-ui);background:#e9e9e9;border:2px solid #000;box-shadow:inset -2px -2px 0 #9a9a9a, inset 2px 2px 0 #fff;padding:0 7px;font-size:14px;white-space:nowrap}
+ul.plain,ol.plain{margin:0 0 12px;padding-left:20px;max-width:74ch}
+ul.plain li,ol.plain li{margin:5px 0}
+.mcnote{font-size:14px;color:var(--muted);margin-top:14px;max-width:78ch}
 
-/* Besüllyesztett doboz (slot-szerű) */
-.inset{
-  background:#b4b4b4;
-  box-shadow:inset 2px 2px 0 #8a8a8a, inset -2px -2px 0 #e2e2e2;
-  padding:16px 18px;
-}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+/* ---------- Kártyák, rácsok ---------- */
+.inset,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.inset p:last-child,.card p:last-child{margin-bottom:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.chip{display:inline-block;font-family:var(--f-ui);font-size:12.5px;font-weight:700;background:#11151b;border:1px solid var(--line);border-radius:99px;padding:1px 9px;color:#fff;white-space:nowrap;vertical-align:middle}
+.chip.tech{color:var(--c-tech)}.chip.magic{color:var(--c-magic)}.chip.storage{color:var(--c-storage)}
+.chip.explore{color:var(--c-explore)}.chip.util{color:var(--c-util)}.chip.farm{color:var(--c-farm)}.chip.core{color:#dfe6ee}
 
-/* Chat-szerű kategóriacímke */
-.chip{
-  display:inline-block;font-family:var(--f-ui);font-size:13px;font-weight:600;
-  background:#2b2b2b;padding:1px 8px 2px;color:#fff;white-space:nowrap;
-  text-shadow:1px 1px 0 rgba(0,0,0,.6);
-}
-.chip.tech{color:var(--c-tech)} .chip.magic{color:var(--c-magic)} .chip.storage{color:var(--c-storage)}
-.chip.explore{color:var(--c-explore)} .chip.util{color:var(--c-util)} .chip.farm{color:var(--c-farm)} .chip.core{color:#fff}
+/* ---------- Kezdőlap ---------- */
+.hero{position:relative;background:radial-gradient(120% 140% at 0% 0%,#2a3546 0%,var(--surface) 55%);border:1px solid var(--line);border-radius:16px;padding:clamp(24px,4vw,40px);margin-bottom:26px;overflow:hidden}
+.hero-logo{font-family:var(--f-pixel);font-weight:700;font-size:clamp(44px,7vw,78px);line-height:.95;color:#eee;margin:0 0 12px;text-shadow:0 3px 0 #8b8b8b,0 6px 0 #5a5a5a,0 9px 0 #333,0 14px 22px rgba(0,0,0,.5)}
+.hero-logo small{display:block;font-size:.3em;letter-spacing:.35em;color:var(--muted);text-shadow:none;margin-bottom:8px}
+.hl{position:relative;display:inline-block}
+.splash{position:absolute;left:calc(100% - 22px);top:-16px;font-family:var(--f-pixel);font-weight:600;color:#ffff55;text-shadow:2px 2px 0 #3f3f15;font-size:clamp(14px,1.8vw,19px);transform:rotate(-15deg);white-space:nowrap;pointer-events:none;animation:splash .55s ease-in-out infinite alternate}
+@keyframes splash{from{transform:rotate(-15deg) scale(1)}to{transform:rotate(-15deg) scale(1.08)}}
+.hero p{color:#c9d3de;font-size:17px;max-width:60ch}
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:18px}
+.quick a{display:grid;gap:2px;text-decoration:none;color:var(--text);background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.quick a:hover{border-color:var(--accent)}
+.quick b{font-family:var(--f-display);font-size:16px}
+.quick small{color:var(--muted);font-size:13.5px}
 
-/* ---------- Haladási útvonal ---------- */
+/* ---------- Gombok, űrlapok ---------- */
+.btn{font-family:var(--f-ui);font-size:14.5px;font-weight:700;cursor:pointer;background:var(--surface-2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 14px}
+.btn:hover{border-color:#5a6a80;background:#323d4c}
+.btn.primary,.btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.small{font-size:13px;padding:4px 10px}
 .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 18px}
-.btn{
-  font-family:var(--f-ui);font-size:15px;font-weight:600;cursor:pointer;
-  background:#6f6f6f;color:#fff;border:2px solid #000;padding:6px 14px;
-  box-shadow:inset 2px 2px 0 #a9a9a9, inset -2px -3px 0 #3d3d3d;
-  text-shadow:1px 1px 0 #3a3a3a;
-}
-.btn:hover{background:#7d86c4;box-shadow:inset 2px 2px 0 #b8c0ff, inset -2px -3px 0 #3a4080}
-.btn[aria-pressed="true"]{background:#5a6bc0;box-shadow:inset 2px 2px 0 #aab6ff, inset -2px -3px 0 #2d3678}
-.btn.small{font-size:13px;padding:3px 10px}
+.search{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+input[type=search],input[type=text],input[type=url],input[type=number],select{font-family:var(--f-ui);font-size:15px;padding:8px 11px;background:#11151b;color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0}
+input:focus,select:focus{outline:none;border-color:var(--accent)}
+.search input{flex:1 1 260px;max-width:440px}
+.empty{padding:20px;text-align:center;color:var(--muted)}
 
-.phases{display:grid;gap:18px;counter-reset:ph}
-.phase{display:grid;grid-template-columns:64px 1fr;gap:16px}
-.phase-num{
-  font-family:var(--f-display);font-weight:700;font-size:30px;color:#fff;
-  background:#5b5b5b;border:2px solid #000;height:64px;display:grid;place-items:center;
-  box-shadow:inset 3px 3px 0 #8d8d8d, inset -3px -3px 0 #333;
-  text-shadow:2px 2px 0 #222;
-}
-.phase.done .phase-num{background:#3f8a12;box-shadow:inset 3px 3px 0 #7fd23f, inset -3px -3px 0 #22500a}
+/* ---------- Globális kereső ---------- */
+.gsearch{position:relative;flex:1;max-width:620px}
+.gsearch input{width:100%;padding:10px 14px}
+#gres{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:60;background:#141922;border:1px solid var(--line);border-radius:var(--r);box-shadow:0 16px 40px rgba(0,0,0,.55);max-height:440px;overflow:auto}
+#gres .gr{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;width:100%;text-align:left;background:transparent;border:0;color:var(--text);padding:10px 14px;cursor:pointer;font-family:var(--f-ui)}
+#gres .gr .chip{grid-row:span 2;align-self:start;margin-top:2px}
+#gres .gr .gt{font-weight:700;font-size:15px}
+#gres .gr .gx{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#gres .gr.sel,#gres .gr:hover{background:var(--surface-2)}
+.gempty{padding:12px 14px;color:var(--muted);font-size:14px}
+
+/* ---------- Útvonal ---------- */
+.phases{display:grid;gap:16px}
+.phase{display:grid;grid-template-columns:52px 1fr;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.phase-num{font-family:var(--f-pixel);font-weight:700;font-size:26px;color:var(--muted);background:#11151b;border:1px solid var(--line);border-radius:10px;height:52px;display:grid;place-items:center}
+.phase.done .phase-num{color:#0f1a07;background:var(--xp);border-color:var(--xp)}
 .phase h3{margin:2px 0 4px}
-.phase .why{color:var(--ink-soft);margin:0 0 10px;max-width:75ch}
+.phase .why{color:var(--muted);margin:0 0 12px}
 .goals{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.goal{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;padding:8px 10px;background:#bdbdbd;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f}
+.goal{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;padding:9px 12px;background:#1b212b;border:1px solid transparent;border-radius:8px}
+.goal:hover{border-color:var(--line)}
 .goal[hidden]{display:none}
-.goal input{appearance:none;width:22px;height:22px;margin:1px 0 0;background:#8b8b8b;border:0;cursor:pointer;
-  box-shadow:inset 2px 2px 0 #373737, inset -2px -2px 0 #fff;position:relative}
-.goal input:checked{background:#8b8b8b}
-.goal input:checked::after{content:"";position:absolute;left:7px;top:2px;width:6px;height:12px;border:solid var(--xp);border-width:0 3px 3px 0;transform:rotate(45deg);filter:drop-shadow(1px 1px 0 #1b3b06)}
+.goal input{appearance:none;width:22px;height:22px;margin:1px 0 0;background:#11151b;border:1.5px solid #5b6b80;border-radius:6px;cursor:pointer;position:relative}
+.goal input:checked{background:var(--xp);border-color:var(--xp)}
+.goal input:checked::after{content:"";position:absolute;left:6px;top:2px;width:6px;height:11px;border:solid #0f1a07;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
 .goal label{cursor:pointer}
 .goal .t{font-weight:700}
-.goal .d{display:block;color:var(--ink-soft);font-size:15px}
-.goal.checked .t{text-decoration:line-through;text-decoration-color:#3f8a12;text-decoration-thickness:2px}
-.needs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0;align-items:center;font-size:14px;color:var(--ink-soft)}
+.goal .d{display:block;color:var(--muted);font-size:15px}
+.goal.checked .t{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--xp)}
+.who{display:block;font-size:13px;color:var(--xp);font-weight:700;margin-top:2px}
+.needs{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0;align-items:center;font-size:14px;color:var(--muted)}
 
-/* ---------- Receptek ---------- */
-.recipe-layout{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
-.recipe-list{display:grid;gap:14px;max-height:none}
-.recipe-list h4{font-size:16px;margin:0 0 4px;color:#2f2f2f}
-.recipe-list .group{display:grid;gap:3px}
-.rbtn{
-  text-align:left;font-family:var(--f-body);font-size:15px;cursor:pointer;
-  background:transparent;border:0;padding:5px 8px;color:var(--ink);
-  display:flex;gap:8px;align-items:center;
-}
-.rbtn:hover{background:#b0b0b0}
-.rbtn[aria-current="true"]{background:#8b8b8b;color:#fff;box-shadow:inset 2px 2px 0 #373737, inset -2px -2px 0 #fff}
+/* ---------- Minecraft ablakok (receptek) ---------- */
+.recipe-layout{display:grid;grid-template-columns:250px 1fr;gap:22px;align-items:start}
+.recipe-list{display:grid;gap:14px;position:sticky;top:76px}
+.recipe-list h4{font-size:14px;color:var(--muted);margin:0 0 4px;padding-left:8px}
+.recipe-list .group{display:grid;gap:2px}
+.rbtn{text-align:left;font-family:var(--f-ui);font-size:14.5px;cursor:pointer;background:transparent;border:0;border-radius:7px;padding:5px 8px;color:#cfd8e2;display:flex;gap:9px;align-items:center}
+.rbtn:hover{background:var(--surface)}
+.rbtn[aria-current="true"]{background:rgba(244,185,66,.13);color:var(--accent);font-weight:700}
 .rbtn .mini{width:24px;height:24px;flex:0 0 24px}
 .recipe-view{min-height:320px}
-.craft{
-  display:flex;flex-wrap:wrap;align-items:center;gap:18px;padding:20px;
-  background:var(--panel);border:2px solid #000;box-shadow:inset 3px 3px 0 var(--hi), inset -3px -3px 0 var(--lo);
-  width:fit-content;max-width:100%;
-}
-.craft-title{font-family:var(--f-ui);color:#404040;font-size:17px;flex-basis:100%;margin:-8px 0 -6px}
+.recipe-view h3{margin-top:0}
+.craft{display:flex;flex-wrap:wrap;align-items:center;gap:18px;padding:20px;background:var(--panel);border:2px solid #000;border-radius:4px;box-shadow:inset 3px 3px 0 var(--hi),inset -3px -3px 0 var(--lo),0 8px 24px rgba(0,0,0,.35);width:fit-content;max-width:100%;color:var(--mc-ink)}
+.craft-title{font-family:var(--f-ui);color:#404040;font-size:16px;flex-basis:100%;margin:-8px 0 -6px}
 .cgrid{display:grid;gap:0}
 .cgrid.g3{grid-template-columns:repeat(3,54px)}
-.cgrid.g2{grid-template-columns:repeat(2,54px)}
-.slot{
-  width:54px;height:54px;background:var(--slot);
-  box-shadow:inset 2px 2px 0 #373737, inset -2px -2px 0 #fff;
-  display:grid;place-items:center;position:relative;
-}
+.slot{width:54px;height:54px;background:var(--slot);box-shadow:inset 2px 2px 0 #373737,inset -2px -2px 0 #fff;display:grid;place-items:center;position:relative;flex:0 0 auto}
 .slot.out{width:72px;height:72px}
-.item{
-  width:48px;height:48px;display:block;cursor:help;
-  image-rendering:pixelated;image-rendering:crisp-edges;
-}
+.item{width:48px;height:48px;display:block;cursor:help;image-rendering:pixelated;image-rendering:crisp-edges}
 .item:hover,.item:focus-visible{background:rgba(255,255,255,.45)}
-.slot.out .item{width:48px;height:48px}
 .spr{image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;vertical-align:middle}
-.count{position:absolute;right:4px;bottom:1px;font-family:var(--f-display);font-weight:700;color:#fff;text-shadow:2px 2px 0 #3f3f3f;font-size:16px;pointer-events:none}
-.chance{position:absolute;left:3px;top:1px;font-family:var(--f-ui);font-size:11px;color:#ffff55;text-shadow:1px 1px 0 #3f3f15;pointer-events:none}
+.count{position:absolute;right:4px;bottom:1px;font-family:var(--f-pixel);font-weight:700;color:#fff;text-shadow:2px 2px 0 #3f3f3f;font-size:16px;pointer-events:none}
+.chance{position:absolute;left:3px;top:1px;font-family:var(--f-ui);font-weight:700;font-size:11px;color:#ffff55;text-shadow:1px 1px 0 #3f3f15;pointer-events:none}
 .arrow{display:grid;justify-items:center;gap:4px;min-width:56px}
 .arrow svg{width:44px;height:30px;image-rendering:pixelated}
-.arrow span{font-family:var(--f-ui);font-size:14px;color:#404040;text-align:center;max-width:140px;line-height:1.15}
-.furnace-in{display:grid;justify-items:center;gap:2px}
-.flame{width:30px;height:30px;image-rendering:pixelated}
 .arrow .amt{font-family:var(--f-ui);font-weight:700;font-size:14px;color:#6a6a6a}
 .inputs{display:flex;flex-wrap:wrap;gap:6px;max-width:190px}
 .outputs{display:flex;flex-wrap:wrap;gap:6px}
-.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:14px 0 0;font-size:14px;color:var(--ink-soft)}
+.furnace-in{display:grid;justify-items:center;gap:2px}
+.flame{width:30px;height:30px;image-rendering:pixelated}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:14px 0 0;font-size:14px;color:var(--muted)}
 .legend span{display:inline-flex;gap:6px;align-items:center}
 .legend img{width:24px;height:24px}
 .rnote{margin:14px 0 0;max-width:70ch}
 .chain{display:grid;gap:14px}
-.mcnote{font-size:14px;color:var(--ink-soft);margin-top:18px;max-width:75ch}
 
-/* ---------- Modok ---------- */
-.search{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
-.search input{
-  font-family:var(--f-ui);font-size:17px;padding:8px 10px;min-width:min(320px,100%);flex:1 1 260px;max-width:420px;
-  background:#000;color:#fff;border:2px solid #a0a0a0;outline:none;
-}
-.search input:focus{border-color:#fff}
-.search input::placeholder{color:#8a8a8a}
-.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-.mod{background:#bdbdbd;box-shadow:inset 2px 2px 0 #e8e8e8, inset -2px -2px 0 #8a8a8a;padding:14px 16px;display:grid;gap:6px;align-content:start}
+/* ---------- Mod kártyák ---------- */
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.mod{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:6px;align-content:start}
 .mod-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
 .mod h4{margin:0}
-.mod dl{margin:0;display:grid;gap:4px;font-size:15px}
-.mod dt{font-weight:700;font-size:13px;color:#555;margin-top:4px}
+.mod dl{margin:0;display:grid;gap:3px;font-size:15px}
+.mod dt{font-weight:700;font-size:12.5px;color:var(--muted);margin-top:5px}
 .mod dd{margin:0}
-.mod dd.warn{color:#7a1d10}
-.empty{padding:20px;text-align:center;color:var(--ink-soft)}
+.mod dd.warn{color:var(--danger)}
 
 /* ---------- Táblázatok ---------- */
-.tbl-wrap{overflow-x:auto;background:#b4b4b4;box-shadow:inset 2px 2px 0 #8a8a8a, inset -2px -2px 0 #e2e2e2}
-table{border-collapse:collapse;width:100%;font-size:15px;min-width:680px}
-th{font-family:var(--f-ui);font-weight:600;text-align:left;font-size:15px;background:#8b8b8b;color:#fff;text-shadow:1px 1px 0 #3a3a3a;padding:8px 10px}
-td{padding:8px 10px;border-top:1px solid #9a9a9a;vertical-align:top}
-tr:nth-child(even) td{background:#bcbcbc}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:640px}
+th{font-family:var(--f-display);font-weight:600;text-align:left;font-size:14.5px;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);background:#1c232d}
+td{padding:9px 12px;border-top:1px solid #2c3644;vertical-align:top}
 td.res{font-weight:700;white-space:nowrap}
-.dot{display:inline-block;width:12px;height:12px;border:1px solid rgba(0,0,0,.6);margin-right:6px;vertical-align:-1px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px;vertical-align:-1px}
 
-/* Energia létra */
+/* ---------- Energia ---------- */
 .ladder{display:grid;gap:8px}
-.rung{display:grid;grid-template-columns:minmax(170px,230px) 140px 1fr;gap:14px;align-items:center;padding:10px 12px;background:#bdbdbd;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f}
-.rung b{font-family:var(--f-ui);font-size:16px;font-weight:700;display:block;line-height:1.15}
-.rung small{color:#555}
-.pips{display:flex;gap:3px}
-.pips i{width:20px;height:14px;background:#6b6b6b;box-shadow:inset 1px 1px 0 #3a3a3a}
-.pips i.on{background:#d01b1b;box-shadow:inset 1px 1px 0 #ff6b6b, inset -1px -1px 0 #7a0e0e}
-.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-.unit{padding:10px 12px;background:#2b2b2b;color:#e6e6e6;font-size:14px}
-.unit b{font-family:var(--f-ui);font-size:18px;display:block;color:#fff}
+.rung{display:grid;grid-template-columns:minmax(170px,240px) 130px 1fr;gap:14px;align-items:center;padding:11px 14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.rung b{font-family:var(--f-display);font-size:16px;font-weight:600;display:block;line-height:1.2}
+.rung small{color:var(--muted)}
+.pips{display:flex;gap:4px}
+.pips i{width:18px;height:10px;border-radius:3px;background:#3a4556}
+.pips i.on{background:var(--accent)}
+.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.unit{padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);color:#d4dce6;font-size:14px}
+.unit b{font-family:var(--f-display);font-size:17px;display:block;color:#fff}
 
-/* Mágia ösvények */
-.track{display:grid;gap:0;margin:8px 0 0;padding:0;list-style:none;counter-reset:st}
-.track li{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:6px 0;position:relative}
-.track li::before{counter-increment:st;content:counter(st);font-family:var(--f-ui);font-weight:700;color:#fff;background:#7a3b9a;width:28px;height:28px;display:grid;place-items:center;border:2px solid #000;box-shadow:inset 2px 2px 0 #c37fe6, inset -2px -2px 0 #3e1450;font-size:14px}
-.track li:not(:last-child)::after{content:"";position:absolute;left:13px;top:36px;bottom:-4px;width:4px;background:#7a3b9a;opacity:.45}
-.magic-card{background:#bdbdbd;box-shadow:inset 2px 2px 0 #e8e8e8, inset -2px -2px 0 #8a8a8a;padding:16px 18px}
-.magic-card .tagline{color:var(--ink-soft);margin:0 0 6px;font-size:15px}
-.res-chip{display:inline-block;font-family:var(--f-ui);font-size:13px;background:#4a1d5c;color:#ffb3ff;padding:1px 8px;margin:4px 0 0}
+/* ---------- Lépéslisták ---------- */
+.track{display:grid;margin:8px 0 0;padding:0;list-style:none;counter-reset:st}
+.track li{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:7px 0;position:relative}
+.track li::before{counter-increment:st;content:counter(st);font-family:var(--f-display);font-weight:700;color:var(--accent-ink);background:var(--accent);width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-size:14px}
+.track li:not(:last-child)::after{content:"";position:absolute;left:13px;top:38px;bottom:-4px;width:2px;background:var(--line)}
+.track.magic li::before{background:#c77dff;color:#1c0a2a}
+.magic-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.magic-card .tagline{color:var(--muted);margin:0 0 6px;font-size:15px}
+.res-chip{display:inline-block;font-size:12.5px;font-weight:700;background:#2a1736;color:#ffb3ff;border-radius:99px;padding:1px 9px}
 
-/* Veszélyek */
+/* ---------- Veszélyek ---------- */
 .dangers{display:grid;gap:10px}
-.danger{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:12px 14px;background:#bdbdbd;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f;align-items:start}
-.sev{font-family:var(--f-ui);font-weight:700;font-size:14px;padding:3px 8px;text-align:center;color:#fff;border:2px solid #000}
-.sev.s3{background:#a11313;box-shadow:inset 2px 2px 0 #ff5b5b}
-.sev.s2{background:#c06a00;box-shadow:inset 2px 2px 0 #ffb04d}
-.sev.s1{background:#5f6d7a;box-shadow:inset 2px 2px 0 #a6b6c4}
-.danger h4{margin:0 0 2px}
-.danger p{margin:0;font-size:15px}
+.danger{display:grid;grid-template-columns:110px 1fr;gap:14px;padding:13px 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);align-items:start}
+.sev{font-family:var(--f-ui);font-weight:700;font-size:13px;padding:3px 8px;text-align:center;border-radius:99px}
+.sev.s3{background:#5a1712;color:#ffb0a6}.sev.s2{background:#5a3a0c;color:#ffd08a}.sev.s1{background:#2c3644;color:#c8d3df}
+.danger h4{margin:0 0 2px}.danger p{margin:0;font-size:15px;color:#d4dce6}
 
-/* Minecraft tooltip */
-#tip{
-  position:fixed;z-index:100;pointer-events:none;display:none;max-width:280px;
-  background:var(--tip-bg);color:#fff;padding:6px 9px;font-family:var(--f-ui);font-size:15px;line-height:1.3;
-  border:2px solid var(--tip-bg);
-  box-shadow:inset 0 0 0 2px #2d0a6b, inset 0 0 0 1px var(--tip-edge);
-  outline:2px solid #100010;
-}
-#tip .sub{color:#7f7fff;font-size:13px;display:block;margin-top:2px}
-#tip .mod{color:#5555ff;font-style:italic;font-size:13px;display:block;padding:0;background:none;box-shadow:none}
+/* ---------- Tooltip ---------- */
+#tip{position:fixed;z-index:100;pointer-events:none;display:none;max-width:280px;background:var(--tip-bg);color:#fff;padding:6px 9px;font-family:var(--f-ui);font-size:14.5px;line-height:1.3;border:2px solid var(--tip-bg);box-shadow:inset 0 0 0 2px #2d0a6b,inset 0 0 0 1px var(--tip-edge);outline:2px solid #100010}
+#tip .mod{color:#7f7fff;font-style:italic;font-size:12.5px;display:block;padding:0;background:none;border:0;margin-top:2px}
 
-/* Textúra-betöltő */
-.texpanel{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin:0 0 20px;padding:12px 14px;background:#2b2b2b;color:#e6e6e6;font-size:14px}
+/* ---------- Textúra-betöltő ---------- */
+.texpanel{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin:0 0 22px;padding:12px 16px;background:#141922;border:1px dashed var(--line);border-radius:var(--r);font-size:14px;color:#cfd8e2}
 .texpanel .tp-actions{display:flex;flex-wrap:wrap;gap:8px}
-.texpanel .tp-status{color:#cfcfcf;max-width:80ch}
 .texpanel .tp-status b{color:var(--xp)}
-.texpanel details{grid-column:1/-1;color:#cfcfcf}
-.texpanel summary{cursor:pointer;color:#fff;font-family:var(--f-ui)}
-.texpanel code{background:#000;padding:0 4px;color:#ffff55}
+.texpanel details{grid-column:1/-1}
+.texpanel summary{cursor:pointer;color:var(--accent);font-weight:700}
 .texpanel input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .texpanel label.btn{display:inline-block}
-@media (max-width:760px){.texpanel{grid-template-columns:1fr}}
 
-/* Tier list */
-.tierlist{margin:22px 0 0}
-.tierlist h3{margin:0 0 8px}
-.tier{display:grid;grid-template-columns:64px 1fr;border:2px solid #000;margin-top:-2px}
-.tier-label{display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:30px;color:#1f1f1f;text-shadow:1px 1px 0 rgba(255,255,255,.4)}
+/* ---------- Tier list ---------- */
+.tierlist{margin:24px 0 0}
+.tierlist h3{margin:0 0 10px}
+.tier{display:grid;grid-template-columns:58px 1fr;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);margin-top:8px}
+.tier-label{display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:28px;color:#1a1a1a}
 .tier.S .tier-label{background:#ff7f7f}.tier.A .tier-label{background:#ffbf7f}.tier.B .tier-label{background:#ffdf7f}.tier.C .tier-label{background:#bfff7f}
-.tier-items{display:flex;flex-wrap:wrap;gap:8px;padding:8px;background:#3a3a3a;min-height:70px}
-.tile{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:start;background:#4a4a4a;color:#eee;padding:7px 10px 7px 7px;width:min(100%,300px);box-shadow:inset 2px 2px 0 #5f5f5f, inset -2px -2px 0 #2e2e2e}
-.tile b{font-family:var(--f-ui);font-size:16px;font-weight:700;display:block;color:#fff;line-height:1.15}
-.tile small{display:block;font-size:13.5px;color:#d6d6d6;line-height:1.35;margin-top:2px}
-.tile .trait{color:#ffff55;font-family:var(--f-ui);font-size:13px;font-weight:700}
+.tier-items{display:flex;flex-wrap:wrap;gap:8px;padding:8px;background:var(--surface);min-height:70px}
+.tile{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:start;background:#1b212b;border:1px solid #2c3644;border-radius:8px;color:#e6ecf2;padding:7px 10px 7px 7px;width:min(100%,300px)}
+.tile b{font-family:var(--f-display);font-size:15.5px;font-weight:600;display:block;color:#fff;line-height:1.2}
+.tile small{display:block;font-size:13.5px;color:#c3cdd8;line-height:1.38;margin-top:2px}
+.tile .trait{color:var(--accent);font-size:12.5px;font-weight:700}
+.tile.light{width:min(100%,520px)}
+.tile .lbl{font-weight:700;color:#e6ecf2}
 
-/* Globális kereső */
-.gsearch{position:relative;width:min(640px,100%);margin-top:14px}
-.gsearch input{width:100%;font-family:var(--f-ui);font-size:16px;padding:10px 12px;background:#000;color:#fff;border:2px solid #a0a0a0;outline:none}
-.gsearch input:focus{border-color:#fff}
-.gsearch input::placeholder{color:#8a8a8a}
-#gres{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:60;background:var(--tip-bg);border:2px solid #2d0a6b;box-shadow:0 10px 30px rgba(0,0,0,.6);max-height:420px;overflow:auto;text-align:left}
-#gres .gr{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;width:100%;text-align:left;background:transparent;border:0;color:#fff;padding:9px 12px;cursor:pointer;font-family:var(--f-ui)}
-#gres .gr .chip{grid-row:span 2;align-self:start;margin-top:2px}
-#gres .gr .gt{font-weight:700;font-size:15px}
-#gres .gr .gx{font-size:13px;color:#b9b9d9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#gres .gr.sel,#gres .gr:hover{background:#2a1450}
-.gempty{padding:12px;color:#ddd;font-size:14px}
-
-/* Ércfeldolgozás */
+/* ---------- Ércfeldolgozás ---------- */
 .flows{display:grid;gap:14px}
-.flow{background:#bdbdbd;box-shadow:inset 2px 2px 0 #e8e8e8, inset -2px -2px 0 #8a8a8a;padding:14px 16px;display:grid;gap:10px}
+.flow{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:12px}
 .flow-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
-.flow-head b{font-family:var(--f-ui);font-size:17px}
-.flow-body{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.flow-head b{font-family:var(--f-display);font-size:17px}
+.flow-body{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
 .flow .craft{padding:14px}
-.yield{display:grid;gap:4px;min-width:180px;flex:1 1 180px;max-width:320px}
-.yield span{font-family:var(--f-display);font-size:24px;font-weight:600;color:#2a2a2a}
-.ybar{height:16px;background:#555;border:2px solid #000;position:relative}
-.ybar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#b4ff70,var(--xp) 45%,#4fae10)}
-.flow-note{margin:0;font-size:15px;color:var(--ink-soft)}
+.yield{display:grid;gap:6px;min-width:180px;flex:1 1 180px;max-width:320px}
+.yield span{font-family:var(--f-display);font-size:26px;font-weight:700;color:#fff}
+.ybar{height:10px;background:#11151b;border-radius:99px;position:relative;overflow:hidden}
+.ybar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#4fae10,var(--xp));border-radius:99px}
+.flow-note{margin:0;font-size:15px;color:var(--muted)}
 
-/* Twilight */
-.tf-start{display:grid;justify-items:center;gap:4px;max-width:420px;margin:0 auto}
-.tf-arrow{font-family:var(--f-ui);font-weight:700;font-size:22px;color:#555;text-align:center}
-.tf-split{text-align:center;max-width:none;margin:14px auto;font-weight:700}
+/* ---------- Twilight ---------- */
+.tf-start{display:grid;justify-items:center;gap:4px;max-width:440px;margin:0 auto}
+.tf-arrow{font-weight:700;font-size:20px;color:var(--muted);text-align:center}
+.tf-split{text-align:center;max-width:none;margin:16px auto;font-weight:700;color:var(--accent)}
 .tf-branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.tf-branch{display:grid;gap:4px;align-content:start;border-top:6px solid var(--bc);background:#b4b4b4;padding:10px}
-.tf-biome{font-family:var(--f-ui);font-weight:700;color:#fff;background:var(--bc);padding:4px 10px;justify-self:start;margin:-10px 0 4px -10px}
-.boss{background:#3a3a3a;color:#eee;padding:10px 12px;width:100%;box-shadow:inset 2px 2px 0 #555, inset -2px -2px 0 #222}
-.boss b{font-family:var(--f-ui);font-size:17px;color:#fff}
-.boss dl{margin:4px 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:14px}
-.boss dt{color:#ffff55;font-weight:700}
+.tf-branch{display:grid;gap:4px;align-content:start;border:1px solid var(--line);border-top:4px solid var(--bc);background:var(--surface);border-radius:var(--r);padding:12px}
+.tf-biome{font-family:var(--f-display);font-weight:600;color:#fff;margin-bottom:6px}
+.boss{background:#1b212b;border:1px solid #2c3644;border-radius:8px;color:#e6ecf2;padding:11px 13px;width:100%}
+.boss b{font-family:var(--f-display);font-size:17px;color:#fff}
+.boss dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:14px}
+.boss dt{color:var(--accent);font-weight:700}
 .boss dd{margin:0}
 
-/* Csapat */
-.teampanel{background:#2b2b2b;color:#e6e6e6;padding:14px 16px;display:grid;gap:10px}
+/* ---------- Csapat ---------- */
+.teampanel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:12px}
 .tm-state{display:flex;gap:10px;align-items:center;font-size:15px}
-.dotlive{width:12px;height:12px;background:#777;border:2px solid #000;flex:0 0 12px}
-.tm-state.on .dotlive{background:var(--xp)}
-.tm-err{margin:0;color:#ff8a7a;font-weight:700}
+.dotlive{width:10px;height:10px;border-radius:99px;background:#6b7787;flex:0 0 10px}
+.tm-state.on .dotlive{background:var(--xp);box-shadow:0 0 0 4px rgba(126,217,87,.18)}
+.tm-err{margin:0;color:var(--danger);font-weight:700}
 .tm-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 12px;align-items:end}
-.tm-form label{font-size:13px;color:#cfcfcf;grid-row:1}
-.tm-form input{grid-row:2}
+.tm-form label{font-size:13px;color:var(--muted);grid-row:1}
+.tm-form input{grid-row:2;width:100%}
 .tm-form .tm-actions{grid-column:1/-1;grid-row:3;margin-top:6px}
-.teampanel input,.roster-form input,.roster-form select,.note-form input,.note-form select{font-family:var(--f-ui);font-size:15px;padding:7px 9px;background:#000;color:#fff;border:2px solid #8a8a8a;width:100%;min-width:0}
 .teampanel input:disabled{opacity:.6}
-.tm-hint{margin:0;font-size:13px;color:#bdbdbd;max-width:none}
+.tm-hint{margin:0;font-size:13px;color:var(--muted);max-width:none}
 .tm-actions{display:flex;gap:8px;flex-wrap:wrap}
-.tm-off{color:var(--ink-soft);font-size:15px}
-.setup{margin-top:12px;background:#b4b4b4;padding:10px 14px;box-shadow:inset 2px 2px 0 #8a8a8a, inset -2px -2px 0 #e2e2e2}
-.setup summary{cursor:pointer;font-weight:700}
+.tm-off{color:var(--muted);font-size:15px}
+.setup{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px}
+.setup summary{cursor:pointer;font-weight:700;color:var(--accent)}
 .setup ol{max-width:75ch;padding-left:22px}
 .setup li{margin:6px 0}
-.setup pre{background:#1e1e1e;color:#e6e6e6;padding:10px 12px;overflow-x:auto;font-size:13px}
-.roster-form,.note-form{display:grid;gap:4px;background:#b4b4b4;padding:12px;box-shadow:inset 2px 2px 0 #8a8a8a, inset -2px -2px 0 #e2e2e2;margin-bottom:10px}
-.roster-form label,.note-form label{font-size:13px;font-weight:700;color:#3a3a3a;margin-top:4px}
-.roster-form input,.roster-form select,.note-form input,.note-form select{background:#fff;color:#222;border-color:#555}
+.setup pre{background:#0f1318;border:1px solid var(--line);border-radius:8px;color:#e6e6e6;padding:10px 12px;overflow-x:auto;font-size:13px}
+.setup pre code{background:none;border:0;padding:0;color:inherit}
+.roster-form,.note-form{display:grid;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.roster-form label,.note-form label{font-size:13px;font-weight:700;color:var(--muted);margin-top:4px}
+.roster-form input,.roster-form select,.note-form input,.note-form select{width:100%}
 .xyz{display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr;gap:6px;align-items:center}
 .xyz label{margin:0}
 .roster-list,.note-list{display:grid;gap:8px}
-.rp,.nt{background:#3a3a3a;color:#eee;padding:10px 12px}
-.rp b,.nt b{font-family:var(--f-ui);font-size:16px;color:#fff;margin-right:8px}
+.rp,.nt{background:#1b212b;border:1px solid #2c3644;border-radius:8px;padding:11px 13px}
+.rp b,.nt b{font-family:var(--f-display);font-size:16px;color:#fff;margin-right:8px}
 .rp p,.nt p{margin:6px 0 2px;font-size:14.5px}
-.rp small,.nt small{color:#aaa}
-.nt code{display:inline-block;margin-top:6px;background:#000;color:#ffff55;padding:2px 6px;font-size:13px}
+.rp small,.nt small{color:var(--muted)}
+.nt code{display:inline-block;margin-top:6px}
 .nt-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
 .nt-foot{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:6px}
-.who{display:block;font-size:13px;color:#2f6a10;font-weight:700;margin-top:2px}
-@media (max-width:760px){.tm-form{grid-template-columns:1fr}.tm-form label,.tm-form input{grid-row:auto}.tm-form .tm-actions{grid-row:auto}}
 
-/* Szótár */
+/* ---------- Szótár ---------- */
 .gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin:0}
-.gl{background:#bdbdbd;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f;padding:10px 12px}
-.gl dt{font-weight:700;font-size:16px}
-.gl dd{margin:2px 0 0;font-size:15px;color:#333}
+.gl{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.gl dt{font-family:var(--f-display);font-weight:600;font-size:16px}
+.gl dd{margin:3px 0 0;font-size:15px;color:#cfd8e2}
 
-/* Thermal */
-.te-track li{grid-template-columns:34px 1fr}
-.te-track li b{display:inline}
+/* ---------- Thermal ---------- */
 .orechain{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:8px 0}
-.orechain.sub{margin-top:0}
-.oc{background:#3a3a3a;color:#eee;padding:10px 12px;display:grid;gap:2px;min-width:150px;flex:1 1 150px;box-shadow:inset 2px 2px 0 #555, inset -2px -2px 0 #222}
-.oc b{font-family:var(--f-ui);font-size:16px;color:#fff}
-.oc small{font-size:13.5px;color:#d0d0d0}
-.oc.alt{background:#4a3a24}
-.oca{align-self:center;font-weight:700;font-size:22px;color:#555}
+.oc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;display:grid;gap:2px;min-width:150px;flex:1 1 150px}
+.oc b{font-family:var(--f-display);font-size:16px;color:#fff}
+.oc small{font-size:13.5px;color:var(--muted)}
+.oc.alt{border-color:#6b5426;background:#2a2418}
+.oca{align-self:center;font-weight:700;font-size:20px;color:var(--muted)}
 .te-alloys{display:flex;flex-wrap:wrap;gap:12px}
 .te-alloys .craft{padding:14px}
 .tiers-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
-.tier-step{display:grid;gap:2px;background:#bdbdbd;padding:10px 12px;min-width:150px;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f}
-.tier-step .tn{font-family:var(--f-display);font-size:20px;color:#c9302c}
+.tier-step{display:grid;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 13px;min-width:150px}
+.tier-step .tn{font-family:var(--f-pixel);font-size:20px;color:var(--accent)}
 .tier-step b{font-size:16px}
-.tier-step small{font-size:13.5px;color:#444}
-.tier-step .kit{color:#6a6a6a}
-.tier-arrow{font-weight:700;color:#555;font-size:20px}
+.tier-step small{font-size:13.5px;color:var(--muted)}
+.tier-arrow{font-weight:700;color:var(--muted);font-size:18px}
 .te-elem{display:flex;flex-wrap:wrap;gap:10px}
-.tile.light{background:#bdbdbd;color:#2a2a2a;box-shadow:inset 1px 1px 0 #e6e6e6, inset -1px -1px 0 #8f8f8f;width:min(100%,500px)}
-.tile.light b{color:#2a2a2a}
-.tile.light small{color:#3a3a3a}
-.tile .lbl{font-weight:700}
 
-footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:#a9a9a9;font-size:14px}
-footer p{max-width:90ch}
+/* ---------- Mod-útmutatók ---------- */
+.mg-head{display:flex;gap:16px;align-items:center;margin-bottom:6px}
+.mg-head .slot{flex:0 0 auto}
+.mg-meta{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 20px}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.key{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.key b{font-family:var(--f-display);font-weight:600;font-size:16px;display:block;margin-bottom:2px}
+.key p{margin:0;font-size:14.5px;color:#cfd8e2}
+.callouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:6px}
+.callout{border-radius:var(--r);padding:14px 16px;border:1px solid var(--line);background:var(--surface)}
+.callout h4{margin-bottom:8px}
+.callout.tip{border-left:4px solid var(--teal)}
+.callout.warn{border-left:4px solid var(--danger)}
+.callout ul{margin:0;padding-left:18px}
+.callout li{margin:4px 0;font-size:15px}
 
-@media (max-width:760px){
+/* ---------- Áramkalkulátor ---------- */
+.calc{display:grid;gap:18px}
+.calc-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.stat small{display:block;color:var(--muted);font-size:13px}
+.stat b{font-family:var(--f-display);font-size:28px;font-variant-numeric:tabular-nums}
+.stat.good b{color:var(--xp)}.stat.bad b{color:var(--danger)}
+.balance{height:12px;border-radius:99px;background:#11151b;overflow:hidden;display:flex}
+.balance i{display:block;height:100%}
+.calc-table{display:grid;gap:6px}
+.crow{display:grid;grid-template-columns:minmax(0,1.6fr) 90px 110px 110px 36px;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.crow.head{background:transparent;border:0;padding:0 10px;font-size:13px;color:var(--muted);font-weight:700}
+.crow .tot{font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+.crow input,.crow select{width:100%}
+.crow .x{background:transparent;border:0;color:var(--muted);font-size:20px;cursor:pointer;border-radius:6px}
+.crow .x:hover{color:var(--danger);background:#2a1a1a}
+.calc-add{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.calc-add select{min-width:220px}
+.suggest{background:#1d2a1f;border:1px solid #35553a;border-radius:var(--r);padding:12px 16px;color:#d9f2d0}
+.suggest.bad{background:#2c1c1a;border-color:#6b3a33;color:#ffd6cf}
+
+/* ---------- Gépház tervek ---------- */
+.plans{display:grid;gap:18px}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:12px}
+.plan-body{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+.pgrid{display:grid;gap:3px;background:#0f1318;padding:8px;border-radius:8px;border:1px solid var(--line)}
+.pc{width:46px;height:46px;border-radius:5px;display:grid;place-items:center;font-family:var(--f-ui);font-weight:700;font-size:12.5px;color:#111;text-align:center;line-height:1.05}
+.pc.empty{background:transparent;border:1px dashed #263040}
+.pc.wire{border-radius:2px}
+.plegend{display:grid;gap:6px;font-size:14px;align-content:start;min-width:220px;flex:1}
+.plegend span{display:flex;gap:8px;align-items:center}
+.plegend i{width:18px;height:18px;border-radius:4px;flex:0 0 18px}
+.plan .steps{margin:0;padding-left:20px;font-size:15px;color:#d4dce6}
+.plan .steps li{margin:4px 0}
+.layer-note{font-size:13.5px;color:var(--muted)}
+
+/* ---------- Mire jó ---------- */
+.uses{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.use{display:grid;grid-template-columns:54px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.use b{font-family:var(--f-display);font-weight:600;font-size:16px;display:block}
+.use p{margin:3px 0 0;font-size:14.5px;color:#cfd8e2}
+.use .from{font-size:13px;color:var(--muted);margin-top:4px}
+
+/* ---------- Reszponzív ---------- */
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;bottom:0;width:min(86vw,var(--side-w));z-index:50;transform:translateX(-105%);transition:transform .22s ease}
+  .side.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.6)}
+  .menu-btn{display:inline-block}
   .recipe-layout{grid-template-columns:1fr}
-  .recipe-list{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .recipe-list{position:static;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+}
+@media (max-width:700px){
   .phase{grid-template-columns:1fr}
-  .phase-num{width:56px;height:48px;font-size:24px}
-  .rung{grid-template-columns:1fr}
-  .danger{grid-template-columns:1fr}
+  .rung,.danger{grid-template-columns:1fr}
+  .tm-form{grid-template-columns:1fr}.tm-form label,.tm-form input,.tm-form .tm-actions{grid-row:auto}
+  .crow{grid-template-columns:1fr 70px 80px 30px}
+  .crow .tot{display:none}
+  .crow.head .tot{display:none}
   .splash{display:none}
-  .gui{border-radius:0 0 4px 4px}
+  .crumb{display:none}
+  .texpanel{grid-template-columns:1fr}
 }
-@media (prefers-reduced-motion: reduce){
-  .splash{animation:none}
-  .xp-fill{transition:none}
-}
+@media (prefers-reduced-motion:reduce){.splash{animation:none}.xp-fill,.side{transition:none}}
+
 </style>
 </head>
 <body>
 
-<header class="title">
-  <h1 class="logo"><small>FTB</small>Revelation</h1>
-  <div class="splash" aria-hidden="true">Most már magyarul is!</div>
-  <p class="subtitle">Magyar útmutató a Minecraft 1.12.2-es modpackhez: sorrend, receptláncok, modok, veszélyek</p>
+<div class="app">
+<aside class="side" id="side" aria-label="Fejezetek">
+  <a class="brand" href="#kezdes"><span class="brand-logo"><small>FTB</small>Revelation</span><span class="brand-sub">Magyar útmutató, Minecraft 1.12.2</span></a>
   <div class="xp" aria-live="polite">
-    <div class="xp-level" id="xpLevel">0</div>
+    <div class="xp-top"><span>Csapat-haladás</span><div class="xp-level" id="xpLevel">0</div></div>
     <div class="xp-bar" role="progressbar" aria-label="Kipipált haladási célok" aria-valuemin="0" aria-valuemax="100" id="xpBar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
-    <div class="xp-label" id="xpLabel">0 / 0 cél kész. Az Útvonal fülön pipálhatod ki őket.</div>
+    <div class="xp-label" id="xpLabel">0 / 0 cél kész.</div>
   </div>
+  <nav id="nav"></nav>
+</aside>
+<div class="shell">
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" type="button" aria-controls="side" aria-expanded="false">Menü</button>
   <div class="gsearch">
-    <input id="gq" type="search" placeholder="Hogyan szerzek…? Keresés az egész útmutatóban (pl. acél, repülés, Hydra)" aria-label="Keresés az egész útmutatóban" autocomplete="off" aria-controls="gres">
+    <input id="gq" type="search" placeholder="Hogyan szerzek…? Keresés az egész útmutatóban" aria-label="Keresés az egész útmutatóban" autocomplete="off" aria-controls="gres">
     <div id="gres" role="listbox" hidden></div>
   </div>
+  <span class="crumb" id="crumb"></span>
 </header>
-
-<div class="tabs-wrap">
-  <nav class="tabs" role="tablist" aria-label="Útmutató fejezetei" id="tabs"></nav>
-</div>
-
-<main>
-<div class="gui">
+<main id="main">
 
 <!-- ================= KEZDÉS ================= -->
-<section id="kezdes" role="tabpanel" aria-labelledby="tab-kezdes">
+<section id="sec-kezdes" role="tabpanel" aria-labelledby="tab-kezdes">
+  <div class="hero">
+    <h1 class="hero-logo"><small>FTB</small><span class="hl">Revelation<span class="splash" aria-hidden="true">Most már magyarul is!</span></span></h1>
+    <p>Magyar útmutató a csapatnak: milyen sorrendben haladjatok, mit hogyan craftoljatok, melyik modban mire figyeljetek. Kezdd az Útvonallal, vagy ugorj egyenesen egy modhoz.</p>
+    <div class="quick">
+      <a href="#utvonal"><b>Útvonal</b><small>Hat szakasz, közös pipákkal</small></a>
+      <a href="#thermal"><b>Thermal Expansion</b><small>Az első gépek és az ércsor</small></a>
+      <a href="#aram"><b>Áramkalkulátor</b><small>Elég-e az áram?</small></a>
+      <a href="#csapat"><b>Csapat</b><small>Ki min dolgozik, közös helyek</small></a>
+    </div>
+  </div>
   <h2>Kezdés: mi ez a pack, és hogyan indulj</h2>
   <p class="lede">A Revelation az FTB „kitchen sink” csomagja: tech, mágia, felfedezés és farmolás egyben, kötött küldetéslánc nélkül. Te döntöd el, merre haladsz, ezért könnyű elveszni. Ez az útmutató egy bevált sorrendet ad, és megmutatja, melyik mod mire jó.</p>
 
@@ -513,7 +503,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= ÚTVONAL ================= -->
-<section id="utvonal" role="tabpanel" aria-labelledby="tab-utvonal" hidden>
+<section id="sec-utvonal" role="tabpanel" aria-labelledby="tab-utvonal" hidden>
   <h2>Haladási útvonal</h2>
   <p class="lede">Hat szakasz az első naptól az endgame-ig. A célokat kipipálhatod, és a fenti XP-csík mutatja, hol tartasz. Ha a Csapat fülön csatlakoztatok, a pipák közösek, és látszik, ki pipálta ki. A tech és a mágia célokat külön is szűrheted.</p>
   <div class="filters" role="group" aria-label="Célok szűrése">
@@ -526,7 +516,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= RECEPTEK ================= -->
-<section id="receptek" role="tabpanel" aria-labelledby="tab-receptek" hidden>
+<section id="sec-receptek" role="tabpanel" aria-labelledby="tab-receptek" hidden>
   <h2>Receptláncok: mihez mi kell</h2>
   <p class="lede">A legfontosabb köztes anyagok és gépi folyamatok, crafting-rácsban és gép-sémában. Vidd az egeret egy slot fölé a tárgy nevéért.</p>
   <div class="texpanel"></div>
@@ -538,7 +528,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= TINKERS ================= -->
-<section id="tinkers" role="tabpanel" aria-labelledby="tab-tinkers" hidden>
+<section id="sec-tinkers" role="tabpanel" aria-labelledby="tab-tinkers" hidden>
   <h2>Tinkers' Construct: anyagok és módosítók</h2>
   <p class="lede">Egy Tinkers' eszköz részekből áll: fej, nyél, kötés (a nagyobbaknál több rész is). Az anyag adja a statokat és a tulajdonságot (trait), a módosítókat pedig utólag teszed rá a Tool Stationben. Ez a tier list a 1.12-es Tinkers'-hez készült, és vélemény: a saját játékstílusod számít.</p>
   <div class="texpanel"></div>
@@ -551,7 +541,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= THERMAL ================= -->
-<section id="thermal" role="tabpanel" aria-labelledby="tab-thermal" hidden>
+<section id="sec-thermal" role="tabpanel" aria-labelledby="tab-thermal" hidden>
   <h2>Thermal Expansion</h2>
   <p class="lede">A pack legfontosabb korai tech modja, és az ércfeldolgozás gerince. A gépek (Machines) áramot esznek, augmentekkel és Upgrade Kitekkel fejleszthetők; az eszközök (Devices) áram nélkül dolgoznak, és nem fejleszthetők. Minden dynamo alapból kb. 40 RF/t-t ad, ezt augmentekkel és szintlépéssel növeled.</p>
   <div class="texpanel"></div>
@@ -629,7 +619,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= ÉRCFELDOLGOZÁS ================= -->
-<section id="feldolgozas" role="tabpanel" aria-labelledby="tab-feldolgozas" hidden>
+<section id="sec-feldolgozas" role="tabpanel" aria-labelledby="tab-feldolgozas" hidden>
   <h2>Ércfeldolgozás: hány rúd lesz egy ércből?</h2>
   <p class="lede">Az ércek a pack legszűkebb erőforrásai, ezért nem mindegy, hogyan dolgozod fel őket. Sorrendben: Smeltery az első napoktól, Pulverizer vagy SAG Mill az első gépekkel, majd Induction Smelter Cinnabarral, ami ércenként 3 rudat ad.</p>
   <div class="flows" id="oreflow"></div>
@@ -643,7 +633,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= MODOK ================= -->
-<section id="modok" role="tabpanel" aria-labelledby="tab-modok" hidden>
+<section id="sec-modok" role="tabpanel" aria-labelledby="tab-modok" hidden>
   <h2>Modkalauz</h2>
   <p class="lede">A pack fontos modjai: mire jók, mivel kezdd, és mire figyelj. Szűrhetsz kategóriára vagy név szerint.</p>
   <div class="search">
@@ -654,7 +644,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= HELYEK ================= -->
-<section id="helyek" role="tabpanel" aria-labelledby="tab-helyek" hidden>
+<section id="sec-helyek" role="tabpanel" aria-labelledby="tab-helyek" hidden>
   <h2>Ércek, helyek, dimenziók</h2>
   <p class="lede">Mit hol keress, és mire kell. A pontos magasság a configtól függ; a Just Enough Resources (JER) a JEI-ben grafikonon is mutatja az érceloszlást.</p>
   <div class="tbl-wrap">
@@ -669,7 +659,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= ENERGIA ================= -->
-<section id="energia" role="tabpanel" aria-labelledby="tab-energia" hidden>
+<section id="sec-energia" role="tabpanel" aria-labelledby="tab-energia" hidden>
   <h2>Energia: mivel termelj, és mikor válts</h2>
   <p class="lede">Kezdd kicsiben, és lépj feljebb, amikor a gépeid már várnak az áramra. A piros jelzések a relatív teljesítményt mutatják, nem pontos értékeket.</p>
   <div class="ladder" id="ladder"></div>
@@ -688,7 +678,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= MÁGIA ================= -->
-<section id="magia" role="tabpanel" aria-labelledby="tab-magia" hidden>
+<section id="sec-magia" role="tabpanel" aria-labelledby="tab-magia" hidden>
   <h2>Mágia ösvények</h2>
   <p class="lede">Minden mágiamodnak saját „valutája” és sorrendje van. Ezek a lépcsők a fő mérföldköveket mutatják, a részleteket a mod saját könyve adja.</p>
   <div class="grid2" id="magic"></div>
@@ -696,7 +686,7 @@ footer p{max-width:90ch}
 
 
 <!-- ================= TWILIGHT ================= -->
-<section id="twilight" role="tabpanel" aria-labelledby="tab-twilight" hidden>
+<section id="sec-twilight" role="tabpanel" aria-labelledby="tab-twilight" hidden>
   <h2>Twilight Forest</h2>
   <p class="lede">Egy örök alkonyatban élő varázserdő bossokkal, kincsekkel és saját felszereléssel. A bossok sorban nyitják meg a területeket: amíg az előző nincs legyőzve, a következő biom büntet, a struktúrát pedig mágikus fal zárja.</p>
   <div class="grid3">
@@ -710,7 +700,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= CSAPAT ================= -->
-<section id="csapat" role="tabpanel" aria-labelledby="tab-csapat" hidden>
+<section id="sec-csapat" role="tabpanel" aria-labelledby="tab-csapat" hidden>
   <h2>Csapatjáték</h2>
   <p class="lede">Közös tábla a csapatnak: ki min dolgozik, fontos helyek koordinátái, és közös pipák az Útvonal fülön. Minden élőben frissül mindenkinél, ha ugyanazzal a csapatkóddal csatlakoztok.</p>
   <div class="teampanel" id="teamPanel"></div>
@@ -760,7 +750,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= SZÓTÁR ================= -->
-<section id="szotar" role="tabpanel" aria-labelledby="tab-szotar" hidden>
+<section id="sec-szotar" role="tabpanel" aria-labelledby="tab-szotar" hidden>
   <h2>Szótár</h2>
   <p class="lede">A modok kézikönyvei tele vannak szakszavakkal. Itt a leggyakoribbak, magyarul.</p>
   <div class="search"><input type="search" id="glossSearch" placeholder="Keresés a szótárban…" aria-label="Keresés a szótárban"></div>
@@ -768,7 +758,7 @@ footer p{max-width:90ch}
 </section>
 
 <!-- ================= TELJESÍTMÉNY ================= -->
-<section id="teljesitmeny" role="tabpanel" aria-labelledby="tab-teljesitmeny" hidden>
+<section id="sec-teljesitmeny" role="tabpanel" aria-labelledby="tab-teljesitmeny" hidden>
   <h2>Teljesítmény, lag és összeomlás</h2>
   <p class="lede">Egy ekkora pack sokat kér a gépektől. Néhány beállítással és jó szokással a legtöbb akadás megelőzhető.</p>
   <div class="grid2">
@@ -812,42 +802,84 @@ footer p{max-width:90ch}
   </div>
 </section>
 
+<!-- ================= ÁRAMKALKULÁTOR ================= -->
+<section id="sec-aram" role="tabpanel" aria-labelledby="tab-aram" hidden>
+  <h2>Áramkalkulátor</h2>
+  <p class="lede">Add meg, milyen gépeid vannak és mivel termelsz áramot, és kiszámolja, elég-e. Az értékek becsült alapértékek: a gép ablakában (energia fül) látod a valódi RF/t-t, azt írd be. A böngésződ megjegyzi a listát.</p>
+  <div class="calc">
+    <div class="calc-sum" id="calcSum"></div>
+    <div class="balance" id="calcBar" aria-hidden="true"></div>
+    <div class="suggest" id="calcSuggest"></div>
+    <div class="search" style="margin:0"><label for="sugGen" style="color:var(--muted)">A hiányt ezzel pótolnám:</label><select id="sugGen"></select></div>
+    <div style="display:grid;gap:26px">
+      <div>
+        <h3 style="margin-top:0">Fogyasztók</h3>
+        <div class="calc-table"><div class="crow head"><span>Gép</span><span>Darab</span><span>RF/t / db</span><span class="tot">Összesen</span><span></span></div><div id="useRows" class="calc-table"></div></div>
+        <div class="calc-add"><select id="useAdd" aria-label="Gép kiválasztása"></select><button class="btn" id="useAddBtn" type="button">Hozzáadás</button></div>
+      </div>
+      <div>
+        <h3 style="margin-top:0">Termelők</h3>
+        <div class="calc-table"><div class="crow head"><span>Generátor</span><span>Darab</span><span>RF/t / db</span><span class="tot">Összesen</span><span></span></div><div id="genRows" class="calc-table"></div></div>
+        <div class="calc-add"><select id="genAdd" aria-label="Generátor kiválasztása"></select><button class="btn" id="genAddBtn" type="button">Hozzáadás</button></div>
+      </div>
+    </div>
+    <div><button class="btn small" id="calcReset" type="button">Lista ürítése</button></div>
+    <p class="mcnote">A Thermal dynamók alapból kb. 40 RF/t-t adnak, augmentekkel és szintlépéssel ennek a többszörösét. A reaktorok és turbinák mérete nagyon eltér: a saját GUI-jukban látod a pontos számot.</p>
+  </div>
+</section>
+
+<!-- ================= GÉPHÁZ ================= -->
+<section id="sec-gephaz" role="tabpanel" aria-labelledby="tab-gephaz" hidden>
+  <h2>Gépház tervek</h2>
+  <p class="lede">Bevált, kicsi elrendezések felülnézetből, hogy az első gépházatok ne legyen kábelspagetti. Bármelyik bővíthető oldalra.</p>
+  <div class="grid3" style="margin-bottom:18px">
+    <div class="inset"><h4>Hagyj helyet</h4><p>Minden gépsor mellett hagyj egy üres sort a későbbi gépeknek és a kábeleknek.</p></div>
+    <div class="inset"><h4>Egy gerinc</h4><p>Egy közös áramvezeték (Fluxduct vagy conduit) fusson végig a padlóban, abból ágazzon le minden.</p></div>
+    <div class="inset"><h4>Chunkhatár</h4><p>A gépház egy chunkba (16×16) férjen, így egyetlen chunkload elég neki.</p></div>
+  </div>
+  <div class="plans" id="plans"></div>
+</section>
+
+<!-- ================= MIRE JÓ ================= -->
+<section id="sec-mirejo" role="tabpanel" aria-labelledby="tab-mirejo" hidden>
+  <h2>Mire jó ez a tárgy?</h2>
+  <p class="lede">A sokat gyűjtött, de elsőre rejtélyes tárgyak: honnan jönnek, és mire használd őket. Mielőtt kidobsz valamit, nézd meg itt vagy a JEI-ben az U gombbal.</p>
+  <div class="texpanel"></div>
+  <div class="search"><input type="search" id="useSearch" placeholder="Keresés: pl. slag, Cinnabar, Nether…" aria-label="Keresés a tárgyak között"></div>
+  <div class="uses" id="uses"></div>
+</section>
+
 <!-- ================= VESZÉLYEK ================= -->
-<section id="veszelyek" role="tabpanel" aria-labelledby="tab-veszelyek" hidden>
+<section id="sec-veszelyek" role="tabpanel" aria-labelledby="tab-veszelyek" hidden>
   <h2>Vigyázz! Gyakori hibák és veszélyek</h2>
   <p class="lede">A legtöbb világ nem a creeperek miatt megy tönkre, hanem egy rosszul bekötött gép vagy egy felrobbant reaktor miatt. Ezeket érdemes előre tudni.</p>
   <div class="dangers" id="dangers"></div>
 </section>
 
-</div>
+<div id="modguides"></div>
 </main>
 
 <footer>
   <p>Készült a Revelation 3.x modlistája alapján. A Minecraft a Mojang védjegye, az FTB Revelation a Feed The Beast csapat modpackje; ez egy nem hivatalos rajongói útmutató.</p>
 </footer>
+</div>
+</div>
+<div class="scrim" id="scrim" hidden></div>
 
 <div id="tip" role="tooltip"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 /* ===================== ADATOK ===================== */
-const TABS = [
-  {id:"kezdes",   label:"Kezdés",   ico:"#5fb236"},
-  {id:"utvonal",  label:"Útvonal",  ico:"#e6c34a"},
-  {id:"receptek", label:"Receptek", ico:"#9a6a3a"},
-  {id:"tinkers",  label:"Tinkers'", ico:"#3f8fd0"},
-  {id:"thermal",  label:"Thermal", ico:"#c9302c"},
-  {id:"feldolgozas", label:"Ércfeldolgozás", ico:"#d9a070"},
-  {id:"modok",    label:"Modok",    ico:"#6c8ed8"},
-  {id:"helyek",   label:"Helyek",   ico:"#a0a0a0"},
-  {id:"energia",  label:"Energia",  ico:"#d01b1b"},
-  {id:"magia",    label:"Mágia",    ico:"#b24fd8"},
-  {id:"twilight", label:"Twilight", ico:"#2f7a4a"},
-  {id:"csapat",   label:"Csapat",   ico:"#55ffff"},
-  {id:"szotar",   label:"Szótár",   ico:"#f0f0e8"},
-  {id:"teljesitmeny", label:"Teljesítmény", ico:"#80ff20"},
-  {id:"veszelyek",label:"Veszélyek",ico:"#ff7a00"}
+const NAV = [
+  {g:"Indulás", items:[["kezdes","Kezdés","#5fb236"],["utvonal","Útvonal","#e6c34a"],["csapat","Csapat","#55ffff"]]},
+  {g:"Tech modok", items:[["tinkers","Tinkers' Construct","#3f8fd0"],["thermal","Thermal Expansion","#c9302c"],["m-enderio","Ender IO","#b8b8b8"],["m-ie","Immersive Engineering","#c08a4a"],["m-aa","Actually Additions","#b51717"],["m-er","Extreme Reactors","#e6e04a"],["m-if","Industrial Foregoing","#e8a3c8"],["m-de","Draconic Evolution","#7b3fc4"]]},
+  {g:"Tárolás", items:[["m-ae2","Applied Energistics 2","#7b4fc8"],["m-rs","Refined Storage","#6d6a78"]]},
+  {g:"Mágia", items:[["m-botania","Botania","#3fbf3f"],["m-bm","Blood Magic","#b2182b"],["m-as","Astral Sorcery","#4fd8c8"],["m-tc","Thaumcraft 6","#9a7ad8"],["magia","Mágia áttekintés","#b24fd8"]]},
+  {g:"Eszközök", items:[["receptek","Receptek","#9a6a3a"],["feldolgozas","Ércfeldolgozás","#d9a070"],["aram","Áramkalkulátor","#d01b1b"],["gephaz","Gépház tervek","#8f8f8f"],["mirejo","Mire jó?","#f0a020"],["szotar","Szótár","#f0f0e8"]]},
+  {g:"Világ és tudnivalók", items:[["twilight","Twilight Forest","#2f7a4a"],["helyek","Ércek és helyek","#a0a0a0"],["energia","Energia","#ffd23a"],["modok","Összes mod","#6c8ed8"],["veszelyek","Veszélyek","#ff7a00"],["teljesitmeny","Teljesítmény","#80ff20"]]}
 ];
+const TABS = NAV.flatMap(g=>g.items.map(i=>({id:i[0],label:i[1],ico:i[2],group:g.g})));
 
 const CAT = {
   tech:{n:"Tech"}, magic:{n:"Mágia"}, storage:{n:"Tárolás"},
@@ -1319,7 +1351,7 @@ const MODS = [
   {n:"Immersive Engineering", c:"tech", w:"Ipari multiblokkok (Coke Oven, Blast Furnace, Crusher, Excavator, Diesel Generator), vezetékek oszlopokon.", s:"Engineer's Hammer és az Engineer's Manual; Coke Oven Coke Brickből.", x:"A vezetékeknek feszültségszintjük van, LV, MV és HV kell transzformátorral."},
   {n:"Immersive Petroleum", c:"tech", w:"Olajkutak (Pumpjack) és Distillation Tower; dízel és benzin.", s:"Core Sample Drill: megmutatja az olajmezőt a chunkban.", x:""},
   {n:"IndustrialCraft 2", c:"tech", w:"EU-alapú gépek, gumi, reaktor. Az ércmosás és a centrifuga extra port ad.", s:"Treetap a gumifához, aztán Generator és Macerator.", x:"Túl nagy feszültségtől a gép felrobban. Csak csavarkulccsal bontsd, különben Machine Casing marad."},
-  {n:"Actually Additions", c:"tech", w:"Atomic Reconstructor, Empowerer, Laser Relay, Canola-alapú áram, sok QoL.", s:"Az Actually Additions Manual könyv mindent leír. Kezdj a Coal Generatorral.", x:"A Reconstructor lézere sebez, ne állj elé."},
+  {n:"Actually Additions", c:"tech", w:"Atomic Reconstructor, Empowerer, Laser Relay, Canola-alapú áram, sok QoL.", s:"Az Actually Additions Manual könyv mindent leír. Kezdj a Coal Generatorral.", x:"Bizonyos lencsékkel (pl. Lens of the Killer) a sugár sebez: ne állj elé."},
   {n:"Extra Utilities 2", c:"tech", w:"Grid Power (GP) rendszer, Quantum Quarry, Transfer Node, Angel Ring, dobok.", s:"Szélmalom vagy vízimalom GP-hez, Transfer Node a csövezéshez.", x:"A GP nem RF; csak az ExU2 saját gépei használják."},
   {n:"Industrial Foregoing", c:"tech", w:"Laser Drill, Mob Crusher, Tree Fluid Extractor (latex → műanyag), Black Hole Unit.", s:"Latex és Plastic a legtöbb géphez.", x:"A Laser Drillhez Laser Base és lencse kell, áramigényes."},
   {n:"Environmental Tech", c:"tech", w:"Void Ore Miner, Void Botanic Miner, napelem-tömbök. A semmiből bányászik.", s:"Litherite kristály, majd Void Ore Miner Tier 1.", x:"Szintek sorrendje: Litherite, Erodium, Kyronite, Pladium, Ionite, Aethium."},
@@ -1508,7 +1540,7 @@ function store(key,val){try{ if(val===undefined) return localStorage.getItem(key
 
 function itemHTML(id,count,chance){
   const it = IT[id]; if(!it) return "";
-  return `<img class="item" tabindex="0" src="${sprite(id)}" alt="${esc(it[0])}" data-tip="${esc(it[0])}" data-mod="${esc(it[3])}" width="48" height="48">`
+  return `<img class="item" tabindex="0" data-id="${id}" src="${sprite(id)}" alt="${esc(it[0])}" data-tip="${esc(it[0])}" data-mod="${esc(it[3])}" width="48" height="48">`
     + (count&&count>1?`<span class="count">${count}</span>`:"")
     + (chance?`<span class="chance">${esc(chance)}</span>`:"");
 }
@@ -1542,28 +1574,30 @@ function machineBlock(inp,m,outs,amt){
 }
 function legendFor(ids){
   const uniq=[...new Set(ids)].filter(k=>IT[k]);
-  return `<div class="legend">${uniq.map(k=>`<span><img class="spr" src="${sprite(k)}" alt="">${esc(IT[k][0])}</span>`).join("")}</div>`;
+  return `<div class="legend">${uniq.map(k=>`<span><img class="spr" data-id="${k}" src="${sprite(k)}" alt="">${esc(IT[k][0])}</span>`).join("")}</div>`;
 }
 
 /* ===================== FÜLEK ===================== */
 function renderTabs(){
-  $("#tabs").innerHTML = TABS.map(t=>`<button class="tab" role="tab" id="tab-${t.id}" aria-controls="${t.id}" aria-selected="false" data-id="${t.id}">
-     <svg class="ico" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="${t.ico}"/><rect x="0" y="0" width="8" height="1" fill="#fff" opacity=".35"/><rect x="0" y="7" width="8" height="1" fill="#000" opacity=".3"/><rect x="2" y="2" width="2" height="2" fill="#fff" opacity=".25"/></svg>${esc(t.label)}</button>`).join("");
-  $("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab"); if(b) location.hash=b.dataset.id;});
-  $("#tabs").addEventListener("keydown",e=>{
-    if(!["ArrowLeft","ArrowRight"].includes(e.key)) return;
-    const ids=TABS.map(t=>t.id); const cur=ids.indexOf(currentTab());
-    const nx=ids[(cur+(e.key==="ArrowRight"?1:-1)+ids.length)%ids.length];
-    location.hash=nx; document.getElementById("tab-"+nx).focus();
-  });
+  const ico=c=>`<svg class="ico" viewBox="0 0 8 8" aria-hidden="true"><rect width="8" height="8" fill="${c}"/><rect width="8" height="1" fill="#fff" opacity=".35"/><rect y="7" width="8" height="1" fill="#000" opacity=".3"/><rect x="2" y="2" width="2" height="2" fill="#fff" opacity=".25"/></svg>`;
+  $("#nav").innerHTML = NAV.map(g=>`<div class="nav-group"><span>${esc(g.g)}</span>${g.items.map(i=>`<a class="nav-item" id="tab-${i[0]}" href="#${i[0]}">${ico(i[2])}${esc(i[1])}</a>`).join("")}</div>`).join("");
+  const side=$("#side"), scrim=$("#scrim"), btn=$("#menuBtn");
+  const close=()=>{side.classList.remove("open");scrim.hidden=true;btn.setAttribute("aria-expanded","false");};
+  btn.addEventListener("click",()=>{const o=!side.classList.contains("open");side.classList.toggle("open",o);scrim.hidden=!o;btn.setAttribute("aria-expanded",o?"true":"false");});
+  scrim.addEventListener("click",close);
+  $("#nav").addEventListener("click",e=>{ if(e.target.closest(".nav-item")) close(); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") close(); });
 }
 function currentTab(){const h=location.hash.slice(1); return TABS.some(t=>t.id===h)?h:"kezdes";}
 function showTab(){
-  const id=currentTab();
-  TABS.forEach(t=>{
-    const sec=document.getElementById(t.id); sec.hidden = t.id!==id;
-    const b=document.getElementById("tab-"+t.id); b.setAttribute("aria-selected", t.id===id?"true":"false"); b.tabIndex = t.id===id?0:-1;
+  const id=currentTab(); const t=TABS.find(x=>x.id===id);
+  TABS.forEach(x=>{
+    const sec=document.getElementById("sec-"+x.id); if(sec) sec.hidden = x.id!==id;
+    const a=document.getElementById("tab-"+x.id); if(a){ if(x.id===id) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); }
   });
+  $("#crumb").textContent = t ? t.group+" / "+t.label : "";
+  document.title = (t&&id!=="kezdes" ? t.label+" | " : "") + "FTB Revelation útmutató";
+  const top=()=>window.scrollTo(0,0); top(); requestAnimationFrame(top); setTimeout(top,0);
 }
 
 /* ===================== ÚTVONAL ===================== */
@@ -1625,7 +1659,7 @@ function renderRecipeList(){
     g.items.map(r=>{
       const out = r.out || (r.steps? (r.steps[r.steps.length-1].out ? (Array.isArray(r.steps[r.steps.length-1].out)? r.steps[r.steps.length-1].out[0][0] : r.steps[r.steps.length-1].out) : null) : (r.out&&r.out[0]));
       const ic = (r.type==="machine"? r.out[0][0] : out);
-      return `<button class="rbtn" data-r="${r.id}" aria-current="${r.id===curRecipe}"><img class="mini spr" src="${sprite(ic)}" alt="">${esc(r.n)}</button>`;
+      return `<button class="rbtn" data-r="${r.id}" aria-current="${r.id===curRecipe}"><img class="mini spr" data-id="${ic}" src="${sprite(ic)}" alt="">${esc(r.n)}</button>`;
     }).join("")}</div>`).join("");
 }
 function renderRecipe(){
@@ -1920,7 +1954,7 @@ function texPanelHTML(){
     </details>`;
 }
 function renderTexPanels(){document.querySelectorAll(".texpanel").forEach(el=>el.innerHTML=texPanelHTML());}
-function rerenderIcons(){renderRecipeList();renderRecipe();renderTiers();renderThermal();renderFlow();}
+function rerenderIcons(){ document.querySelectorAll("img[data-id]").forEach(i=>{ i.src=sprite(i.dataset.id); }); }
 
 async function handleTexFiles(fileList,fromDir){
   if(texBusy)return;
@@ -2084,7 +2118,7 @@ function renderGloss(){
 /* ===================== GLOBÁLIS KERESŐ ===================== */
 function buildIndex(){
   const I=[];
-  const go=(h,fn)=>()=>{ if(fn)fn(); if(location.hash.slice(1)!==h) location.hash=h; else showTab(); window.scrollTo({top:$("main").offsetTop-60}); };
+  const go=(h,fn)=>()=>{ if(fn)fn(); if(location.hash.slice(1)!==h) location.hash=h; else showTab(); window.scrollTo(0,0); };
   PHASES.forEach(p=>p.goals.forEach(g=>I.push({c:"Útvonal",t:g[1],x:p.t+" "+g[2],go:go("utvonal")})));
   RECIPES.forEach(g=>g.items.forEach(r=>I.push({c:"Recept",t:r.n,x:g.g+" "+r.note,go:go("receptek",()=>{curRecipe=r.id;renderRecipe();})})));
   TIERS.forEach(g=>Object.values(g.rows).flat().forEach(i=>I.push({c:"Tinkers'",t:i[1]+(i[2]?" ("+i[2]+")":""),x:g.t+" "+i[3],go:go("tinkers")})));
@@ -2092,6 +2126,12 @@ function buildIndex(){
   TE_DYNAMOS.forEach(d=>I.push({c:"Thermal",t:d[0],x:d[1]+" "+d[2]+" áram generátor",go:go("thermal")}));
   TE_ELEMENTAL.forEach(e=>I.push({c:"Thermal",t:e[1],x:e[2]+" "+e[3],go:go("thermal")}));
   I.push({c:"Thermal",t:"Automata ércsor",x:"Pulverizer Redstone Furnace melléktermék Cinnabar ércmenedzsment",go:go("thermal")});
+  MODGUIDES.forEach(g=>{ I.push({c:"Mod-útmutató",t:g.n,x:g.intro,go:go("m-"+g.id)});
+    g.steps.forEach(st=>I.push({c:g.n,t:st[0],x:st[1],go:go("m-"+g.id)}));
+    g.keys.forEach(k=>I.push({c:g.n,t:k[0],x:k[1],go:go("m-"+g.id)})); });
+  USES.forEach(u=>I.push({c:"Mire jó?",t:u[1],x:u[2]+" "+u[3],go:go("mirejo",()=>{$("#useSearch").value=u[1];renderUses();})}));
+  PLANS.forEach(p=>I.push({c:"Gépház",t:p.n,x:p.steps.join(" "),go:go("gephaz")}));
+  I.push({c:"Eszköz",t:"Áramkalkulátor",x:"RF/t áram generátor fogyasztás elég dynamo",go:go("aram")});
   FLOW.forEach(f=>I.push({c:"Feldolgozás",t:f.n,x:f.mod+" "+f.note+" érc duplázás triplázás",go:go("feldolgozas")}));
   MODS.forEach(m=>I.push({c:"Mod",t:m.n,x:m.w+" "+m.s+" "+m.x+" "+CAT[m.c].n,go:go("modok",()=>{$("#modSearch").value=m.n;modCat="all";document.querySelectorAll("[data-cat]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.cat==="all"?"true":"false"));renderMods();})}));
   ORES.forEach(o=>I.push({c:"Érc",t:o[0],x:o[2]+" "+o[3]+" "+o[4],go:go("helyek")}));
@@ -2329,10 +2369,446 @@ function renderThermal(){
   $("#teElemental").innerHTML = TE_ELEMENTAL.map(e=>`<div class="tile light"><div class="slot">${itemHTML(e[0])}</div><div><b>${esc(e[1])}</b><small><span class="lbl">Forrás:</span> ${esc(e[2])}</small><small><span class="lbl">Mire:</span> ${esc(e[3])}</small></div></div>`).join("");
 }
 
+/* ===================== RÉSZLETES MOD-ÚTMUTATÓK ===================== */
+const MODGUIDES = [
+{id:"enderio", n:"Ender IO", cat:"tech", icon:"electricalsteel",
+ intro:"Gépek, ötvözetek és egy blokkba pakolható conduitok. A közép-korai tech kedvence, és a Dark Steel páncél miatt sokáig veled marad.",
+ steps:[
+  ["Grains of Infinity","Gyújts tüzet a bedrockon (kőzetágyon): néha Grains of Infinity esik. A korai Ender IO alkatrészekhez kell."],
+  ["Simple gépek","Simple SAG Mill, Simple Alloy Smelter, Simple Stirling Generator: olcsók, gyorsan beindítják a modot, de nem fejleszthetők."],
+  ["Silicon és Electrical Steel","SAG Millben homokból szilícium, Alloy Smelterben vas + szénpor + szilícium = Electrical Steel. Ebből lesz a Machine Chassis."],
+  ["Rendes gépek kondenzátorral","A teljes SAG Mill és Alloy Smelter. A gépbe tett kondenzátor (Basic, Double-Layer, Octadic) szintje adja a sebességet és a tudást."],
+  ["Conduitok","Conduit Binder (gravel + homok + agyag keverékét égetve) kell hozzájuk. Áram, tárgy, folyadék és redstone egy blokkban futhat."],
+  ["Capacitor Bank","Áramtároló, ami tömbbé rakható. Az oldalain beállítod, hol vegyen fel és hol adjon le áramot."],
+  ["Dark Steel felszerelés","Dark Steel páncél és eszközök, a Dark Steel Anvilen XP-ből fejleszthetők (Empowered, sebesség, siklás, éjjellátó stb.)."],
+  ["Késői gépek","Soul Binder + Powered Spawner, Travel Anchor + Staff of Traveling, Farming Station, Experience Obelisk, Zombie Generator."]
+ ],
+ keys:[
+  ["Kondenzátorok","Minden gépbe kell egy. A magasabb szint gyorsabb, és extra funkciót nyit (pl. több bemeneti slot)."],
+  ["Yeta Wrench","A conduitok és gépek beállító kulcsa. Shift + görgővel válthatsz módot."],
+  ["Soul Vial","Mob befogása üvegcsébe. A Soul Binderben ebből lesz spawner-alkatrész vagy Soulbound bűvölés."],
+  ["Grinding Ball","A SAG Millbe téve több mellékterméket ad és/vagy kevesebb áramot eszik."],
+  ["Staff of Traveling","Travel Anchorok között teleportál, és rövid távon „villanni” is tud."],
+  ["Experience Obelisk","XP-tároló: a Dark Steel fejlesztésekhez nagyon hasznos."]
+ ],
+ tips:["Az item conduitot a csatlakozásnál „Extract” módba kell tenni, különben nem szív ki semmit.","A Painter-rel bármilyen blokk kinézetét ráfestheted a conduitokra, így eltűnnek a falban.","A Capacitor Bank mellé tett generátor automatikusan tölti, ha a bank oldala bemenetre van állítva."],
+ warn:["A Dark Steel fejlesztések sok XP-t kérnek: előbb legyen XP-forrásod (mobfarm, Experience Obelisk).","A Powered Spawnerhez befogott mob kell (Soul Vial), és sok áramot eszik."]
+},
+{id:"ie", n:"Immersive Engineering", cat:"tech", icon:"steel",
+ intro:"Ipari multiblokkok, vezetékek oszlopokon és egy jól megírt kézikönyv. Az acél és a nagy dízeláram forrása.",
+ steps:[
+  ["Engineer's Hammer és Manual","A kalapáccsal rakod össze a multiblokkokat, a kézikönyvben minden felépítés rétegenként szerepel."],
+  ["Coke Oven","3×3×3 Coke Brickből. Szénből Coal Coke és kreozot lesz; kreozottal és deszkával Treated Wood."],
+  ["Blast Furnace","3×3×3 Blast Brickből. Vasból és kokszból acél. Lassú, de üzemanyag nélkül megy."],
+  ["Első áram","Water Wheel vagy Windmill + Kinetic Dynamo, LV vezetékkel (réz) és LV Capacitorral."],
+  ["Metal Press és Crusher","Prés formákkal: lemezek, fogaskerekek, rudak. A Crusher ércből 2 port csinál."],
+  ["Improved Blast Furnace","Gyorsabb acélgyártás; Preheater-ekkel (külső fűtés) még gyorsabb."],
+  ["Biodízel","Squeezer (Plant Oil) + Fermenter (Ethanol) → Refinery → Biodiesel → Diesel Generator."],
+  ["Arc Furnace és Excavator","Az Arc Furnace grafit elektródákkal ércből 2 rudat önt; az Excavator a Core Sample Drill-lel talált érctelért termeli ki."]
+ ],
+ keys:[
+  ["Vezetékek","LV (réz), MV (electrum), HV (acél). Más szintre transzformátor kell."],
+  ["Garden Cloche","Áramból és vízből termeszt növényeket egy blokkon."],
+  ["Core Sample Drill","Megmutatja, milyen érctelér van a chunk alatt az Excavatornak."],
+  ["Assembler","Három receptet gyárt automatikusan, mintakártyákkal."],
+  ["Revolver","Testreszabható fegyver különféle töltényekkel."],
+  ["Treated Wood","Időjárásálló fa a vezeték-oszlopokhoz és sok recepthez."]
+ ],
+ tips:["A kézikönyvben a multiblokkoknál rétegenkénti nézet van; Shift lenyomásával részletesebb a leírás.","A multiblokkot a kalapáccsal a kézikönyvben jelölt blokkra kattintva aktiválod.","Az Improved Blast Furnace a sima mellé is felépíthető, és ugyanazt a receptet gyorsabban csinálja."],
+ warn:["A szigeteletlen MV és HV vezeték megsebez, ha hozzáérsz.","Rossz szintű vezetéket ne köss gépbe: transzformátor kell köztük."]
+},
+{id:"aa", n:"Actually Additions", cat:"tech", icon:"redstoneblock",
+ intro:"Rengeteg apró kényelmi és gépi megoldás, egy kiváló, játékon belüli kézikönyvvel.",
+ steps:[
+  ["Actually Additions Manual","A kézikönyv minden gépet, receptet és trükköt bemutat. Ezzel kezdj."],
+  ["Black Quartz","Az Overworldben található érc. Sok gép alapanyaga."],
+  ["Coal Generator","Egyszerű korai áramforrás szénből."],
+  ["Atomic Reconstructor","Lézerrel alakít át blokkokat és tárgyakat. Ebből jönnek a kristályok (Restonia, Palis, Diamatine, Void, Emeradic, Enori)."],
+  ["Empowerer","Display Standekkel körbevéve a kristályokat Empowered változattá erősíti."],
+  ["Canola-olaj","Canola Press és Fermenting Barrel: olajból Oil Generator-ral áram."],
+  ["Laser Relay","Áram-, tárgy- és folyadékszállítás lézerekkel, falakon át is."],
+  ["Automatizálás","Farmer, Block Breaker/Placer, Phantomface (távoli hozzáférés), Item Repairer."]
+ ],
+ keys:[
+  ["Kristályok","Redstone → Restonia, lápisz → Palis, gyémánt → Diamatine, szén → Void, smaragd → Emeradic, vas → Enori."],
+  ["Wings of the Bats","Repülést adó kiegészítő; denevérszárnyak kellenek hozzá."],
+  ["Drill","Fejleszthető bányászfúró: gyorsaság, hatótáv, Silk Touch, Fortune."],
+  ["Coffee Machine","Kávé buffokkal (gyorsaság, erő stb.), jó a hosszú bányászáshoz."],
+  ["Lenses","A Reconstructorba tett lencsék más-más hatást adnak."],
+  ["Battery","Hordozható RF-tároló a fúróhoz és más eszközökhöz."]
+ ],
+ tips:["A Reconstructor egy irányba lő: a cél blokk legyen előtte, a tárgyat pedig dobd a sugár útjába.","Laser Relay-ek között a Laser Wrench-csel hozol létre kapcsolatot."],
+ warn:["Bizonyos lencsékkel (pl. Lens of the Killer) a sugár sebez: ne állj elé.","A Canola-olaj alap változata kevés áramot ad; a finomított olajok sokkal jobbak."]
+},
+{id:"ae2", n:"Applied Energistics 2", cat:"storage", icon:"fluix",
+ intro:"A legnépszerűbb digitális raktár: minden tárgy egy kereshető terminálban, plusz automatikus gyártás. Bonyolultabb, de nagyon erős.",
+ steps:[
+  ["Meteorit","A Meteorite Compass a legközelebbire mutat. Közepén Sky Stone ládában van a 4 Inscriber press."],
+  ["Certus Quartz és Fluix","Charger: Charged Certus. Charged Certus + Nether Quartz + redstone vízbe dobva = Fluix."],
+  ["Inscriber és processzorok","Logic (arany), Calculation (certus), Engineering (gyémánt) processzor, mindegyikhez Printed Silicon is kell."],
+  ["Első kis hálózat","Energy Acceptor, ME Drive + Storage Cell, ME Terminal. Controller nélkül legfeljebb 8 eszköz működik."],
+  ["ME Controller és kábelek","A Controllerrel több csatorna: sima/smart kábel 8, dense kábel 32 csatornát visz."],
+  ["Buszok és Interface","Import/Export Bus a gépekhez, Storage Bus ládák és Drawerek bekötéséhez, Interface a gépek ellátására."],
+  ["Autocrafting","Pattern Terminal + minták, Molecular Assembler, Crafting CPU (Crafting Storage + Co-Processing Unit)."],
+  ["Kényelem","Wireless Terminal (Wireless Access Point), P2P Tunnel a csatornák elosztására, Quartz Fiber az áramhoz."]
+ ],
+ keys:[
+  ["Storage Cell","1k, 4k, 16k és 64k. Egy cellában legfeljebb 63 féle tárgy fér el."],
+  ["Csatornák","Minden eszköz egy csatornát kér. A smart kábel mutatja, mennyi fut rajta."],
+  ["Growth Accelerator","A vízbe tett Certus seed-ek gyorsabb növesztése: végtelen certus."],
+  ["Storage Bus + Drawer Controller","A Storage Drawers rendszer egy az egyben a hálózat része lesz. Remek páros."],
+  ["P2P Tunnel","32 csatornát visz át egy csatorna áráért, távoli részekhez."],
+  ["Spatial IO","Teljes területek „becsomagolása” és áthelyezése. Késői játék."]
+ ],
+ tips:["Kezdj kicsiben, Controller nélkül; a Controllert akkor építsd, amikor elfogynak a csatornák.","A Controller lehet több blokkos, de téglatest alakú legyen.","Sok különböző apró tárgyhoz több kisebb cella jobb, mint egy nagy."],
+ warn:["Ha túl sok eszköz van egy kábelen, véletlenszerűen leállnak. Mindig figyeld a csatornákat.","Áram nélkül az egész hálózat leáll, és a tárgyaidhoz sem férsz hozzá."]
+},
+{id:"rs", n:"Refined Storage", cat:"storage", icon:"silicon",
+ intro:"Egyszerűbb digitális raktár csatornák nélkül, autocraftinggal. Könnyebb kezdeni, kisebb csapatnak is remek.",
+ steps:[
+  ["Quartz Enriched Iron","Vas + Nether Quartz. Szinte minden RS blokkhoz kell."],
+  ["Silicon és processzorok","Kvarc olvasztásából szilícium; Processor Binding + nyers processzorok, kemencében égetve."],
+  ["Controller és Grid","Controller (áramot kér), Grid vagy Crafting Grid, kábelek."],
+  ["Disk Drive","Storage Disk-ek (1k-tól 64k-ig). Ez a tényleges raktár."],
+  ["Külső tárolók","External Storage: ládák, Drawerek, más raktárak bekötése."],
+  ["Importer és Exporter","Gépek etetése és ürítése szűrőkkel."],
+  ["Autocrafting","Pattern Grid + Crafter. A Crafting Monitor mutatja, mi készül éppen."],
+  ["Wireless és bővítés","Wireless Grid + Wireless Transmitter; távoli részhez Network Transmitter/Receiver."]
+ ],
+ keys:[
+  ["Upgrade-ek","Speed, Stack, Crafting: gyorsítják az Importert, Exportert és Craftert."],
+  ["Security Manager","Kártyákkal szabályozod, ki mihez fér hozzá. Csapatban hasznos."],
+  ["Detector","Redstone jelet ad, ha egy tárgyból kevés vagy sok van."],
+  ["Fluid Grid","Folyadékok tárolása ugyanabban a hálózatban."]
+ ],
+ tips:["AE2 vagy RS: egyet válasszatok a közös bázisra, a kettő együtt csak bonyolítja.","Az RS-ben minden eszköz folyamatosan fogyaszt; nagy hálózatnál számolj vele az áramkalkulátorban."],
+ warn:["Áram nélkül a teljes hálózat elérhetetlen.","A Controller törésekor nem vesznek el a tárgyak, de a hálózat leáll, amíg vissza nem rakod."]
+},
+{id:"er", n:"Extreme Reactors", cat:"tech", icon:"ingot",
+ intro:"Méretezhető reaktor és turbina yelloriummal. Nem robban fel, így bátran kísérletezhetsz.",
+ steps:[
+  ["Yellorite","Mélyen az Overworldben. Kiolvasztva Yellorium Ingot."],
+  ["Reaktor alkatrészek","Reactor Casing, Glass, Controller, Fuel Rod, Control Rod, Access Port és Power Tap."],
+  ["Passzív reaktor","A Control Rod a Fuel Rod oszlop tetejére kerül. Egy kisebb, pl. 5×5×5-ös reaktor már szép áramot ad."],
+  ["Hűtés","A belső üres teret töltsd ki víz helyett jobb anyaggal (pl. grafit- vagy aranyblokk, Cryotheum): nő a hatásfok."],
+  ["Hulladék","A fűtőanyag Cyanite-tá ég ki; az Access Port kiadja, a Yelloriumot pedig ott töltöd utána."],
+  ["Aktív reaktor","Coolant Port: víz be, gőz ki. A gőz a turbinába megy."],
+  ["Turbina","Rotor Bearing, Rotor Shaft, Rotor Blades, indukciós tekercs (Coil) és Power Tap."],
+  ["Reprocessor","Cyanite-ból Blutonium: újra fűtőanyag."]
+ ],
+ keys:[
+  ["Control Rod","Szabályozza a reakciót: ha behúzod, kevesebb áram, kevesebb fogyasztás."],
+  ["Turbina fordulat","A turbina 900 vagy 1800 RPM körül a leghatékonyabb."],
+  ["Tekercsanyag","A jobb tekercsblokk (pl. arany helyett Ludicrite) több áramot ad ugyanabból a gőzből."]
+ ],
+ tips:["Kezdj passzív reaktorral; a turbina akkor éri meg, ha már sok áram kell.","A reaktor GUI-ja mutatja a termelt RF/t-t: írd be az áramkalkulátorba."],
+ warn:["Ha a Cyanite-ot nem viszed ki, a reaktor lassan lefullad.","A túl nagy, hűtés nélküli reaktor rengeteg fűtőanyagot pazarol."]
+},
+{id:"if", n:"Industrial Foregoing", cat:"tech", icon:"dust",
+ intro:"Automatizálás és farmolás: műanyag, lézeres bányászat, mobfeldolgozás, hatalmas egyfajta-tárolók.",
+ steps:[
+  ["Latex","Tree Fluid Extractor egy fa mellett: latexet csöpögtet."],
+  ["Műanyag","Latex Processing Unit → Tiny Dry Rubber → Dry Rubber, kemencében Plastic. Szinte minden géphez kell."],
+  ["Farmok","Plant Sower, Plant Gatherer, Plant Fertilizer: teljes növényfarm automatikusan."],
+  ["Állatok","Animal Rancher, Animal Feeder, Animal Baby Separator."],
+  ["Mobok","Mob Crusher megöli a mobokat és Essence-t (XP-folyadékot) ad; Mob Duplicator Essence-ből szaporít."],
+  ["Laser Drill","Laser Base + Laser Drill-ek: ércet bányászik a semmiből, lencsével színre szűrhető."],
+  ["Black Hole Unit és Tank","Egy fajta tárgyból vagy folyadékból óriási mennyiséget tárol."]
+ ],
+ keys:[
+  ["Range Addon","A gépek munkaterületét növeli."],
+  ["Pink Slime","Különleges alapanyag késői receptekhez."],
+  ["Munkaterület gomb","A gépek GUI-jában megjelenítheted, melyik területen dolgoznak."]
+ ],
+ tips:["Kezdd a latex-műanyag sorral: e nélkül szinte semmi nem készül.","A Laser Drill sok áramot kér: előbb legyen erős áramforrásod."],
+ warn:["A Mob Crusher a játékosokat is sebezheti, ha a területén állsz.","Sok gép kis területen sok laggot okozhat."]
+},
+{id:"de", n:"Draconic Evolution", cat:"tech", icon:"wyverncore",
+ intro:"Az endgame csúcsa: Wyvern és Draconic felszerelés, óriási energiatároló, fúziós gyártás és a hírhedt reaktor.",
+ steps:[
+  ["Draconium","Az Overworldben ritka és mély, a Netherben és főleg az Endben több van belőle. Pulverizerrel duplázd."],
+  ["Draconium Core","Az alapalkatrész (lásd Receptek). Ebből készül a Grinder, az Energy Infuser és a Dislocator."],
+  ["Wyvern szint","Wither → Nether Star → Wyvern Core → Wyvern eszközök és páncél."],
+  ["Energy Core","Óriási RF-tároló multiblokk Energy Pylonokkal és stabilizátorokkal, 8 szinttel."],
+  ["Fusion Crafting","Fusion Crafting Core + körülötte Crafting Injectorok. A recept szintje szerinti injector kell."],
+  ["Dragon Heart","Az Ender Dragon dobja. Négy End Crystallal a kijárati portálnál újraidézhető."],
+  ["Draconic szint","Awakened Draconium → Draconic Core → Draconic eszközök és páncél."],
+  ["Chaotic szint","A Chaos Guardian (Chaos Island, messze az Endben) Chaos Shardot dob."]
+ ],
+ keys:[
+  ["Dislocator","Teleportáló eszköz; a fejlettebb változat több helyet jegyez meg."],
+  ["Grinder","Mobölő blokk mobfarmokhoz."],
+  ["Energy Infuser","RF-es eszközök töltése."],
+  ["Celestial Manipulator","Időjárás és napszak állítása."],
+  ["Draconic páncél","Pajzsot ad, ami RF-ből töltődik. Töltve tartsd!"]
+ ],
+ tips:["Az Energy Core a csapat közös áramtárolója lehet: Flux Networks-szel mindenhova eljut.","Az Ender Dragon újraidézésével folyamatosan gyűjthetsz Dragon Heartot."],
+ warn:["A Draconic Reactor rossz kezelésnél óriási krátert robbant. Előtte mindig mentés!","A Chaos Guardian nagyon erős: csak Wyvern vagy Draconic felszereléssel menj."]
+},
+{id:"botania", n:"Botania", cat:"magic", icon:"terrasteel",
+ intro:"Virág-alapú „technológiai mágia”. Mana a valuta, és a mod szinte teljesen áram nélkül automatizálható.",
+ steps:[
+  ["Lexica Botania","A kézikönyv: könyv + virág. Minden belső receptet mutat."],
+  ["Mystical Flowerek","Törd le őket, szirmok jönnek. Petal Apothecaryben (víz + szirmok + mag) készülnek a funkcionális virágok."],
+  ["Pure Daisy","Kőből Livingrock, fából Livingwood."],
+  ["Első mana","Mana Spreader + Mana Pool + generáló virág (Endoflame éget, Hydroangeas vizet használ). A Wand of the Forest köti össze őket."],
+  ["Runic Altar","Rúnák a későbbi receptekhez; Manasteel eszközök a Mana Poolból."],
+  ["Terrasteel","Terrestrial Agglomeration Plate, nagyon sok manával."],
+  ["Alfheim portál","Elven Gateway Core + Livingwood keret: elf-kereskedés, Elementium, Pixie Dust, Dragonstone."],
+  ["Gaia Guardian","Beacon + 4 Gaia Pylon, Terrasteel ingottal idézed. Gaia Spirit a végső relikviákhoz."]
+ ],
+ keys:[
+  ["Generáló virágok","Endoflame (éghető tárgy), Hydroangeas (víz), Thermalily (láva), Rosa Arcana (XP), Gourmaryllis (kaja)."],
+  ["Orechid","Kőből ércet csinál manáért. Nagyon jó ércforrás!"],
+  ["Corporea","A Botania saját tárgyhálózata."],
+  ["Flügel Tiara","Repülés, a Gaia Guardian után."],
+  ["Terra Blade és Terra Shatterer","Erős Terrasteel fegyver és csákány."],
+  ["Spreader típusok","Az Elven Mana Spreader gyorsabb és messzebbre lő."]
+ ],
+ tips:["A Wand of the Forest-et Shift + jobb klikkel váltod a „kötés” módba.","Több Endoflame egy Spreaderhez és egy hopper/láda a szénnek: az első automata mana."],
+ warn:["Több generáló virág idővel elszárad (pl. Hydroangeas). Számolj az újraültetéssel.","Az Entropinnyum csak „nem duplikált” TNT-t fogad el."]
+},
+{id:"bm", n:"Blood Magic", cat:"magic", icon:"orb3",
+ intro:"Vér (LP) a valuta: oltárok, sigilek, rituálék, démoni akarat és Living Armour. Középjátékra való, de erős.",
+ steps:[
+  ["Sacrificial Dagger és Blood Altar","A tőr a saját véredet adja az oltárnak."],
+  ["Weak Blood Orb","Gyémánt az oltárban. Az orb a Soul Networkben tárolja a LP-t."],
+  ["Első sigilek","Divination Sigil (mutatja az LP-t), Water és Lava Sigil."],
+  ["2. szintű oltár","Blood Rune-ok az oltár körül; Apprentice Orb (redstone blokk)."],
+  ["Well of Suffering","Rituálé, ami a közeli mobokat „vérezteti” helyetted."],
+  ["Hellfire Forge és Tartaric Gem","Démoni akarat a Soul Snare-rel befogott mobokból."],
+  ["3–4. szint","Glowstone-pillérek, Magician és Master Orb, Bound páncél és eszközök."],
+  ["5. szint","Archmage's Orb Nether Starral."]
+ ],
+ keys:[
+  ["Blood Rune-ok","Speed (gyorsabb), Sacrifice és Self-Sacrifice (több LP), Capacity (nagyobb tartály)."],
+  ["Rituálék","Master Ritual Stone + rúnák a Ritual Diviner-rel lerakva, Activation Crystal-lal indítva."],
+  ["Alchemy Table","Alkímiai receptek (pl. Arcane Ash a tömbökhöz)."],
+  ["Living Armour","Használat közben fejlődő páncél."],
+  ["Incense Altar","Több LP az önfeláldozásból."]
+ ],
+ tips:["A Divination Sigil-lel mindig látod az oltárt és a hálózatod LP-jét.","Egy Well of Suffering egy mobfarm mellett szinte végtelen LP."],
+ warn:["A tőr sebez: alacsony életerőnél megölheted magad.","Ha elfogy a LP, a sigilek az életerődből vesznek el."]
+},
+{id:"as", n:"Astral Sorcery", cat:"magic", icon:"diamond",
+ intro:"Csillagfény és csillagképek. Éjszaka, tiszta ég alatt dolgozik; a végén saját perkfát és rituálékat kapsz.",
+ steps:[
+  ["Aquamarine","Folyók és tengerek homokjában. Ebből és egy könyvből Astral Tome."],
+  ["Luminous Crafting Table","Nyílt ég alatt, éjszaka: ez gyűjti a csillagfényt a receptekhez."],
+  ["Resonating Wand","Megmutatja a csillagfény-forrásokat és a Rock Crystal-okat."],
+  ["Starlight Crafting Altar","A következő oltárszint, erősebb receptekkel."],
+  ["Lightwell","Liquid Starlight: ebbe dobva Stardust és Rock Crystal-ból Celestial Crystal nő."],
+  ["Attunement Altar","Hangolódj egy fő csillagképre: Aevitas, Discidia, Armara, Vicio vagy Evorsio."],
+  ["Perkfa","A hangolás után a perkfán fejleszted a karaktered."],
+  ["Celestial Altar és rituálék","Csillagképekhez kötött rituálék, Constellation Paper-ek."]
+ ],
+ keys:[
+  ["Aevitas","Növekedés és élet (pl. növények gyorsítása)."],
+  ["Discidia","Sebzés és harc."],
+  ["Armara","Védelem."],
+  ["Vicio","Mozgás és sebesség."],
+  ["Evorsio","Rombolás és bányászás."]
+ ],
+ tips:["Minél magasabban vagy, annál több csillagfény jut; a fák és tetők rontják.","A Hold fázisa is számít: telihold idején a legerősebb."],
+ warn:["Az Evorsio rituálé blokkokat bont a környéken: ne a bázis mellé tedd.","Napközben és borult időben szinte semmit nem gyűjt."]
+},
+{id:"tc", n:"Thaumcraft 6", cat:"magic", icon:"netherquartz",
+ intro:"Kutatás, aspektusok és infúzió. A leglassabb és legmélyebb mágiamod, ami cserébe nagyon erős eszközöket ad.",
+ steps:[
+  ["Vis kristályok és Salis Mundus","A barlangok falán lévő kristályokból. A Salis Mundust könyvespolcra szórva Thaumonomicon lesz."],
+  ["Thaumometer","Minden blokkot és mobot szkennelj vele: így jön a kutatási tudás."],
+  ["Arcane Workbench","Salis Mundus a crafting asztalra. A vis-receptekhez a chunk aurája kell."],
+  ["Research Table","Scribing Tools + papír: elméleti kutatás „kártyákkal”."],
+  ["Crucible","Salis Mundus az üstre: alkímia aspektusokkal."],
+  ["Essentia","Smelter + Alembic + Jar: aspektusok desztillálása és tárolása."],
+  ["Infusion","Runic Matrix + pillérek + piedesztálok: a legerősebb receptek."],
+  ["Golemek és Focus-ok","Automatizálás golemekkel, varázslatok a Caster's Gauntlet-tel."]
+ ],
+ keys:[
+  ["Aura","Chunkonként változik; a vis-receptek ebből vesznek."],
+  ["Flux","A mágia szennyezése. Sok Flux → rift, Flux Goo, taint."],
+  ["Warp","A tiltott tudás mellékhatása: rémálmok, debuffok."],
+  ["Instability","Az infúzió kudarca: tárgyak repkednek, robbanás is lehet."]
+ ],
+ tips:["Mindent szkennelj, ami új: olcsó tudás.","Az infúzió körül szimmetrikus legyen az elrendezés, az csökkenti az instabilitást."],
+ warn:["A Flux-szennyezés tönkreteheti a környéket: ne a fő bázison kísérletezz.","A Warp ellen nincs könnyű gyógymód; csak indokolt esetben kutass tiltott dolgokat."]
+}
+];
+
+function renderModGuides(){
+  const host=$("#modguides");
+  host.innerHTML = MODGUIDES.map(g=>`<section id="sec-m-${g.id}" role="tabpanel" aria-labelledby="tab-m-${g.id}" hidden>
+    <div class="mg-head"><div class="slot">${itemHTML(g.icon)}</div><h2 style="margin:0">${esc(g.n)}</h2></div>
+    <div class="mg-meta"><span class="chip ${g.cat}">${esc(CAT[g.cat].n)}</span></div>
+    <p class="lede">${esc(g.intro)}</p>
+    <div class="texpanel"></div>
+    <h3>Haladási sorrend</h3>
+    <ol class="track${g.cat==="magic"?" magic":""}">${g.steps.map(s=>`<li><span><b>${esc(s[0])}.</b> ${esc(s[1])}</span></li>`).join("")}</ol>
+    <h3>Fontos elemek</h3>
+    <div class="keys">${g.keys.map(k=>`<div class="key"><b>${esc(k[0])}</b><p>${esc(k[1])}</p></div>`).join("")}</div>
+    <div class="callouts" style="margin-top:22px">
+      <div class="callout tip"><h4>Tippek</h4><ul>${g.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+      <div class="callout warn"><h4>Mire figyelj</h4><ul>${g.warn.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+    </div>
+  </section>`).join("");
+}
+
+/* ===================== ÁRAMKALKULÁTOR ===================== */
+/* Becsült alapértékek (RF/t). A gépek GUI-jában látod a valódit: azt írd be. */
+const PWR_USE = [
+  ["Pulverizer (Thermal)",40],["Induction Smelter (Thermal)",40],["Redstone Furnace (Thermal)",20],["Sawmill (Thermal)",20],
+  ["Phytogenic Insolator (Thermal)",20],["Fluid Transposer (Thermal)",20],["Magma Crucible (Thermal)",40],
+  ["SAG Mill (Ender IO)",20],["Alloy Smelter (Ender IO)",20],["Farming Station (Ender IO)",20],["Powered Spawner (Ender IO)",80],
+  ["Crusher (IE)",80],["Arc Furnace (IE)",500],["Metal Press (IE)",80],["Garden Cloche (IE)",10],
+  ["Charger (AE2)",50],["AE2 hálózat (kicsi)",30],["Refined Storage hálózat (kicsi)",50],
+  ["Atomic Reconstructor (AA)",40],["Laser Drill (Industrial Foregoing)",1000],["Mob Crusher (Industrial Foregoing)",100],
+  ["Fusion Crafting (Draconic)",500],["Egyéb gép",50]
+];
+const PWR_GEN = [
+  ["Stirling Dynamo (Thermal)",40],["Magmatic Dynamo (Thermal)",40],["Compression Dynamo (Thermal)",40],
+  ["Coal Generator (AA)",30],["Oil Generator (AA)",80],["Stirling Generator (Ender IO)",20],["Combustion Generator (Ender IO)",100],
+  ["Kinetic Dynamo + Water Wheel (IE)",20],["Diesel Generator (IE)",4096],["Extreme Reactor (passzív, kicsi)",1000],
+  ["Extreme Turbine",8000],["Egyéb generátor",100]
+];
+let PWR = {use:[["Pulverizer (Thermal)",1,40],["Redstone Furnace (Thermal)",1,20],["Induction Smelter (Thermal)",1,40]], gen:[["Stirling Dynamo (Thermal)",2,40]]};
+try{ const v=JSON.parse(localStorage.getItem("rev-power")||"null"); if(v&&v.use&&v.gen) PWR=v; }catch(e){}
+function savePwr(){ try{ localStorage.setItem("rev-power",JSON.stringify(PWR)); }catch(e){} }
+const fmt = n => Math.round(n).toLocaleString("hu-HU");
+function pwrRows(kind){
+  return PWR[kind].map((r,i)=>`<div class="crow" data-k="${kind}" data-i="${i}">
+    <input type="text" value="${esc(r[0])}" aria-label="Név" data-f="0">
+    <input type="number" min="0" step="1" value="${r[1]}" aria-label="Darab" data-f="1">
+    <input type="number" min="0" step="1" value="${r[2]}" aria-label="RF/t darabonként" data-f="2">
+    <span class="tot">${fmt(r[1]*r[2])}</span>
+    <button class="x" type="button" aria-label="Sor törlése" data-del="1">×</button></div>`).join("");
+}
+function renderCalc(){
+  const use=PWR.use.reduce((a,r)=>a+(+r[1]||0)*(+r[2]||0),0);
+  const gen=PWR.gen.reduce((a,r)=>a+(+r[1]||0)*(+r[2]||0),0);
+  const bal=gen-use; const tot=Math.max(use,gen,1);
+  const pick=$("#sugGen")?$("#sugGen").value:"Stirling Dynamo (Thermal)";
+  const pv=(PWR_GEN.find(g=>g[0]===pick)||PWR_GEN[0])[1];
+  const need=bal<0?Math.ceil(-bal/pv):0;
+  $("#calcSum").innerHTML=`<div class="stat"><small>Fogyasztás</small><b>${fmt(use)} RF/t</b></div>
+    <div class="stat"><small>Termelés</small><b>${fmt(gen)} RF/t</b></div>
+    <div class="stat ${bal>=0?"good":"bad"}"><small>Egyenleg</small><b>${bal>=0?"+":""}${fmt(bal)} RF/t</b></div>`;
+  $("#calcBar").innerHTML=`<i style="width:${Math.min(use,gen)/tot*100}%;background:var(--xp)"></i><i style="width:${Math.abs(bal)/tot*100}%;background:${bal>=0?"#2f6b3a":"var(--danger)"}"></i>`;
+  $("#calcSuggest").className="suggest"+(bal<0?" bad":"");
+  $("#calcSuggest").innerHTML = bal<0
+    ? `Hiányzik <b>${fmt(-bal)} RF/t</b>. Ehhez még kb. <b>${need} db</b> ${esc(pick)} kellene (${fmt(pv)} RF/t darabonként).`
+    : `Rendben van: <b>${fmt(bal)} RF/t</b> tartalékod marad. Egy Energy Cell vagy Capacitor Bank elteszi a felesleget.`;
+}
+function renderCalcTables(){
+  $("#useRows").innerHTML=pwrRows("use"); $("#genRows").innerHTML=pwrRows("gen"); renderCalc();
+}
+function initCalc(){
+  $("#useAdd").innerHTML=PWR_USE.map(p=>`<option>${esc(p[0])}</option>`).join("");
+  $("#genAdd").innerHTML=PWR_GEN.map(p=>`<option>${esc(p[0])}</option>`).join("");
+  $("#sugGen").innerHTML=PWR_GEN.filter(g=>!g[0].startsWith("Egyéb")).map(p=>`<option>${esc(p[0])}</option>`).join("");
+  renderCalcTables();
+  const host=$("#sec-aram");
+  host.addEventListener("input",e=>{
+    const row=e.target.closest(".crow"); if(!row||!e.target.dataset.f) return;
+    const k=row.dataset.k,i=+row.dataset.i,f=+e.target.dataset.f;
+    PWR[k][i][f]= f===0 ? e.target.value : Math.max(0,+e.target.value||0);
+    row.querySelector(".tot").textContent=fmt(PWR[k][i][1]*PWR[k][i][2]); savePwr(); renderCalc();
+  });
+  host.addEventListener("click",e=>{
+    const d=e.target.closest("[data-del]"); if(d){ const row=d.closest(".crow"); PWR[row.dataset.k].splice(+row.dataset.i,1); savePwr(); renderCalcTables(); return; }
+    if(e.target.id==="useAddBtn"||e.target.id==="genAddBtn"){
+      const k=e.target.id==="useAddBtn"?"use":"gen"; const name=$(k==="use"?"#useAdd":"#genAdd").value;
+      const preset=(k==="use"?PWR_USE:PWR_GEN).find(p=>p[0]===name); PWR[k].push([name,1,preset?preset[1]:0]); savePwr(); renderCalcTables(); }
+    if(e.target.id==="calcReset"){ PWR={use:[],gen:[]}; savePwr(); renderCalcTables(); }
+  });
+  $("#sugGen").addEventListener("change",renderCalc);
+}
+
+/* ===================== GÉPHÁZ TERVEK ===================== */
+const PLAN_KEYS = {
+  L:["Láda","#c08a4a"], P:["Pulverizer","#d24a3a"], F:["Redstone Furnace","#e07a3a"], I:["Induction Smelter","#c0452a"],
+  D:["Dynamo","#9aa3ab"], C:["Energy Cell / Capacitor Bank","#5fd0bf"], M:["Melléktermék-láda","#a7845a"],
+  K:["Coke Oven (3×3×3)","#7a5a3a"], B:["Blast Furnace (3×3×3)","#8a4a3a"], H:["Hopper / kimenet","#6b6b6b"],
+  S:["SAG Mill","#b8b8b8"], A:["Alloy Smelter","#e8a23c"], G:["Stirling Generator","#8f8f8f"], n:["Conduit (áram + tárgy)","#4fa3e0"],
+  d:["Fluxduct","#d01b1b"], i:["Itemduct + Servo","#6fa86f"], R:["Redstone (vezérlés)","#ff5f5f"], c:["Comparator / jel","#e0e0e0"]
+};
+const PLANS = [
+  {n:"Kezdő Thermal ércsor, cső nélkül", size:"5×3",
+   grid:[". D C D .","L P F L .",". M . . ."],
+   steps:["A gépeket egymás mellé teszed: Pulverizer → Redstone Furnace → kimeneti láda.","A Pulverizernél és a Furnace-nél kapcsold be az auto-outputot a következő gép felé.","A Pulverizer melléktermék-kimenetét állítsd lefelé, a melléktermék-ládába.","A dynamók az Energy Cellt töltik, a cella a gépeket (közvetlenül érintkeznek vagy Fluxducttal)."],
+   note:"Felülnézet. A dynamók piros tekercse a cella felé nézzen."},
+  {n:"Immersive Engineering: koksz és acél", size:"7×3",
+   grid:["K K K . B B B","K K K . B B B","K K K H B B B"],
+   steps:["A Coke Oven és a Blast Furnace egyaránt 3×3×3-as, egymás mellé építheted őket.","A kokszot a Coke Oven-ből tölcsérrel vagy kézzel viszed át a Blast Furnace-be.","A Coke Oven oldalán vödörrel vagy Fluid csővel csapolhatod a kreozotot.","Később mellé építsd az Improved Blast Furnace-t: gyorsabb acél."],
+   note:"Felülnézet, a középső H egy tölcsér vagy kimeneti láda helye."},
+  {n:"Ender IO gépsor conduittal", size:"6×3",
+   grid:["L S A L G G","n n n n n n",". . C . . ."],
+   steps:["A gépek előtt egy conduit-sor fut: egy blokkban áram és tárgy.","A bemeneti ládánál az item conduit „Extract”, a gépeknél „Insert” módban legyen.","A Capacitor Bank a conduit-sorra csatlakozik, a generátorok is.","Szűrőkkel (Basic Item Filter) dönteheted el, melyik gép mit kap."],
+   note:"Felülnézet. A conduit-sor (kék) lehet a padlóban is."},
+  {n:"Áramközpont redstone-vezérléssel", size:"5×4",
+   grid:["D D D D .","d d d d d",". . C c R",". . d . ."],
+   steps:["A dynamók egy közös Fluxduct-gerincre dolgoznak, ami a nagy cellába megy.","A cella mellé tett comparator jelet ad, ha telik a cella.","A redstone-jelet a dynamókhoz vezetve beállíthatod, hogy csak akkor fussanak, ha fogy az áram (redstone-vezérlés fül).","A cella kimenete egy Fluxducton megy a gépház felé."],
+   note:"Felülnézet. Így nem égeted feleslegesen az üzemanyagot."}
+];
+function renderPlans(){
+  $("#plans").innerHTML = PLANS.map(p=>{
+    const rows=p.grid.map(r=>r.split(" "));
+    const cols=Math.max(...rows.map(r=>r.length));
+    const used=new Set();
+    const cells=rows.map(r=>r.map(ch=>{ if(ch==="."||!PLAN_KEYS[ch]) return `<div class="pc empty"></div>`; used.add(ch);
+      const k=PLAN_KEYS[ch]; const wire="dinR".includes(ch);
+      return `<div class="pc${wire?" wire":""}" style="background:${k[1]}" title="${esc(k[0])}">${esc(ch)}</div>`; }).join("")).join("");
+    return `<article class="plan"><div class="flow-head"><b>${esc(p.n)}</b><span class="chip core">${esc(p.size)}</span></div>
+      <div class="plan-body"><div class="pgrid" style="grid-template-columns:repeat(${cols},46px)" role="img" aria-label="${esc(p.n)} elrendezése">${cells}</div>
+      <div class="plegend">${[...used].map(ch=>`<span><i style="background:${PLAN_KEYS[ch][1]}"></i><b>${esc(ch)}</b> ${esc(PLAN_KEYS[ch][0])}</span>`).join("")}<p class="layer-note">${esc(p.note)}</p></div></div>
+      <ol class="steps">${p.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></article>`;
+  }).join("");
+}
+
+/* ===================== MIRE JÓ? ===================== */
+const USES = [
+  ["richslag","Rich Slag","Induction Smelter","Érccel együtt az Induction Smelterben extra rudat ad. Ne dobd ki!"],
+  ["slag","Salak (Slag)","Thermal, IE","Rich Slag-gé alakítható, vagy Rockwool és Slag Gravel alapanyag. Jó töltelék is."],
+  ["cinnabar","Cinnabar","Redstone-érc a Pulverizerben","Induction Smelterben érccel 3 rúd. Az egyik legértékesebb melléktermék."],
+  ["coalcoke","Coal Coke","IE Coke Oven","Acélgyártás a Blast Furnace-ben, és jó üzemanyag (több mint a szén)."],
+  ["creosote","Creosote Oil","IE Coke Oven","Treated Wood (deszka + kreozot), és rossz, de használható üzemanyag."],
+  ["silicon","Silicon","SAG Mill / kvarc olvasztása","Ender IO és Refined Storage alkatrészek, AE2 Printed Silicon."],
+  ["certus","Certus Quartz","AE2 érc, Certus seed","AE2 processzorok, kábelek, cellák. Seed-ből vízben végtelenül növeszthető."],
+  ["fluix","Fluix Crystal","Vízbe dobott kristályokból","AE2 kábelek és szinte minden komolyabb AE2 blokk."],
+  ["netherquartz","Nether Quartz","Nether","AE2 Fluix, Refined Storage Quartz Enriched Iron, Tinkers' Sharpness."],
+  ["enderpearl","Ender gyöngy","Endermanek","Vibrant Alloy, Pulsating Iron, teleport-eszközök, Tinkers' Beheading."],
+  ["blazepowder","Blaze por","Blaze a Netherben","Pyrotheum, Fiery módosító, főzetek. A blaze rod üzemanyagnak is jó."],
+  ["netherstar","Nether Star","Wither","Wyvern Core, Soulbound módosító, Archmage's Blood Orb, Beacon."],
+  ["necroticbone","Necrotic Bone","Wither csontváz","Tinkers' Necrotic módosító (életlopás)."],
+  ["slimeball","Slime Ball","Slime-ok, slime-szigetek","Tinkers' slime eszközök, dugattyúk, Slime Boots."],
+  ["knightslime","Knightslime","Tinkers' Smeltery","Erős Tinkers' anyag, a Crumbling tulajdonság miatt jó csákányfej."],
+  ["cobalt","Cobalt","Nether","Tinkers' csákányfej (Momentum), Manyullyn alapanyag."],
+  ["draconium","Draconium","Overworld (ritka), Nether, End","Draconic Evolution: minden belőle indul."],
+  ["manadiamond","Mana Diamond","Gyémánt a Mana Poolban","Terrasteel, Botania eszközök és rúnák."],
+  ["livingrock","Livingrock","Kő a Pure Daisy mellett","Botania Mana Pool, Runic Altar és sok más blokk."],
+  ["glowstone","Glowstone por","Nether","Energetic Alloy, Tinkers' Glowing, Blood Magic oltárpillérek."],
+  ["redstone","Redstone","Érc, void bányák","Szinte minden tech mod, Haste módosító, Enervation Dynamo üzemanyag."],
+  ["lapis","Lápisz lazuli","Érc","Tinkers' Luck (Fortune/Looting), Palis kristály, bűvölés."],
+  ["obsidian","Obszidián","Láva + víz","Dark Steel, Tinkers' Beheading, erős blokkok."],
+  ["soulsand","Lélekhomok","Nether","Soularium (Ender IO), Wither idézése."],
+  ["bone","Csont","Csontvázak","Csontliszt, Tinkers' nyél, farmok gyorsítása."],
+  ["pyrotheum","Pyrotheum","Blaze por + redstone + kén","Magmatic Dynamo, Pyro-Concentrator, magas szintű Thermal receptek."],
+  ["cryotheum","Cryotheum","Blizz por + redstone + hó","Hűtés, Cryo-stabilized Fluxduct, gyors jég."],
+  ["petrotheum","Petrotheum","Basalz por + redstone + obszidián(por)","Tectonic Initiator a Pulverizerben."],
+  ["dust","Fémporok","Pulverizer, SAG Mill, Crusher","Kemencében rúd lesz belőlük; ötvözetekhez is jók."],
+  ["gravel","Kavics","Pulverizer kőből","Flint, Grout (Tinkers'), Conduit Binder (Ender IO)."]
+];
+function renderUses(){
+  const q=norm(($("#useSearch")||{value:""}).value.trim());
+  const list=USES.filter(u=>!q||norm(u.slice(1).join(" ")).includes(q));
+  $("#uses").innerHTML = list.length ? list.map(u=>`<div class="use"><div class="slot">${itemHTML(u[0])}</div><div><b>${esc(u[1])}</b><p>${esc(u[3])}</p><div class="from">Honnan: ${esc(u[2])}</div></div></div>`).join("")
+    : `<div class="empty">Nincs ilyen tárgy a listán. Próbáld a globális keresőt fent.</div>`;
+}
+
 /* ===================== INDÍTÁS ===================== */
-renderTabs(); renderPhases(); renderRecipeList(); renderRecipe(); renderCatFilters(); renderMods(); renderStatic(); renderTiers(); renderTexPanels(); loadCachedTex(); renderFlow(); renderThermal(); renderTF(); renderGloss(); initSearch(); $("#glossSearch").addEventListener("input",renderGloss);
+renderModGuides(); renderTabs(); renderPhases(); renderPlans(); renderUses(); initCalc(); $("#useSearch").addEventListener("input",renderUses); renderRecipeList(); renderRecipe(); renderCatFilters(); renderMods(); renderStatic(); renderTiers(); renderTexPanels(); loadCachedTex(); renderFlow(); renderThermal(); renderTF(); renderGloss(); initSearch(); $("#glossSearch").addEventListener("input",renderGloss);
 { const auto=loadTeamCfg(); renderTeamPanel(); renderRoster(); renderNotes(); if(auto) teamConnect(); }
-showTab(); addEventListener("hashchange",showTab);
+try{ history.scrollRestoration="manual"; }catch(e){}
+showTab(); addEventListener("hashchange",showTab); addEventListener("load",()=>setTimeout(()=>window.scrollTo(0,0),30));
 </script>
 </body>
 </html>
